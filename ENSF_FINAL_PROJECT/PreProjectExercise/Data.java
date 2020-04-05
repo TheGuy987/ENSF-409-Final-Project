@@ -1,4 +1,4 @@
-/**
+/*
  * Represents data within a node
  */
 public class Data {
