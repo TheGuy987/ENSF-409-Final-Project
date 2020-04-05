@@ -29,6 +29,18 @@ public class GUI extends JFrame {
 			control.insertPressed();
 			});
 		
+		find.addActionListener((ActionEvent e) -> { 
+			control.findPressed();
+			});
+		
+		browse.addActionListener((ActionEvent e) -> { 
+			control.browsePressed();
+			});
+		
+		createTree.addActionListener((ActionEvent e) -> { 
+			control.createTreePressed();
+			});
+		
 		buttonPanel = new JPanel();
 		buttonPanel.add(insert);
 		buttonPanel.add(find);

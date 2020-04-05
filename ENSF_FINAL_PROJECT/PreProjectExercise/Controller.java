@@ -12,9 +12,7 @@ public class Controller {
 		if(bst==null) {
 			JOptionPane.showMessageDialog(null, "Please Create a Tree before using Insert","Error", JOptionPane.PLAIN_MESSAGE);
 		}else {
-			JDialog insertFields = new JDialog();
-			insertFields.setSize(500, 300);
-			insertFields.setVisible(true);
+			
 		}
 	}
 	
@@ -26,7 +24,7 @@ public class Controller {
 	
 	}
 
-	public void createTreePress() {
+	public void createTreePressed() {
 		
 	}
 }
