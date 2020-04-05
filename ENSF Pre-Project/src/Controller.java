@@ -1,3 +1,6 @@
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 

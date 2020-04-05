@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import javax.swing.JOptionPane;
 
 
 
@@ -13,6 +14,9 @@ public class DataBaseReader {
 
 	public DataBaseReader(String fileName, BinSearchTree theTree) {
 		this.fileName = fileName;
+		if(theTree == null) {
+			theTree = new BinSearchTree();
+		}
 		this.theTree = theTree;	
 	}
 	
@@ -21,6 +25,7 @@ public class DataBaseReader {
 		try {
 			input = new BufferedReader(new FileReader(new File(fileName)));
 		}catch(FileNotFoundException e) {
+			JOptionPane.showMessageDialog(null, "\nCannot find that file", " Warning",JOptionPane.PLAIN_MESSAGE);
 			return;
 		}
 		
@@ -28,7 +33,6 @@ public class DataBaseReader {
 		
 		try {
 			while((line = input.readLine()) != null) {
-			
 			addToTree(line);
 			}
 		} catch (IOException e) {
