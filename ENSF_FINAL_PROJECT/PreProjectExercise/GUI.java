@@ -1,6 +1,8 @@
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import java.awt.event.ActionEvent;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -9,8 +11,11 @@ public class GUI extends JFrame {
 	JLabel title;
 	JPanel titlePanel, buttonPanel;
 	JScrollPane display;
+	Controller control;
 	
 	public GUI() {
+		control = new Controller();
+		
 		titlePanel = new JPanel();
 		title = new JLabel("An Application to Maintain Student Records");
 		titlePanel.add(title);
@@ -20,7 +25,9 @@ public class GUI extends JFrame {
 		browse = new JButton("Browse");
 		createTree = new JButton("Create Tree From File");
 		
-		//insert.addActionListener();
+		insert.addActionListener((ActionEvent e) -> { 
+			control.insertPressed();
+			});
 		
 		buttonPanel = new JPanel();
 		buttonPanel.add(insert);
