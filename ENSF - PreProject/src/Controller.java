@@ -1,11 +1,22 @@
+import java.awt.FlowLayout;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.OverlayLayout;
 
 public class Controller {
 	BinSearchTree bst;
+	GUI mainPane;
 	
-	public Controller() {
+	public Controller(GUI mainPane) {
 		bst = new BinSearchTree();
+		this.mainPane = mainPane;
 	}
 	
 	public void insertPressed() {
@@ -39,12 +50,35 @@ public class Controller {
 	}
 	
 	public void browsePressed() {
+		mainPane.remove(mainPane.display);
+		if(bst.root != null)
+			mainPane.display = new JScrollPane(updateTextArea(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		else
+			mainPane.display = new JScrollPane(new JTextArea("",23,62), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		mainPane.display.setSize(300, 20);
+		mainPane.add("Center",mainPane.display);
+        mainPane.add(mainPane.display);
+        mainPane.pack();
+	}
 	
+	public JTextArea updateTextArea() {
+		StringWriter out = new StringWriter();
+		PrintWriter writer = new PrintWriter(out);
+		try {
+			bst.print_tree(bst.root, writer);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		JTextArea jta = new JTextArea(out.toString(), 23, 62);
+		return jta;
 	}
 
 	public void createTreePressed() {
 		String fileName = JOptionPane.showInputDialog("Enter the file name:");
-		DataBaseReader createTree = new DataBaseReader(fileName, bst);
-		createTree.readFromFile();
+		if(fileName != null) {
+			DataBaseReader createTree = new DataBaseReader(fileName, bst);
+			createTree.readFromFile();
+		}
 	}
 }

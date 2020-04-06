@@ -2,6 +2,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -16,7 +17,7 @@ public class GUI extends JFrame {
 	Controller control;
 	
 	public GUI() {
-		control = new Controller();
+		control = new Controller(this);
 		
 		titlePanel = new JPanel();
 		title = new JLabel("An Application to Maintain Student Records");
@@ -55,6 +56,8 @@ public class GUI extends JFrame {
 		this.add("North",titlePanel);
 		this.add("Center",display);
 		this.setSize(720,480);
+		this.setLocationRelativeTo(null);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	public static void main(String[] args) {
