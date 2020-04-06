@@ -20,13 +20,13 @@ public class DataBaseReader {
 		this.theTree = theTree;	
 	}
 	
-	public void readFromFile() {
+	public BinSearchTree readFromFile() {
 		BufferedReader input;
 		try {
 			input = new BufferedReader(new FileReader(new File(fileName)));
 		}catch(FileNotFoundException e) {
 			JOptionPane.showMessageDialog(null, "\nCannot find that file", " Warning",JOptionPane.PLAIN_MESSAGE);
-			return;
+			return theTree;
 		}
 		
 		String line = "";
@@ -46,10 +46,12 @@ public class DataBaseReader {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		return theTree;
 	}
 	
 	private void addToTree(String line) {
-		String[] seperated = line.trim().split("\\s+");
-		theTree.insert(seperated[0], seperated[1], seperated[2], seperated[3]);
+		String[] separated = line.trim().split("\\s+");
+		theTree.insert(separated[0], separated[1], separated[2], separated[3]);
 	}
 }

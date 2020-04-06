@@ -26,12 +26,16 @@ public class Controller {
 	}
 	
 	public void browsePressed() {
-	
+		if(bst==null) {
+			JOptionPane.showMessageDialog(null, "Please Create a Tree before using Browse","Error", JOptionPane.PLAIN_MESSAGE);
+		}else {
+			
+		}
 	}
 
 	public void createTreePressed() {
 		String fileName = JOptionPane.showInputDialog("Enter the file name:");
 		DataBaseReader createTree = new DataBaseReader(fileName, bst);
-		createTree.readFromFile();
+		bst = createTree.readFromFile();
 	}
 }
