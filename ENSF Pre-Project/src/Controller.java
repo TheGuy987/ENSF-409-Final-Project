@@ -5,14 +5,14 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 public class Controller {
-	BinSearchTree bst;
+	private BinSearchTree bst;
 	
 	public Controller() {
-		bst = null;
+		bst = new BinSearchTree();
 	}
 	
 	public void insertPressed() {
-		if(bst==null) {
+		if(bst.root==null) {
 			JOptionPane.showMessageDialog(null, "Please Create a Tree before using Insert","Error", JOptionPane.PLAIN_MESSAGE);
 		}else {
 			JDialog insertFields = new JDialog();
@@ -26,7 +26,7 @@ public class Controller {
 	}
 	
 	public void browsePressed() {
-		if(bst==null) {
+		if(bst.root==null) {
 			JOptionPane.showMessageDialog(null, "Please Create a Tree before using Browse","Error", JOptionPane.PLAIN_MESSAGE);
 		}else {
 			
@@ -36,6 +36,6 @@ public class Controller {
 	public void createTreePressed() {
 		String fileName = JOptionPane.showInputDialog("Enter the file name:");
 		DataBaseReader createTree = new DataBaseReader(fileName, bst);
-		bst = createTree.readFromFile();
+		createTree.readFromFile();
 	}
 }

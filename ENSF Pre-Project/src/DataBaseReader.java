@@ -14,19 +14,16 @@ public class DataBaseReader {
 
 	public DataBaseReader(String fileName, BinSearchTree theTree) {
 		this.fileName = fileName;
-		if(theTree == null) {
-			theTree = new BinSearchTree();
-		}
 		this.theTree = theTree;	
 	}
 	
-	public BinSearchTree readFromFile() {
+	public void readFromFile() {
 		BufferedReader input;
 		try {
 			input = new BufferedReader(new FileReader(new File(fileName)));
 		}catch(FileNotFoundException e) {
 			JOptionPane.showMessageDialog(null, "\nCannot find that file", " Warning",JOptionPane.PLAIN_MESSAGE);
-			return theTree;
+			return;
 		}
 		
 		String line = "";
@@ -47,7 +44,7 @@ public class DataBaseReader {
 			e.printStackTrace();
 		}
 		
-		return theTree;
+		
 	}
 	
 	private void addToTree(String line) {
