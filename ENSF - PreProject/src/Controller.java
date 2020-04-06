@@ -30,11 +30,11 @@ public class Controller {
 			}
 			// Record doesn't exists
 			else {
-				JOptionPane.showMessageDialog(null, "Id: " + nodeFind.data.id + "\nFaculty: " + nodeFind.data.faculty + "\nMajor: " + nodeFind.data.major + "\nYear: " + nodeFind.data.year, "Search Results", JOptionPane.INFORMATION_MESSAGE, null);
+				JOptionPane.showMessageDialog(null, "Error: Record not found!", "Error", JOptionPane.INFORMATION_MESSAGE, null);
 			}
 		}
 		else {
-			JOptionPane.showMessageDialog(null, "Please Create a Tree before using Insert","Error", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Please Create a Tree before using Insert", "Error", JOptionPane.PLAIN_MESSAGE);
 		}
 	}
 	
