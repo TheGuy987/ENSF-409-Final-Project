@@ -53,6 +53,9 @@ public class GUI extends JFrame {
 		this.add("North",titlePanel);
 		this.add("Center",display);
 		this.setSize(720,480);
+		
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 	}
 	
 	public static void main(String[] args) {
