@@ -1,7 +1,10 @@
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+
+import java.awt.event.ActionEvent;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -10,8 +13,11 @@ public class GUI extends JFrame {
 	JLabel title;
 	JPanel titlePanel, buttonPanel;
 	JScrollPane display;
+	Controller control;
 	
 	public GUI() {
+		control = new Controller();
+		
 		titlePanel = new JPanel();
 		title = new JLabel("An Application to Maintain Student Records");
 		titlePanel.add(title);
@@ -21,7 +27,22 @@ public class GUI extends JFrame {
 		browse = new JButton("Browse");
 		createTree = new JButton("Create Tree From File");
 		
-		//insert.addActionListener();		
+		insert.addActionListener((ActionEvent e) -> { 
+			control.insertPressed();
+			});
+		
+		find.addActionListener((ActionEvent e) -> { 
+			control.findPressed();
+			});
+		
+		browse.addActionListener((ActionEvent e) -> { 
+			control.browsePressed();
+			});
+		
+		createTree.addActionListener((ActionEvent e) -> { 
+			control.createTreePressed();
+			});
+		
 		buttonPanel = new JPanel();
 		buttonPanel.add(insert);
 		buttonPanel.add(find);
@@ -36,15 +57,8 @@ public class GUI extends JFrame {
 		this.setSize(720,480);
 	}
 	
-	public String find() {
-		String idToSearch;
-		idToSearch = JOptionPane.showInputDialog("Please enter the student's id:");
-		return idToSearch;
-	}
-	
 	public static void main(String[] args) {
 		GUI app = new GUI();
 		app.setVisible(true);
-		app.find();
 	}
 }

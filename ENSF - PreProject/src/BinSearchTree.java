@@ -3,9 +3,7 @@ import javax.swing.JOptionPane;
 /**
  * The following class called BinSearchTree creates an empty 
  * tree, and allows the user of the class to insert new nodes into the tree.  
- */
-
- 
+ */ 
 
 class BinSearchTree {
 	
