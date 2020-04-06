@@ -3,7 +3,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 
 /**
@@ -76,3 +80,5 @@ public class DataBaseReader {
 		theTree.insert(separated[0], separated[1], separated[2], separated[3]);
 	}
 }
+
+
