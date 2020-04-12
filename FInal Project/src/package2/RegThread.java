@@ -12,6 +12,8 @@ public class RegThread extends Thread {
 	PrintWriter socketOut;
 	
 	BufferedReader socketIn;
+ 	private Student theStudent; 
+ 	private CourseCatalogue theCalalogue; 
 	
 	public RegThread(PrintWriter socketOut, BufferedReader socketIn) {
 		this.socketIn = socketIn;
@@ -19,7 +21,7 @@ public class RegThread extends Thread {
 	}
 
 	public void run() {
-		
+ 		
 		CourseCatalogue cat = new CourseCatalogue (socketIn, socketOut);
 		Student student = new Student(socketIn, socketOut);
 		Course myCourse = cat.searchCat("ENGG", 233);

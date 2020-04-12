@@ -46,9 +46,6 @@ public class Student {
 			setStudentName();
 			setStudentId();
 			coursesTaken = addCoursesTaken();
-			
-			System.out.println("The student "+studentName+" has been created");
-			System.out.println(toStringAllCoursesTaken());
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -65,10 +62,12 @@ public class Student {
 	 * sets studentName
 	 */
 	public void setStudentName() throws IOException {
+		socketOut.println("Please enter your name");
 		try {
 			studentName = socketIn.readLine(); 
 		}catch(Exception e) {
-			e.printStackTrace();
+			socketOut.println("Error - Try again");
+			setStudentName();
 		}
 	}
 	/*
@@ -85,7 +84,8 @@ public class Student {
 		try {
 			studentId = Integer.parseInt(socketIn.readLine()); 
 		}catch(Exception e) {
-			e.printStackTrace();
+			socketOut.println("Error - Try again");
+			setStudentId();
 		}
 	}
 	@Override
@@ -102,22 +102,15 @@ public class Student {
 		studentRegList.add(registration);
 	}
 	
-	public void removeRegistration() throws IOException {
-		String courseName;
-		int courseNum;
-		
-		socketOut.println("Hi "+studentName+", please enter the name of the course you would like to un-register for:");
-		courseName=socketIn.readLine();
-		socketOut.println("Please eneter the course number:");
-		courseNum=Integer.parseInt(socketIn.readLine());
+	public String removeRegistration(String courseName, int courseNum) throws IOException {	
 		
 		for(int i=0;i < studentRegList.size();i++) {
 			if(courseName.contentEquals(studentRegList.get(i).getTheOffering().getTheCourse().getCourseName()) && courseNum==studentRegList.get(i).getTheOffering().getTheCourse().getCourseNum()) {
 			studentRegList.remove(i);
-			return;
+			return "1";
 			}
 		}
-		socketOut.println("The course you are unregistering from could not be found. Returning to main menu");
+		return "0";
 	}
 	
 	public void addRegistirationInterface(CourseCatalogue list) throws IOException {
@@ -178,28 +171,38 @@ public class Student {
 	
 	public ArrayList<Course> addCoursesTaken() throws IOException {
 		boolean check=true;
-		String courseName;
-		int userInput;
+		String [] line;
+		String courseName, userInput;
 		int courseNum=0;
 		ArrayList<Course> temp = new ArrayList<Course>();
 	
 		
 		while(check) {
+			socketOut.println("Hi "+studentName+", please enter the name and number of the course you have taken");
 			courseName=socketIn.readLine();
-			System.out.println(courseName);
-			courseNum=Integer.parseInt(socketIn.readLine());
-			System.out.println(courseNum);
-			Course c = new Course(courseName,courseNum);
-			temp.add(c);
+			line=courseName.split(" ");
+			courseName=line[0];
+			if(line[1].matches("\\d+")) {
+				courseNum=Integer.parseInt(line[1]);
+				Course c = new Course(courseName,courseNum);
+				temp.add(c);
+			}
+			else {
+				socketOut.println("You have entered an invalid input");
+			}
+			
+
 						
-			userInput=Integer.parseInt(socketIn.readLine());
-			if(userInput==1) {
+			socketOut.println("Do you want to add another course? Please enter 'yes' or 'no':");
+			userInput=socketIn.readLine();
+			if(userInput.equals("no")) {
 				check=false;
 			}
-			else if(userInput==0) {
+			else if(userInput.equals("yes")) {
 				check = true;
 			}
 			else {
+				socketOut.println("You have enter and invalid input. Returning to main menu...");
 				break;
 			}
 		}

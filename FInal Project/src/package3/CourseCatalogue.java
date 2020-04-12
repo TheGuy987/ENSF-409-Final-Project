@@ -1,9 +1,9 @@
 package package3;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class CourseCatalogue {
 	
@@ -43,31 +43,23 @@ public class CourseCatalogue {
 				return c;
 			}	
 		}
-		displayCourseNotFoundError();
 		return null;
 	}
 	//Typically, methods that are called from other methods of the class
 	//are private and are not exposed for use by other classes.
 	//These methods are refereed to as helper methods or utility methods
-	private void displayCourseNotFoundError() {
-		// TODO Auto-generated method stub
-		System.err.println("Course was not found!");
 		
-	}
 	public ArrayList <Course> getCourseList() {
 		return courseList;
 	}
 	
-	public void searchCatalogue() throws IOException {
-		//System.out.println("Please enter the name and number of the course you want to find");
-		String name = socketIn.readLine();
-		int num = socketIn.read();
+	public String searchCatalogue(String name, int num) {
 		
 		Course found = searchCat(name,num);
 		if(found==null)
-			socketOut.println("The course "+name+" "+num+" could not be found");
+			return "0";
 		else
-			socketOut.println(found.toString());
+			return found.toString();
 		
 	}
 	public void setCourseList(ArrayList <Course> courseList) {
