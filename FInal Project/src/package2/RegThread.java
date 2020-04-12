@@ -41,7 +41,8 @@ public class RegThread extends Thread {
 						break;
 
 					case(3):
-					
+						result = theCalalogue.toString();
+						socketOut.println(result);
 						break;
 
 					case(4):
