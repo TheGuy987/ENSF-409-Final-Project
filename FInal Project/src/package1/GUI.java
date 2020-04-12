@@ -84,27 +84,6 @@ public class GUI extends JFrame {
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-	
-	public void getStudentInfo() {
-		String studentName = JOptionPane.showInputDialog("Please enter your name");
-		//send studentName to server 
-		
-		JTextField courseName = new JTextField();
-		JTextField courseNum = new JTextField();
-		
-		Object[] fields = {
-				"Course Name:", courseName,
-				"Course Number: ", courseNum,
-		};
-		
-		int check = 0;
-		while(check==0) {
-			JOptionPane.showConfirmDialog(null,fields,"Courses Taken", JOptionPane.CANCEL_OPTION);
-			//send courseName and courseNum to server
-			check =JOptionPane.showConfirmDialog(null, "Do you want to add another course?", "Courses Taken", JOptionPane.OK_OPTION);
-		}
-		
-	}
 	/**
 	 * Main method of the program. It creates a new insance of GUI, which calls
 	 * its constructor and starts the program.

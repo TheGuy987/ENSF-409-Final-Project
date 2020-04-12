@@ -7,9 +7,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class Controller {
-	GUI mainPane;
-	BufferedReader socketIn;
-	PrintWriter socketOut;
+	private GUI mainPane;
+	private BufferedReader socketIn;
+	private PrintWriter socketOut;
 	
 	public Controller(BufferedReader socketIn, PrintWriter socketOut) {
 		this.socketIn = socketIn;
@@ -36,8 +36,10 @@ public class Controller {
 		// Loop to ask students what courses they have taken 
 		while(check==0) {
 			JOptionPane.showConfirmDialog(null,fields,"Courses Taken", JOptionPane.CANCEL_OPTION);
-			//send courseName and courseNum to server
+			socketOut.println(courseName);
+			socketOut.println(courseNum);
 			check =JOptionPane.showConfirmDialog(null, "Do you want to add another course?", "Courses Taken", JOptionPane.OK_OPTION);
+			socketOut.println(check);
 		}
 	}
 	

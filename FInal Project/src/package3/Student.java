@@ -189,14 +189,13 @@ public class Student {
 			temp.add(c);
 						
 			userInput=Integer.parseInt(socketIn.readLine());
-			if(userInput.equals("no")) {
+			if(userInput==1) {
 				check=false;
 			}
-			else if(userInput.equals("yes")) {
+			else if(userInput==0) {
 				check = true;
 			}
 			else {
-				socketOut.println("You have enter and invalid input. Returning to main menu...");
 				break;
 			}
 		}
