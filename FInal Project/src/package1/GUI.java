@@ -1,4 +1,4 @@
-package package1
+package package1;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -36,7 +36,7 @@ public class GUI extends JFrame {
 		this.control = control;
 		
 		titlePanel = new JPanel();
-		title = new JLabel("An Application to Maintain Student Records");
+		title = new JLabel("Course Registeration App");
 		titlePanel.add(title);
 		
 		searchCata = new JButton("Search Course Catalogue");
@@ -45,6 +45,7 @@ public class GUI extends JFrame {
 		displayTaken = new JButton("Display Courses Taken");
 		displayReg = new JButton("Display Registered Courses");
 		
+		/*
 		searchCata.addActionListener((ActionEvent e) -> { 
 			control.searchCataPressed();
 			});
@@ -64,6 +65,7 @@ public class GUI extends JFrame {
 		displayReg.addActionListener((ActionEvent e) -> { 
 			control.displayRegPressed();
 			});
+		*/
 		
 		buttonPanel = new JPanel();
 		buttonPanel.add(searchCata);
@@ -82,13 +84,16 @@ public class GUI extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
+	public void getStudentInfo() {
+		
+	}
 	/**
 	 * Main method of the program. It creates a new insance of GUI, which calls
 	 * its constructor and starts the program.
 	 * @param args String array that can be read form the command line.
 	 */
 	public static void main(String[] args) {
-		GUI app = new GUI();
+		GUI app = new GUI(new Controller());
 		app.setVisible(true);
 	}
 }
