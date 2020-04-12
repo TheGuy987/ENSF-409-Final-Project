@@ -62,12 +62,10 @@ public class Student {
 	 * sets studentName
 	 */
 	public void setStudentName() throws IOException {
-		socketOut.println("Please enter your name");
 		try {
 			studentName = socketIn.readLine(); 
 		}catch(Exception e) {
-			socketOut.println("Error - Try again");
-			setStudentName();
+			e.printStackTrace();
 		}
 	}
 	/*
@@ -84,8 +82,7 @@ public class Student {
 		try {
 			studentId = Integer.parseInt(socketIn.readLine()); 
 		}catch(Exception e) {
-			socketOut.println("Error - Try again");
-			setStudentId();
+			e.printStackTrace();
 		}
 	}
 	@Override
@@ -178,30 +175,20 @@ public class Student {
 	
 	public ArrayList<Course> addCoursesTaken() throws IOException {
 		boolean check=true;
-		String [] line;
-		String courseName, userInput;
+		String courseName;
+		int userInput;
 		int courseNum=0;
 		ArrayList<Course> temp = new ArrayList<Course>();
 	
 		
 		while(check) {
-			socketOut.println("Hi "+studentName+", please enter the name and number of the course you have taken");
 			courseName=socketIn.readLine();
-			line=courseName.split(" ");
-			courseName=line[0];
-			if(line[1].matches("\\d+")) {
-				courseNum=Integer.parseInt(line[1]);
-				Course c = new Course(courseName,courseNum);
-				temp.add(c);
-			}
-			else {
-				socketOut.println("You have entered an invalid input");
-			}
-			
 
+			courseNum=Integer.parseInt(socketIn.readLine());
+			Course c = new Course(courseName,courseNum);
+			temp.add(c);
 						
-			socketOut.println("Do you want to add another course? Please enter 'yes' or 'no':");
-			userInput=socketIn.readLine();
+			userInput=Integer.parseInt(socketIn.readLine());
 			if(userInput.equals("no")) {
 				check=false;
 			}

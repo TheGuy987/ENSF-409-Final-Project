@@ -17,25 +17,7 @@ public class RegThread extends Thread {
 		this.socketIn = socketIn;
 		this.socketOut = socketOut;
 	}
-	
-	public int getUserInput() throws NumberFormatException, IOException {
 
-		int input;
-		boolean check=false;
-		
-		do {
-			input = Integer.parseInt(socketIn.readLine());
-			if(input<1 || input>6) {
-				socketOut.println("The number you have entered is invalid. Please try again");
-				check=true;
-			}
-		}while(check);
-		
-		return input;
-	}
-	
-	
-	
 	public void run() {
 		
 		CourseCatalogue cat = new CourseCatalogue (socketIn, socketOut);
@@ -64,7 +46,7 @@ public class RegThread extends Thread {
 		while(check) {
 			int choice = 0;
 			try {
-				choice = this.getUserInput();
+				choice = socketIn.read();
 			} catch (NumberFormatException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -78,7 +60,12 @@ public class RegThread extends Thread {
 				socketOut.println("There was a problem with your selection. Please try again");
 				break;
 			case(1):
-				cat.searchCatalogue();
+				try {
+					cat.searchCatalogue();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			break;
 
 			case(2):

@@ -1,9 +1,9 @@
 package package3;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class CourseCatalogue {
 	
@@ -58,17 +58,16 @@ public class CourseCatalogue {
 		return courseList;
 	}
 	
-	public void searchCatalogue() {
-		Scanner scan = new Scanner(System.in);
-		System.out.println("Please enter the name and number of the course you want to find");
-		String name = scan.next();
-		int num = scan.nextInt();
+	public void searchCatalogue() throws IOException {
+		//System.out.println("Please enter the name and number of the course you want to find");
+		String name = socketIn.readLine();
+		int num = socketIn.read();
 		
 		Course found = searchCat(name,num);
 		if(found==null)
-			return;
+			socketOut.println("The course "+name+" "+num+" could not be found");
 		else
-			System.out.println(found.toString());
+			socketOut.println(found.toString());
 		
 	}
 	public void setCourseList(ArrayList <Course> courseList) {
