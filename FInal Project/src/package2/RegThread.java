@@ -78,12 +78,7 @@ public class RegThread extends Thread {
 				socketOut.println("There was a problem with your selection. Please try again");
 				break;
 			case(1):
-				try {
-					cat.searchCatalogue();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				cat.searchCatalogue();
 			break;
 
 			case(2):
