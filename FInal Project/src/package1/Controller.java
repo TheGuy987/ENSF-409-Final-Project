@@ -51,23 +51,27 @@ public class Controller {
 		socketOut.println("1");
 	}
 	
-	public void removeRegPressed() {
+	public void addRegPressed() {
 		socketOut.println("2");
-
 	}
 	
-	public void displayCataPressed() {
+	public void removeRegPressed() {
 		socketOut.println("3");
 
 	}
 	
-	public void displayTakenPressed() {
+	public void displayCataPressed() {
 		socketOut.println("4");
 
 	}
 	
-	public void displayRegPressed() {
+	public void displayTakenPressed() {
 		socketOut.println("5");
+
+	}
+	
+	public void displayRegPressed() {
+		socketOut.println("6");
 
 	}
 }

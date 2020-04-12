@@ -21,7 +21,7 @@ import javax.swing.JTextField;
  */
 
 public class GUI extends JFrame {
-	JButton searchCata, removeReg, displayCata, displayTaken, displayReg;
+	JButton searchCata, addReg, removeReg, displayCata, displayTaken, displayReg;
 	JLabel title;
 	JPanel titlePanel, buttonPanel;
 	JScrollPane display;
@@ -41,6 +41,7 @@ public class GUI extends JFrame {
 		titlePanel.add(title);
 		
 		searchCata = new JButton("Search Course Catalogue");
+		addReg = new JButton("Register for a Course");
 		removeReg = new JButton("Remove Registeration");
 		displayCata = new JButton("Display Course Catalogue");
 		displayTaken = new JButton("Display Courses Taken");
@@ -70,6 +71,7 @@ public class GUI extends JFrame {
 		
 		buttonPanel = new JPanel();
 		buttonPanel.add(searchCata);
+		buttonPanel.add(addReg);
 		buttonPanel.add(removeReg);
 		buttonPanel.add(displayCata);
 		buttonPanel.add(displayTaken);
