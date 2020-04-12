@@ -46,6 +46,9 @@ public class Student {
 			setStudentName();
 			setStudentId();
 			coursesTaken = addCoursesTaken();
+			
+			System.out.println("The student "+studentName+" has been created");
+			System.out.println(toStringAllCoursesTaken());
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

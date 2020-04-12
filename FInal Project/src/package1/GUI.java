@@ -46,7 +46,7 @@ public class GUI extends JFrame {
 		displayTaken = new JButton("Display Courses Taken");
 		displayReg = new JButton("Display Registered Courses");
 		
-		/*
+		
 		searchCata.addActionListener((ActionEvent e) -> { 
 			control.searchCataPressed();
 			});
@@ -66,7 +66,7 @@ public class GUI extends JFrame {
 		displayReg.addActionListener((ActionEvent e) -> { 
 			control.displayRegPressed();
 			});
-		*/
+		
 		
 		buttonPanel = new JPanel();
 		buttonPanel.add(searchCata);

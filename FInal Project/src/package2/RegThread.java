@@ -45,7 +45,7 @@ public class RegThread extends Thread {
 		while(check) {
 			int choice = 0;
 			try {
-				choice = socketIn.read();
+				choice = Integer.parseInt(socketIn.readLine());
 			} catch (NumberFormatException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -56,45 +56,51 @@ public class RegThread extends Thread {
 			
 			switch(choice) {
 			case(0):
-				socketOut.println("There was a problem with your selection. Please try again");
+				System.out.println("There was a problem with your selection. Please try again");
 				break;
 			case(1):
-				try {
+				System.out.println("1");
+				/*try {
 					cat.searchCatalogue();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}
+				}*/
 			break;
 
 			case(2):
-				try {
+				System.out.println("2");
+				/*try {
 					student.addRegistirationInterface(cat);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
+				}*/
 			break;
 
 			case(3):
-				try {
+				System.out.println("3");
+				/*try {
 					student.removeRegistration();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
+				}*/
 			break;
 
 			case(4):
-				socketOut.println(cat.toString());
+				System.out.println("3");
+				//socketOut.println(cat.toString());
 			break;
 			
 			case(5):
-				socketOut.println(student.toStringAllCoursesTaken());
+				System.out.println("4");
+				//socketOut.println(student.toStringAllCoursesTaken());
 			break;
 			
 			case(6):
-				socketOut.println(student.toStringAllRegistrations());
+				System.out.println("5");
+				//socketOut.println(student.toStringAllRegistrations());
 			break;
 			
 			case(7):

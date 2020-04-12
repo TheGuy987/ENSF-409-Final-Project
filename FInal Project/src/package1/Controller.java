@@ -51,7 +51,7 @@ public class Controller {
 		socketOut.println("1");
 	}
 	
-	public void removeRegPress() {
+	public void removeRegPressed() {
 		socketOut.println("2");
 
 	}
@@ -61,7 +61,7 @@ public class Controller {
 
 	}
 	
-	public void displayTakenPress() {
+	public void displayTakenPressed() {
 		socketOut.println("4");
 
 	}
