@@ -58,17 +58,13 @@ public class CourseCatalogue {
 		return courseList;
 	}
 	
-	public void searchCatalogue() {
-		Scanner scan = new Scanner(System.in);
-		System.out.println("Please enter the name and number of the course you want to find");
-		String name = scan.next();
-		int num = scan.nextInt();
+	public String searchCatalogue(String name, int num) {
 		
 		Course found = searchCat(name,num);
 		if(found==null)
-			return;
+			return "0";
 		else
-			System.out.println(found.toString());
+			return found.toString();
 		
 	}
 	public void setCourseList(ArrayList <Course> courseList) {

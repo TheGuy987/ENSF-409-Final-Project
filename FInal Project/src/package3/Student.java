@@ -102,22 +102,15 @@ public class Student {
 		studentRegList.add(registration);
 	}
 	
-	public void removeRegistration() throws IOException {
-		String courseName;
-		int courseNum;
-		
-		socketOut.println("Hi "+studentName+", please enter the name of the course you would like to un-register for:");
-		courseName=socketIn.readLine();
-		socketOut.println("Please eneter the course number:");
-		courseNum=Integer.parseInt(socketIn.readLine());
+	public String removeRegistration(String courseName, int courseNum) throws IOException {	
 		
 		for(int i=0;i < studentRegList.size();i++) {
 			if(courseName.contentEquals(studentRegList.get(i).getTheOffering().getTheCourse().getCourseName()) && courseNum==studentRegList.get(i).getTheOffering().getTheCourse().getCourseNum()) {
 			studentRegList.remove(i);
-			return;
+			return "1";
 			}
 		}
-		socketOut.println("The course you are unregistering from could not be found. Returning to main menu");
+		return "0";
 	}
 	
 	public void addRegistirationInterface(CourseCatalogue list) throws IOException {
