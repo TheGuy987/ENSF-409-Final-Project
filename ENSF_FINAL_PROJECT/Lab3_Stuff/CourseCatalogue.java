@@ -1,3 +1,5 @@
+import java.io.BufferedReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -5,8 +7,19 @@ public class CourseCatalogue {
 	
 	private ArrayList <Course> courseList;
 	
-	public CourseCatalogue () {
+	/*
+	 * socketIn is used to read client input from the socket 
+	 */
+	private BufferedReader socketIn;
+	/**
+	 * socketOut is used to write to the socket 
+	 */
+	private PrintWriter socketOut;
+	
+	public CourseCatalogue (BufferedReader socketIn, PrintWriter socketOut) {
 		loadFromDataBase ();
+		this.socketIn = socketIn;
+		this.socketOut = socketOut;
 	}
 	
 	private void loadFromDataBase() {

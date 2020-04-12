@@ -1,5 +1,7 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Scanner;
 /**
  * The Student class that contains name, id, CourseOffering List and Registration List
  *
@@ -22,17 +24,31 @@ public class Student {
 	 */
 	private ArrayList<Course> coursesTaken;
 	/*
-	 * Scanner class used to obtain user input from console 
+	 * socketIn is used to read client input from the socket 
 	 */
-	Scanner scan = new Scanner(System.in);
-	/*
-	 * constructs student with Name and Id input 
+	private BufferedReader socketIn;
+	/**
+	 * socketOut is used to write to the socket 
 	 */
-	public Student (String studentName, int studentId) {
-		this.setStudentName(studentName);
-		this.setStudentId(studentId);
+	private PrintWriter socketOut;
+	/**
+	 * constructs the class student 
+	 */
+	public Student (BufferedReader socketIn, PrintWriter socketOut) {
 		studentRegList = new ArrayList<Registration>();
-		coursesTaken = addCoursesTaken();
+		
+		this.socketIn = socketIn;
+		this.socketOut = socketOut;
+		
+		try {
+			setStudentName();
+			setStudentId();
+			coursesTaken = addCoursesTaken();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	/*
 	 * return studentName 
@@ -43,8 +59,14 @@ public class Student {
 	/*
 	 * sets studentName
 	 */
-	public void setStudentName(String studentName) {
-		this.studentName = studentName;
+	public void setStudentName() throws IOException {
+		socketOut.println("Please enter your name");
+		try {
+			studentName = socketIn.readLine(); 
+		}catch(Exception e) {
+			socketOut.println("Error - Try again");
+			setStudentName();
+		}
 	}
 	/*
 	 * returns StudentId 
@@ -55,8 +77,14 @@ public class Student {
 	/*
 	 * sets studentId 
 	 */
-	public void setStudentId(int studentId) {
-		this.studentId = studentId;
+	public void setStudentId() {
+		socketOut.println("Please enter your id");
+		try {
+			studentId = Integer.parseInt(socketIn.readLine()); 
+		}catch(Exception e) {
+			socketOut.println("Error - Try again");
+			setStudentId();
+		}
 	}
 	@Override
 	public String toString () {
@@ -72,14 +100,14 @@ public class Student {
 		studentRegList.add(registration);
 	}
 	
-	public void removeRegistration() {
+	public void removeRegistration() throws IOException {
 		String courseName;
 		int courseNum;
 		
-		System.out.println("Hi "+studentName+", please enter the name of the course you would like to un-register for:");
-		courseName=scan.next();
-		System.out.println("Please eneter the course number:");
-		courseNum=scan.nextInt();
+		socketOut.println("Hi "+studentName+", please enter the name of the course you would like to un-register for:");
+		courseName=socketIn.readLine();
+		socketOut.println("Please eneter the course number:");
+		courseNum=Integer.parseInt(socketIn.readLine());
 		
 		for(int i=0;i < studentRegList.size();i++) {
 			if(courseName.contentEquals(studentRegList.get(i).getTheOffering().getTheCourse().getCourseName()) && courseNum==studentRegList.get(i).getTheOffering().getTheCourse().getCourseNum()) {
@@ -87,26 +115,26 @@ public class Student {
 			return;
 			}
 		}
-		System.out.println("The course you are unregistering from could not be found. Returning to main menu");
+		socketOut.println("The course you are unregistering from could not be found. Returning to main menu");
 	}
 	
-	public void addRegistirationInterface(CourseCatalogue list) {
+	public void addRegistirationInterface(CourseCatalogue list) throws IOException {
 		String courseName;
 		int courseNum, check=0;
 		
 		if(maxCourseReg()) {
-			System.out.println("You have already registered for a maximum of 6 courses. Returning to main menu...");
+			socketOut.println("You have already registered for a maximum of 6 courses. Returning to main menu...");
 			return;
 		}
 		
-		System.out.println("Hi "+studentName+", please enter the name of the course you would like to register for:");
-		courseName=scan.next();
-		System.out.println("Please eneter the course number:");
-		courseNum=scan.nextInt();
+		socketOut.println("Hi "+studentName+", please enter the name of the course you would like to register for:");
+		courseName=socketIn.readLine();
+		socketOut.println("Please eneter the course number:");
+		courseNum=Integer.parseInt(socketIn.readLine());
 		
 		Course reg = list.searchCat(courseName, courseNum);
 		if(reg==null) {
-			System.out.println("The course you have entered could not be found. Returning to main menu");
+			socketOut.println("The course you have entered could not be found. Returning to main menu");
 			return;
 		}
 		
@@ -119,7 +147,7 @@ public class Student {
 		}
 		
 		if(check!=reg.getPreReq().size()) {
-			System.out.println("You do not meet the prerequisites for this course. Returning to main menu"); 
+			socketOut.println("You do not meet the prerequisites for this course. Returning to main menu"); 
 			return;
 		}
 		
@@ -131,12 +159,12 @@ public class Student {
 				of=reg.getCourseOfferingAt(i);
 				Registration r = new Registration();
 				r.completeRegistration(this, of);
-				System.out.println("You have been added to "+of.getTheCourse().getCourseName()+" "+of.getTheCourse().getCourseNum());
+				socketOut.println("You have been added to "+of.getTheCourse().getCourseName()+" "+of.getTheCourse().getCourseNum());
 				break;
 			}
 		}
 		if(check==0) {
-			System.out.println("Registeration error. All course offering for this class is full. Returning to main menu");
+			socketOut.println("Registeration error. All course offering for this class is full. Returning to main menu");
 			return;
 		}
 	}
@@ -146,7 +174,7 @@ public class Student {
 		return false; 
 	}
 	
-	public ArrayList<Course> addCoursesTaken() {
+	public ArrayList<Course> addCoursesTaken() throws IOException {
 		boolean check=true;
 		String [] line;
 		String courseName, userInput;
@@ -155,8 +183,8 @@ public class Student {
 	
 		
 		while(check) {
-			System.out.println("Hi "+studentName+", please enter the name and number of the course you have taken");
-			courseName=scan.nextLine();
+			socketOut.println("Hi "+studentName+", please enter the name and number of the course you have taken");
+			courseName=socketIn.readLine();
 			line=courseName.split(" ");
 			courseName=line[0];
 			if(line[1].matches("\\d+")) {
@@ -165,13 +193,13 @@ public class Student {
 				temp.add(c);
 			}
 			else {
-				System.out.println("You have entered an invalid input");
+				socketOut.println("You have entered an invalid input");
 			}
 			
 
 						
-			System.out.println("Do you want to add another course? Please enter 'yes' or 'no':");
-			userInput=scan.nextLine();
+			socketOut.println("Do you want to add another course? Please enter 'yes' or 'no':");
+			userInput=socketIn.readLine();
 			if(userInput.equals("no")) {
 				check=false;
 			}
@@ -179,7 +207,7 @@ public class Student {
 				check = true;
 			}
 			else {
-				System.out.println("You have enter and invalid input. Returning to main menu...");
+				socketOut.println("You have enter and invalid input. Returning to main menu...");
 				break;
 			}
 		}
@@ -190,7 +218,7 @@ public class Student {
 		for(int i=0;i<coursesTaken.size();i++) {
 			if(coursesTaken.get(i).getCourseName().equals(name)&&coursesTaken.get(i).getCourseNum()==num) {
 				coursesTaken.remove(i);
-				System.out.println(name+" has been removed");
+				socketOut.println(name+" has been removed");
 				return;
 			}
 		}

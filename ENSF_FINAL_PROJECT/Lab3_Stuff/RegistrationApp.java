@@ -39,8 +39,8 @@ public class RegistrationApp {
 		RegistrationApp App = new RegistrationApp();
 		CourseCatalogue cat = new CourseCatalogue ();
 		System.out.println(cat);
-		Student st = new Student ("Sara", 1);
-		Student st2 = new Student ("Sam", 2);
+		//Student st = new Student ("Sara", 1);
+		//Student st2 = new Student ("Sam", 2);
 		Course myCourse = cat.searchCat("ENGG", 233);
 		Course myCourse2 = cat.searchCat("ENSF", 409);
 		Course myCourse3 = cat.searchCat("PHYS", 259);
