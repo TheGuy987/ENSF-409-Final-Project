@@ -89,17 +89,17 @@ public class RegThread extends Thread {
 			break;
 
 			case(4):
-				System.out.println("3");
+				System.out.println("4");
 				//socketOut.println(cat.toString());
 			break;
 			
 			case(5):
-				System.out.println("4");
+				System.out.println("5");
 				//socketOut.println(student.toStringAllCoursesTaken());
 			break;
 			
 			case(6):
-				System.out.println("5");
+				System.out.println("6");
 				//socketOut.println(student.toStringAllRegistrations());
 			break;
 			
