@@ -32,10 +32,21 @@ public class RegServer {
 				socket = serverSocket.accept();
 				socketIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				socketOut = new PrintWriter(socket.getOutputStream(), true);
+				pool.execute(new RegThread(socketOut, socketIn));
 			} catch (IOException e) {
 				e.printStackTrace();
+				break;
 			}
 		}
+		
+		try {
+			socket.close();
+			socketIn.close();
+			socketOut.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public static void main(String[] args) {
