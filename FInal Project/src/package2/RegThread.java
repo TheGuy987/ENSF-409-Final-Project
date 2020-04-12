@@ -21,7 +21,6 @@ public class RegThread extends Thread {
 	public void run() {
 		
 		CourseCatalogue cat = new CourseCatalogue (socketIn, socketOut);
-		socketOut.println(cat);
 		Student student = new Student(socketIn, socketOut);
 		Course myCourse = cat.searchCat("ENGG", 233);
 		Course myCourse2 = cat.searchCat("ENSF", 409);

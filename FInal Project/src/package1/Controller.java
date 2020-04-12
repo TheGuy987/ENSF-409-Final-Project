@@ -7,7 +7,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 public class Controller {
-	private GUI mainPane;
+	private GUI theGUI;	
 	private BufferedReader socketIn;
 	private PrintWriter socketOut;
 	
@@ -16,13 +16,17 @@ public class Controller {
 		this.socketOut = socketOut;
 	}
 	//Default controller to have eclipse stop yelling at me 
-	public Controller() {
-		
+	public void startGUI() {
+		theGUI = new GUI(this);
+		theGUI.setVisible(true);
 	}
 	
 	public void getStudentInfo() {
 		String studentName = JOptionPane.showInputDialog("Please enter your name");
 		socketOut.println(studentName);
+		
+		String studentId = JOptionPane.showInputDialog("Please enter your id");
+		socketOut.println(studentId);
 		
 		JTextField courseName = new JTextField();
 		JTextField courseNum = new JTextField();
@@ -36,8 +40,8 @@ public class Controller {
 		// Loop to ask students what courses they have taken 
 		while(check==0) {
 			JOptionPane.showConfirmDialog(null,fields,"Courses Taken", JOptionPane.CANCEL_OPTION);
-			socketOut.println(courseName);
-			socketOut.println(courseNum);
+			socketOut.println(courseName.getText());
+			socketOut.println(courseNum.getText());
 			check =JOptionPane.showConfirmDialog(null, "Do you want to add another course?", "Courses Taken", JOptionPane.OK_OPTION);
 			socketOut.println(check);
 		}

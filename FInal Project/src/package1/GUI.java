@@ -89,8 +89,4 @@ public class GUI extends JFrame {
 	 * its constructor and starts the program.
 	 * @param args String array that can be read form the command line.
 	 */
-	public static void main(String[] args) {
-		GUI app = new GUI(new Controller());
-		app.setVisible(true);
-	}
 }

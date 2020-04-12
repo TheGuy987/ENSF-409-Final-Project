@@ -183,8 +183,9 @@ public class Student {
 		
 		while(check) {
 			courseName=socketIn.readLine();
-
+			System.out.println(courseName);
 			courseNum=Integer.parseInt(socketIn.readLine());
+			System.out.println(courseNum);
 			Course c = new Course(courseName,courseNum);
 			temp.add(c);
 						
