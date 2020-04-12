@@ -113,24 +113,21 @@ public class Student {
 		return "0";
 	}
 	
-	public void addRegistirationInterface(CourseCatalogue list) throws IOException {
-		String courseName;
-		int courseNum, check=0;
+	public String addRegistrationController(CourseCatalogue list, String courseName, int courseNum) throws IOException {
+		//Returns:
+		//	"0" for already in 6 courses
+		//	"1" for course not found
+		//	"2" for wrong prereqs
+		//	"3" for course is full
+		//	"4" if the action was sucessful
+		int check=0;
 		
 		if(maxCourseReg()) {
-			socketOut.println("You have already registered for a maximum of 6 courses. Returning to main menu...");
-			return;
+			return "0";
 		}
-		
-		socketOut.println("Hi "+studentName+", please enter the name of the course you would like to register for:");
-		courseName=socketIn.readLine();
-		socketOut.println("Please eneter the course number:");
-		courseNum=Integer.parseInt(socketIn.readLine());
-		
 		Course reg = list.searchCat(courseName, courseNum);
 		if(reg==null) {
-			socketOut.println("The course you have entered could not be found. Returning to main menu");
-			return;
+			return "1";
 		}
 		
 		for(int i = 0;i < reg.getPreReq().size();i++) {
@@ -142,8 +139,7 @@ public class Student {
 		}
 		
 		if(check!=reg.getPreReq().size()) {
-			socketOut.println("You do not meet the prerequisites for this course. Returning to main menu"); 
-			return;
+			return "2";
 		}
 		
 		CourseOffering of;
@@ -154,14 +150,14 @@ public class Student {
 				of=reg.getCourseOfferingAt(i);
 				Registration r = new Registration();
 				r.completeRegistration(this, of);
-				socketOut.println("You have been added to "+of.getTheCourse().getCourseName()+" "+of.getTheCourse().getCourseNum());
+				//socketOut.println("You have been added to "+of.getTheCourse().getCourseName()+" "+of.getTheCourse().getCourseNum());
 				break;
 			}
 		}
 		if(check==0) {
-			socketOut.println("Registeration error. All course offering for this class is full. Returning to main menu");
-			return;
+			return "3";
 		}
+		return "4";
 	}
 	
 	public boolean maxCourseReg(){

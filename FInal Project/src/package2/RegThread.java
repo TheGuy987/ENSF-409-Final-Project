@@ -12,7 +12,7 @@ public class RegThread extends Thread {
 	private PrintWriter socketOut;
 	private BufferedReader socketIn;
 	private Student theStudent;
-	private CourseCatalogue theCalalogue;
+	private CourseCatalogue theCatalogue;
 	
 	public RegThread(PrintWriter socketOut, BufferedReader socketIn) {
 		this.socketIn = socketIn;
@@ -31,33 +31,40 @@ public class RegThread extends Thread {
 					case(0):
 						break;
 					case(1):
-						result = theCalalogue.searchCatalogue(socketIn.readLine(), Integer.parseInt(socketIn.readLine()));
+						result = theCatalogue.searchCatalogue(socketIn.readLine(), Integer.parseInt(socketIn.readLine()));
 						socketOut.println(result);
 						break;
-
+						
 					case(2):
-						result = theStudent.removeRegistration(socketIn.readLine(), Integer.parseInt(socketIn.readLine()));
+						result = theStudent.addRegistrationController(theCatalogue, socketIn.readLine(), Integer.parseInt(socketIn.readLine()));
 						socketOut.println(result);
 						break;
 
 					case(3):
-						result = theCalalogue.toString();
+						result = theStudent.removeRegistration(socketIn.readLine(), Integer.parseInt(socketIn.readLine()));
 						socketOut.println(result);
 						break;
 
 					case(4):
-					
+						result = theCatalogue.toString();
+						socketOut.println(result);
 						break;
-				
+
 					case(5):
-					
+						result = theStudent.toStringAllCoursesTaken();
+						socketOut.println(result);
 						break;
 				
 					case(6):
-						
+						result = theStudent.toStringAllRegistrations();
+						socketOut.println(result);
 						break;
 				
 					case(7):
+						
+						break;
+				
+					case(8):
 						return;
 				}
 			} catch (NumberFormatException e) {
