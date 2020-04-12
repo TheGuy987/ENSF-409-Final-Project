@@ -18,7 +18,7 @@ import javax.swing.JScrollPane;
  */
 
 public class GUI extends JFrame {
-	JButton insert, find, browse, createTree;
+	JButton searchCata, removeReg, displayCata, displayCoursesTaken, displayReg;
 	JLabel title;
 	JPanel titlePanel, buttonPanel;
 	JScrollPane display;
