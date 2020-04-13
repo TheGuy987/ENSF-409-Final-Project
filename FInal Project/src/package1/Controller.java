@@ -21,6 +21,7 @@ public class Controller {
 	}
 	//Default controller to have eclipse stop yelling at me 
 	public void startGUI() {
+		getStudentInfo();
 		theGUI = new GUI(this);
 		theGUI.setVisible(true);
 	}

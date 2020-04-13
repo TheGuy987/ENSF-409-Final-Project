@@ -25,7 +25,6 @@ public class Client {
 	
 	public void startController() {
 		theController = new Controller(socketIn, socketOut);
-		theController.getStudentInfo();
 		theController.startGUI();
 	}
 	
