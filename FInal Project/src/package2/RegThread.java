@@ -59,13 +59,6 @@ public class RegThread extends Thread {
 						result = theStudent.toStringAllRegistrations();
 						socketOut.println(result);
 						break;
-				
-					case(7):
-						
-						break;
-				
-					case(8):
-						return;
 				}
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
