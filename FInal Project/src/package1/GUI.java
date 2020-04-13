@@ -6,6 +6,8 @@ import javax.swing.JOptionPane;
 
 import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -52,6 +54,10 @@ public class GUI extends JFrame {
 			control.searchCataPressed();
 			});
 		
+		addReg.addActionListener((ActionEvent e) -> { 
+			control.addRegPressed();
+			});
+		
 		removeReg.addActionListener((ActionEvent e) -> { 
 			control.removeRegPressed();
 			});
@@ -65,7 +71,12 @@ public class GUI extends JFrame {
 			});
 		
 		displayReg.addActionListener((ActionEvent e) -> { 
-			control.displayRegPressed();
+			try {
+				control.displayRegPressed();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			});
 		
 		

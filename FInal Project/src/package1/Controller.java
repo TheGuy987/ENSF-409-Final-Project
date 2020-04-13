@@ -1,9 +1,13 @@
 package package1;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class Controller {
@@ -57,21 +61,30 @@ public class Controller {
 	
 	public void removeRegPressed() {
 		socketOut.println("3");
-
 	}
 	
 	public void displayCataPressed() {
 		socketOut.println("4");
-
 	}
 	
 	public void displayTakenPressed() {
 		socketOut.println("5");
-
 	}
 	
-	public void displayRegPressed() {
+	public void displayRegPressed() throws IOException {
 		socketOut.println("6");
+		theGUI.remove(theGUI.display);
 
+		theGUI.display = new JScrollPane(updateTextArea(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		theGUI.display.setSize(300, 20);
+		theGUI.add("Center",theGUI.display);
+        theGUI.add(theGUI.display);
+        theGUI.pack();
 	}
+	
+	public JTextArea updateTextArea() throws IOException {
+		JTextArea jta = new JTextArea(socketIn.readLine(), 23, 62);
+		return jta;
+	}
+	
 }

@@ -69,7 +69,6 @@ public class RegThread extends Thread {
 					e1.printStackTrace();
 				}*/
 			break;
-
 			case(2):
 				System.out.println("2");
 				/*try {
@@ -101,7 +100,7 @@ public class RegThread extends Thread {
 			break;
 			
 			case(6):
-				System.out.println("6");
+				socketOut.println(student.toStringAllCoursesTaken());
 				//socketOut.println(student.toStringAllRegistrations());
 			break;
 			
