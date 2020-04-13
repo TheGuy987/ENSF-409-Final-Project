@@ -19,7 +19,7 @@ public class Controller {
 		this.socketIn = socketIn;
 		this.socketOut = socketOut;
 	}
-	//Default controller to have eclipse stop yelling at me 
+
 	public void startGUI() {
 		getStudentInfo();
 		theGUI = new GUI(this);
