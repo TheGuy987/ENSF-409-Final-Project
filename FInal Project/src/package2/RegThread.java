@@ -13,7 +13,7 @@ public class RegThread extends Thread {
 	
 	BufferedReader socketIn;
  	private Student theStudent; 
- 	private CourseCatalogue theCalalogue; 
+ 	private CourseCatalogue theCatalogue; 
 	
 	public RegThread(PrintWriter socketOut, BufferedReader socketIn) {
 		this.socketIn = socketIn;
@@ -22,23 +22,21 @@ public class RegThread extends Thread {
 
 	public void run() {
  		
-		CourseCatalogue cat = new CourseCatalogue (socketIn, socketOut);
-		Student student = new Student(socketIn, socketOut);
-		Course myCourse = cat.searchCat("ENGG", 233);
-		Course myCourse2 = cat.searchCat("ENSF", 409);
-		Course myCourse3 = cat.searchCat("PHYS", 259);
+		Course myCourse = theCatalogue.searchCat("ENGG", 233);
+		Course myCourse2 = theCatalogue.searchCat("ENSF", 409);
+		Course myCourse3 = theCatalogue.searchCat("PHYS", 259);
 		
 		if (myCourse2 != null) {
-			cat.createCourseOffering(myCourse2, 1, 1);
-			cat.createCourseOffering(myCourse2, 2, 50);
+			theCatalogue.createCourseOffering(myCourse2, 1, 1);
+			theCatalogue.createCourseOffering(myCourse2, 2, 50);
 		}
 		if (myCourse != null) {
-			cat.createCourseOffering(myCourse, 1, 100);
-			cat.createCourseOffering(myCourse, 2, 200);
+			theCatalogue.createCourseOffering(myCourse, 1, 100);
+			theCatalogue.createCourseOffering(myCourse, 2, 200);
 		}
 		if (myCourse3 != null) {
-			cat.createCourseOffering(myCourse3, 1, 100);
-			cat.createCourseOffering(myCourse3, 2, 200);
+			theCatalogue.createCourseOffering(myCourse3, 1, 100);
+			theCatalogue.createCourseOffering(myCourse3, 2, 200);
 		}
 		
 		//Begin
@@ -92,21 +90,21 @@ public class RegThread extends Thread {
 			case(4):
 				System.out.println("4");
 				socketOut.flush();
-				System.out.println(cat.toString());
-				socketOut.println(cat.toString());
+				System.out.println(theCatalogue.toString());
+				socketOut.println(theCatalogue.toString());
 			break;
 			
 			case(5):
 				System.out.println("5");
 				socketOut.flush();
-				System.out.println(student.toStringAllCoursesTaken());
-				socketOut.println(student.toStringAllCoursesTaken());
+				System.out.println(theStudent.toStringAllCoursesTaken());
+				socketOut.println(theStudent.toStringAllCoursesTaken());
 			break;
 			
 			case(6):
 				socketOut.flush();
-				System.out.println(student.toStringAllRegistrations());
-				socketOut.println(student.toStringAllRegistrations());
+				System.out.println(theStudent.toStringAllRegistrations());
+				socketOut.println(theStudent.toStringAllRegistrations());
 			break;
 			
 			case(7):
