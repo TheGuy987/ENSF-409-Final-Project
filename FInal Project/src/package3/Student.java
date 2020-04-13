@@ -170,7 +170,6 @@ public class Student {
 	
 	public ArrayList<Course> addCoursesTaken() throws IOException {
 		boolean check=true;
-		String [] line;
 		String courseName;
 		int userInput;
 		int courseNum=0;
