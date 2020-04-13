@@ -65,25 +65,50 @@ public class Controller {
 	
 	public void displayCataPressed() {
 		socketOut.println("4");
-	}
-	
-	public void displayTakenPressed() {
-		socketOut.println("5");
-	}
-	
-	public void displayRegPressed() throws IOException {
-		socketOut.println("6");
 		theGUI.remove(theGUI.display);
 
 		theGUI.display = new JScrollPane(updateTextArea(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		theGUI.display.setSize(300, 20);
+		theGUI.display.setSize(1080,720);
 		theGUI.add("Center",theGUI.display);
         theGUI.add(theGUI.display);
         theGUI.pack();
 	}
 	
-	public JTextArea updateTextArea() throws IOException {
-		JTextArea jta = new JTextArea(socketIn.readLine(), 23, 62);
+	public void displayTakenPressed() {
+		socketOut.println("5");
+		theGUI.remove(theGUI.display);
+
+		theGUI.display = new JScrollPane(updateTextArea(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		theGUI.display.setSize(1080,720);
+		theGUI.add("Center",theGUI.display);
+        theGUI.add(theGUI.display);
+        theGUI.pack();
+	}
+	
+	public void displayRegPressed() {
+		socketOut.println("6");
+		theGUI.remove(theGUI.display);
+
+		theGUI.display = new JScrollPane(updateTextArea(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		theGUI.display.setSize(1080,720);
+		theGUI.add("Center",theGUI.display);
+        theGUI.add(theGUI.display);
+        theGUI.pack();
+	}
+	
+	public JTextArea updateTextArea() {
+		String display="";
+		try {
+			while(socketIn.ready()) {
+				display+=socketIn.readLine();
+				display+="\n";
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		JTextArea jta = new JTextArea(display, 40, 87);
 		return jta;
 	}
 	

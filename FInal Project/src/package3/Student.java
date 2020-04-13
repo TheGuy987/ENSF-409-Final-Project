@@ -65,7 +65,6 @@ public class Student {
 	 * sets studentName
 	 */
 	public void setStudentName() throws IOException {
-		socketOut.println("Please enter your name");
 		try {
 			studentName = socketIn.readLine(); 
 		}catch(Exception e) {
@@ -82,7 +81,6 @@ public class Student {
 	 * sets studentId 
 	 */
 	public void setStudentId() {
-		socketOut.println("Please enter your id");
 		try {
 			studentId = Integer.parseInt(socketIn.readLine()); 
 		}catch(Exception e) {
