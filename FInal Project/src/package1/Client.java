@@ -38,7 +38,7 @@ public class Client {
 	}
 	
 	/**
-	 * Assigns variable theController to a new Controller object using the PrintWriter and 
+	 * Assigns variable thseController to a new Controller object using the PrintWriter and 
 	 * BufferedReader objects. Then uses variable theController to create a GUI.
 	 */
 	public void startController() {

@@ -3,6 +3,7 @@ package package3;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.SocketException;
 import java.util.ArrayList;
 /**
  * The Student class that contains name, id, CourseOffering List and Registration List
@@ -36,7 +37,7 @@ public class Student {
 	/**
 	 * constructs the class student 
 	 */
-	public Student (BufferedReader socketIn, PrintWriter socketOut) {
+	public Student (BufferedReader socketIn, PrintWriter socketOut)throws SocketException {
 		studentRegList = new ArrayList<Registration>();
 		
 		this.socketIn = socketIn;
@@ -47,10 +48,14 @@ public class Student {
 			setStudentId();
 			coursesTaken = addCoursesTaken();
 
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		}catch(SocketException e) {
+			throw new SocketException();
+		}catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		System.out.println("Student "+studentName+" "+studentId);
+		System.out.println(toStringAllCoursesTaken());
 	}
 	/*
 	 * return studentName 
@@ -61,13 +66,15 @@ public class Student {
 	/*
 	 * sets studentName
 	 */
-	public void setStudentName() throws IOException {
-		socketOut.println("Please enter your name");
+	public void setStudentName() throws SocketException {
 		try {
 			studentName = socketIn.readLine(); 
+		}catch(SocketException e) {
+			throw new SocketException();
+		}catch(IOException e) {
+			e.printStackTrace();
 		}catch(Exception e) {
-			socketOut.println("Error - Try again");
-			setStudentName();
+			e.printStackTrace();
 		}
 	}
 	/*
@@ -79,13 +86,15 @@ public class Student {
 	/*
 	 * sets studentId 
 	 */
-	public void setStudentId() {
-		socketOut.println("Please enter your id");
+	public void setStudentId() throws SocketException{
 		try {
 			studentId = Integer.parseInt(socketIn.readLine()); 
+		}catch(SocketException e) {
+			throw new SocketException();
+		}catch (IOException e) {
+			e.printStackTrace();
 		}catch(Exception e) {
-			socketOut.println("Error - Try again");
-			setStudentId();
+			e.printStackTrace();
 		}
 	}
 	@Override
@@ -168,38 +177,21 @@ public class Student {
 	public ArrayList<Course> addCoursesTaken() throws IOException {
 		boolean check=true;
 		String [] line;
-		String courseName, userInput;
+		String courseName;
+		int userInput;
 		int courseNum=0;
 		ArrayList<Course> temp = new ArrayList<Course>();
 	
 		
 		while(check) {
-			socketOut.println("Hi "+studentName+", please enter the name and number of the course you have taken");
 			courseName=socketIn.readLine();
-			line=courseName.split(" ");
-			courseName=line[0];
-			if(line[1].matches("\\d+")) {
-				courseNum=Integer.parseInt(line[1]);
-				Course c = new Course(courseName,courseNum);
-				temp.add(c);
-			}
-			else {
-				socketOut.println("You have entered an invalid input");
-			}
-			
-
+			courseNum =Integer.parseInt(socketIn.readLine());
+			Course c = new Course(courseName,courseNum);
+			temp.add(c);
 						
-			socketOut.println("Do you want to add another course? Please enter 'yes' or 'no':");
-			userInput=socketIn.readLine();
-			if(userInput.equals("no")) {
+			userInput=Integer.parseInt(socketIn.readLine());
+			if(userInput==1) {
 				check=false;
-			}
-			else if(userInput.equals("yes")) {
-				check = true;
-			}
-			else {
-				socketOut.println("You have enter and invalid input. Returning to main menu...");
-				break;
 			}
 		}
 		return temp;

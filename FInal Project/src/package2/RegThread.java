@@ -3,6 +3,7 @@ package package2;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.SocketException;
 
 import package3.*;
 
@@ -21,7 +22,31 @@ public class RegThread extends Thread {
 	
 	public void run() {
 		
+		try {
+		theStudent = new Student(socketIn, socketOut);
+ 		theCatalogue = new CourseCatalogue(socketIn, socketOut);
+		} catch(SocketException e) {
+			return;
+		}
+		
 		String result = "0";
+		
+		Course myCourse = theCatalogue.searchCat("ENGG", 233);
+		Course myCourse2 = theCatalogue.searchCat("ENSF", 409);
+		Course myCourse3 = theCatalogue.searchCat("PHYS", 259);
+		
+		if (myCourse2 != null) {
+			theCatalogue.createCourseOffering(myCourse2, 1, 1);
+			theCatalogue.createCourseOffering(myCourse2, 2, 50);
+		}
+		if (myCourse != null) {
+			theCatalogue.createCourseOffering(myCourse, 1, 100);
+			theCatalogue.createCourseOffering(myCourse, 2, 200);
+		}
+		if (myCourse3 != null) {
+			theCatalogue.createCourseOffering(myCourse3, 1, 100);
+			theCatalogue.createCourseOffering(myCourse3, 2, 200);
+		}
 		
 		while(true) {
 			int choice = 0;
@@ -46,19 +71,27 @@ public class RegThread extends Thread {
 						break;
 
 					case(4):
-						result = theCatalogue.toString();
-						socketOut.println(result);
-						break;
-
+						System.out.println("4");
+						socketOut.flush();
+						System.out.println(theCatalogue.toString());
+						socketOut.println(theCatalogue.toString());
+					break;
+					
 					case(5):
-						result = theStudent.toStringAllCoursesTaken();
-						socketOut.println(result);
-						break;
-				
+						System.out.println("5");
+						socketOut.flush();
+						System.out.println(theStudent.toStringAllCoursesTaken());
+						socketOut.println(theStudent.toStringAllCoursesTaken());
+					break;
+					
 					case(6):
-						result = theStudent.toStringAllRegistrations();
-						socketOut.println(result);
-						break;
+						socketOut.flush();
+						System.out.println(theStudent.toStringAllRegistrations());
+						socketOut.println(theStudent.toStringAllRegistrations());
+					break;
+					
+					case(7):
+						return;
 				}
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
