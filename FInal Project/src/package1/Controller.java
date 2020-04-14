@@ -77,6 +77,9 @@ public class Controller {
     		};
     		
     		int option = JOptionPane.showConfirmDialog(null,field2, panelTitle, JOptionPane.CANCEL_OPTION);
+
+    		if(option == JOptionPane.CANCEL_OPTION)
+        		break;
         	
             nameIn = courseName.getText();
             idIn = courseNum.getText();

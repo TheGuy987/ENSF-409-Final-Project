@@ -128,9 +128,4 @@ public class GUI extends JFrame {
 		buttonPanel.setBackground(Color.DARK_GRAY);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-	/**
-	 * Main method of the program. It creates a new insance of GUI, which calls
-	 * its constructor and starts the program.
-	 * @param args String array that can be read form the command line.
-	 */
 }
