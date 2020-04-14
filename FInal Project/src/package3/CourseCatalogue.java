@@ -1,21 +1,19 @@
 package package3;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
-
 /**
  * Class representing the course catalogue of a course registration system. It has variables
  * holding data streams to a client, and an ArrayList containing all courses.
  * @author Vaibhav Kapoor, Thomas Pan, and Matthew Wells
  *
  */
-
 public class CourseCatalogue {
 	
 	private ArrayList <Course> courseList;
-	
 	/*
 	 * socketIn is used to read client input from the socket 
 	 */
@@ -24,7 +22,6 @@ public class CourseCatalogue {
 	 * socketOut is used to write to the socket 
 	 */
 	private PrintWriter socketOut;
-	
 	/**
 	 * Constructor that takes BufferedReader and PrintWriter objects as input, and assigns them
 	 * to the corrosponding variables.
@@ -36,11 +33,11 @@ public class CourseCatalogue {
 		this.socketIn = socketIn;
 		this.socketOut = socketOut;
 	}
-	
 	/**
 	 * Initializes a DBManager object, and uses it to set the variable courseList.
 	 */
 	private void loadFromDataBase() {
+		// TODO Auto-generated method stub
 		DBManager db = new DBManager();
 		setCourseList(db.readFromDataBase());
 		
@@ -55,6 +52,24 @@ public class CourseCatalogue {
 		if (c!= null) {
 			CourseOffering theOffering = new CourseOffering (secNum, secCap);
 			c.addOffering(theOffering);
+		}
+	}
+	/**
+	 * Calls the method searchCat and processes the result.
+	 * @param name String holding the name of the course being searched for.
+	 * @param num Integer holding the number of the course being searched for.
+	 * @return String holding the result of the search.
+	 */
+	public void searchCatalogue() throws NumberFormatException, IOException {
+		String option = socketIn.readLine();
+		if(option.contentEquals("0")) {
+			String name = socketIn.readLine();
+			int num = Integer.parseInt(socketIn.readLine());
+			Course found = searchCat(name,num);
+			if(found!=null)
+				socketOut.println(found.toString());
+			else
+				socketOut.println("The course "+name+" "+num+" could not be found");
 		}
 	}
 	/**
@@ -80,25 +95,9 @@ public class CourseCatalogue {
 	/**
 	 * Returns the variable courseList.
 	 * @return ArrayList holding all of the courses.
-	 */
+	 */	
 	public ArrayList <Course> getCourseList() {
 		return courseList;
-	}
-	
-	/**
-	 * Calls the method searchCat and processes the result.
-	 * @param name String holding the name of the course being searched for.
-	 * @param num Integer holding the number of the course being searched for.
-	 * @return String holding the result of the search.
-	 */
-	public String searchCatalogue(String name, int num) {
-		
-		Course found = searchCat(name,num);
-		if(found==null)
-			return "0";
-		else
-			return found.toString();
-		
 	}
 	/**
 	 * Sets the variable courseList.
@@ -107,11 +106,11 @@ public class CourseCatalogue {
 	public void setCourseList(ArrayList <Course> courseList) {
 		this.courseList = courseList;
 	}
-	@Override
 	/**
 	 * Returns the object in String form.
 	 * @return String holding the object in String form.
 	 */
+	@Override
 	public String toString () {
 		String st = "All courses in the catalogue: \n";
 		for (Course c : courseList) {

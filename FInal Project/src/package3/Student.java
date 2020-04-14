@@ -49,17 +49,21 @@ public class Student {
 			setStudentName();
 			setStudentId();
 			coursesTaken = addCoursesTaken();
-
 		}catch(SocketException e) {
 			throw new SocketException();
-		}catch (IOException e) {
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		System.out.println("Student "+studentName+" "+studentId);
-		System.out.println(toStringAllCoursesTaken());
+		try {
+			System.out.println(toStringAllCoursesTaken());
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-
 	/**
 	 * Returns the name of the student.
 	 * @return String holding the student's name.
@@ -67,8 +71,6 @@ public class Student {
 	public String getStudentName() {
 		return studentName;
 	}
-
-
 	/**
 	 * Sets the student's name, using variable socketIn as input.
 	 * @throws SocketException that is thrown if the server has lost connection to the client.
@@ -78,13 +80,10 @@ public class Student {
 			studentName = socketIn.readLine(); 
 		}catch(SocketException e) {
 			throw new SocketException();
-		}catch(IOException e) {
-			e.printStackTrace();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
 	/**
 	 * Returns the students ID number.
 	 * @return Integer holding the student's ID number.
@@ -92,23 +91,19 @@ public class Student {
 	public int getStudentId() {
 		return studentId;
 	}
-	
 	/**
 	 * Sets the student's ID, using variable socketIn as input.
 	 * @throws SocketException that is thrown if the server has lost connection to the client.
 	 */
-	public void setStudentId() throws SocketException{
+	public void setStudentId()throws SocketException {
 		try {
 			studentId = Integer.parseInt(socketIn.readLine()); 
 		}catch(SocketException e) {
 			throw new SocketException();
-		}catch (IOException e) {
-			e.printStackTrace();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
 	/**
 	 * Returns the students information in the form of a String.
 	 */
@@ -123,9 +118,9 @@ public class Student {
 	 * @param registration object of type Registration to be added to student list.
 	 */
 	public void addRegistration(Registration registration) {
+		// TODO Auto-generated method stub
 		studentRegList.add(registration);
 	}
-	
 	/**
 	 * Removes a registration form student list.
 	 * @param courseName String holding the name of course the regisitration is for.
@@ -134,40 +129,62 @@ public class Student {
 	 * @throws IOException Exception thrown if something goes wrong with the operation relating to
 	 * and IO operation.
 	 */
-	public String removeRegistration(String courseName, int courseNum) throws IOException {	
+	public void removeRegistration(String courseName, int courseNum) throws IOException {	
 		
 		for(int i=0;i < studentRegList.size();i++) {
 			if(courseName.contentEquals(studentRegList.get(i).getTheOffering().getTheCourse().getCourseName()) && courseNum==studentRegList.get(i).getTheOffering().getTheCourse().getCourseNum()) {
-			studentRegList.remove(i);
-			return "1";
+				studentRegList.remove(i);
+				socketOut.println("The course has been successfully removed from your registration");
+				return;
 			}
 		}
-		return "0";
+		socketOut.println("The course you have entered could not be found");
 	}
 	
-	/**
-	 * 
-	 * @param list
-	 * @param courseName
-	 * @param courseNum
-	 * @return
-	 * @throws IOException
-	 */
-	public String addRegistrationController(CourseCatalogue list, String courseName, int courseNum) throws IOException {
-		//Returns:
-		//	"0" for already in 6 courses
-		//	"1" for course not found
-		//	"2" for wrong prereqs
-		//	"3" for course is full
-		//	"4" if the action was sucessful
-		int check=0;
+	public void removeRegistrationInterface() throws IOException {
 		
-		if(maxCourseReg()) {
-			return "0";
+		//cancels method if the user presses "Cancel"
+		String option = socketIn.readLine();
+		System.out.println("TEST "+option);
+		if(!option.contentEquals("0")) {
+			return;
 		}
+		
+		String courseName = socketIn.readLine();
+		int courseNum = Integer.parseInt(socketIn.readLine());
+		
+		removeRegistration(courseName, courseNum);
+	}
+	/**
+	 * Registers the student to a course based on client input. It will then send a message to the client based
+	 * on whether or not the student was successfully added and why
+	 * @param list of courses to register for 
+	 * @param courseName is the name of the course to add
+	 * @param courseNum is the number of the course to add
+	 * @return void
+	 * @throws IOException Exception thrown if something goes wrong with the operation relating to an IO Operation
+	 */
+	public void addRegistirationInterface(CourseCatalogue list) throws IOException {
+		//cancels method if the user presses "Cancel"
+		String option = socketIn.readLine();
+		System.out.println("TEST "+option);
+		if(!option.contentEquals("0")) {
+			return;
+		}
+		
+		String courseName = socketIn.readLine();
+		int courseNum = Integer.parseInt(socketIn.readLine());
+		int check=0;
+
+		if(maxCourseReg()) {
+			socketOut.println("You have already registered for a maximum of 6 courses.");
+			return;
+		}
+		
 		Course reg = list.searchCat(courseName, courseNum);
 		if(reg==null) {
-			return "1";
+			socketOut.println("The course you have entered could not be found");
+			return;
 		}
 		
 		for(int i = 0;i < reg.getPreReq().size();i++) {
@@ -179,7 +196,8 @@ public class Student {
 		}
 		
 		if(check!=reg.getPreReq().size()) {
-			return "2";
+			socketOut.println("You do not meet the prerequisites for this course"); 
+			return;
 		}
 		
 		CourseOffering of;
@@ -190,34 +208,32 @@ public class Student {
 				of=reg.getCourseOfferingAt(i);
 				Registration r = new Registration();
 				r.completeRegistration(this, of);
-				//socketOut.println("You have been added to "+of.getTheCourse().getCourseName()+" "+of.getTheCourse().getCourseNum());
+				socketOut.println("You have been added to "+of.getTheCourse().getCourseName()+" "+of.getTheCourse().getCourseNum());
 				break;
 			}
 		}
+		
 		if(check==0) {
-			return "3";
+			socketOut.println("Registeration error. All course offering for this class is full");
+			return;
 		}
-		return "4";
 	}
-	
 	/**
 	 * Returns true if the student is registered in the maximum number of courses (6).
 	 * @return boolean holding a true if the student is already registered in 6 courses.
 	 */
 	public boolean maxCourseReg(){
-		if(studentRegList.size()>=6) return true;
+		if(studentRegList.size()>6) return true;
 		return false; 
 	}
-	
 	/**
 	 * Adds courses to an ArrayList of courese that the student has already taken.
 	 * @return ArrayList of Course objects representing all of the courses the student
 	 * has already taken.
 	 * @throws IOException
-	 */
+	 */	
 	public ArrayList<Course> addCoursesTaken() throws IOException {
 		boolean check=true;
-		String [] line;
 		String courseName;
 		int userInput;
 		int courseNum=0;
@@ -237,12 +253,11 @@ public class Student {
 		}
 		return temp;
 	}
-	
 	/**
 	 * Removes a coures from the list of courses that the student has already taken.
 	 * @param name String holding the name of the course to be removed.
 	 * @param num Integer holding the
-	 */
+	 */	
 	public void removeCoursesTaken(String name,int num) {
 		for(int i=0;i<coursesTaken.size();i++) {
 			if(coursesTaken.get(i).getCourseName().equals(name)&&coursesTaken.get(i).getCourseNum()==num) {
@@ -252,12 +267,11 @@ public class Student {
 			}
 		}
 	}
-	
 	/**
 	 * Returns a String holding all the courses that the student has taken.
 	 * @return String holding all the courses that the student has taken.
 	 */
-	public String toStringAllCoursesTaken() {
+	public String toStringAllCoursesTaken() throws SocketException{
 		String st = "All courses the student has taken: \n";
 		for (int i=0;i<coursesTaken.size();i++) {
 			st += coursesTaken.get(i).toString();  //This line invokes the toString() method of Course
@@ -265,11 +279,10 @@ public class Student {
 		}
 		return st;
 	}
-	
 	/**
 	 * Returns a String holding all the courses that the student is registered for.
 	 * @return String holding all the courses that the student is registered for.
-	 */
+	 */	
 	public String toStringAllRegistrations() {
 		String st = "All courses the student has registered for: \n";
 		for (int i=0;i<studentRegList.size();i++) {

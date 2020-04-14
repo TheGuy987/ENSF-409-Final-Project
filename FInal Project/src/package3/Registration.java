@@ -1,5 +1,4 @@
 package package3;
-
 /**
  * Class representing a students registration in a specific course. It has variables for
  * the student, the course offering, and the grade the student currently has in the course.
@@ -10,18 +9,16 @@ public class Registration {
 	private Student theStudent;
 	private CourseOffering theOffering;
 	private char grade;
-	
 	/**
 	 * assigns the variables theStudent and theOffering, then calls the method addRegistration.
 	 * @param st Student object assigned to theStudent.
 	 * @param of CourseOffering object assigned to theOffering.
-	 */
+	 */	
 	void completeRegistration (Student st, CourseOffering of) {
 		theStudent = st;
 		theOffering = of;
 		addRegistration ();
 	}
-	
 	/**
 	 * Adds this object to the Student object and the CourseOffering object.
 	 */
@@ -29,7 +26,6 @@ public class Registration {
 		theStudent.addRegistration(this);
 		theOffering.addRegistration(this);
 	}
-	
 	
 	/**
 	 * Returns theStudent.
@@ -73,15 +69,14 @@ public class Registration {
 	public void setGrade(char grade) {
 		this.grade = grade;
 	}
-	
-	@Override
 	/**
 	 * Returns this class in String form.
 	 * @return String holding this class in String form.
 	 */
+	@Override
 	public String toString () {
 		String st = "\n";
-		st += "Student Name: " + getTheStudent() + "\n";
+		st += "Student Name: " + getTheStudent().getStudentName() + "\n";
 		st += "The Offering: " + getTheOffering () + "\n";
 		st += "Grade: " + getGrade();
 		st += "\n-----------\n";

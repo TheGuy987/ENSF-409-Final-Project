@@ -121,7 +121,7 @@ public class GUI extends JFrame {
 		this.add("South",buttonPanel);
 		this.add("North",titlePanel);
 		this.add("Center",display);
-		this.setSize(1080,720);
+		this.setSize(1080,650);
 		this.setLocationRelativeTo(null);
 		
 		titlePanel.setBackground(Color.DARK_GRAY);

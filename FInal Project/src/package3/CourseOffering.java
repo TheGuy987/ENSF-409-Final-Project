@@ -1,7 +1,6 @@
 package package3;
 
 import java.util.ArrayList;
-
 /**
  * Class that represents a course offering for a course in the course catalogue. It
  * contains variables for section number, section capacity, a Course object, an Array
@@ -15,15 +14,15 @@ public class CourseOffering {
 	private int secNum;
 	private int secCap;
 	private Course theCourse;
+	//private ArrayList<Student> studentList;
 	private ArrayList <Registration> offeringRegList;
 	boolean minReached;
-	
 	/**
 	 * Constructor that takes in the section number and capacity, and assigns then to the
 	 * corrosponding variables.
 	 * @param secNum Integer holding the section number.
 	 * @param secCap Integer holding the section capacity.
-	 */
+	 */	
 	public CourseOffering (int secNum, int secCap) {
 		this.setSecNum(secNum);
 		this.setSecCap(secCap);
@@ -104,6 +103,7 @@ public class CourseOffering {
 	 * @param registration object to be added to variable offeringRegList.
 	 */
 	public void addRegistration(Registration registration) {
+		// TODO Auto-generated method stub
 		offeringRegList.add(registration);
 		
 	}

@@ -8,19 +8,19 @@ import java.net.SocketException;
 import package3.*;
 
 /**
- * Class that represents a thread that a RegServer will run. It is responsible to passing information
- * between package3 classes and the client side of the application. It contains variables relating to
- * dataflow, as well as Student and CourseCatalogue objects.
- * @author Vaibhav Kapoor, Thomas Pan, and Matthew Wells
- *
- */
+* Class that represents a thread that a RegServer will run. It is responsible to passing information
+* between package3 classes and the client side of the application. It contains variables relating to
+* dataflow, as well as Student and CourseCatalogue objects.
+* @author Vaibhav Kapoor, Thomas Pan, and Matthew Wells
+*
+*/
 public class RegThread extends Thread {
 	
-	private PrintWriter socketOut;
-	private BufferedReader socketIn;
-	private Student theStudent;
-	private CourseCatalogue theCatalogue;
+	PrintWriter socketOut;
 	
+	BufferedReader socketIn;
+ 	private Student theStudent; 
+ 	private CourseCatalogue theCatalogue; 
 	/**
 	 * Constructor that takes PrintWriter and BufferedReader objects as arguements and assigns the
 	 * respective variables to them.
@@ -31,7 +31,6 @@ public class RegThread extends Thread {
 		this.socketIn = socketIn;
 		this.socketOut = socketOut;
 	}
-	
 	/**
 	 * Assigns variables theStudent and theCatalogue to new Student and CourseCatalogue objects
 	 * respectively, using variables socketIn and socketOut. It then waits for input from the client
@@ -40,92 +39,69 @@ public class RegThread extends Thread {
 	 * and exception, causing it to break the loop and exit.
 	 */
 	public void run() {
-		
-		try {
-		theStudent = new Student(socketIn, socketOut);
- 		theCatalogue = new CourseCatalogue(socketIn, socketOut);
-		} catch(SocketException e) {
+ 		try {
+			theStudent = new Student(socketIn, socketOut);
+		} catch (SocketException e2) {
 			return;
 		}
+ 		theCatalogue = new CourseCatalogue(socketIn, socketOut);
 		
-		String result = "0";
-		
-		Course myCourse = theCatalogue.searchCat("ENGG", 233);
-		Course myCourse2 = theCatalogue.searchCat("ENSF", 409);
-		Course myCourse3 = theCatalogue.searchCat("PHYS", 259);
-		
-		if (myCourse2 != null) {
-			theCatalogue.createCourseOffering(myCourse2, 1, 1);
-			theCatalogue.createCourseOffering(myCourse2, 2, 50);
-		}
-		if (myCourse != null) {
-			theCatalogue.createCourseOffering(myCourse, 1, 100);
-			theCatalogue.createCourseOffering(myCourse, 2, 200);
-		}
-		if (myCourse3 != null) {
-			theCatalogue.createCourseOffering(myCourse3, 1, 100);
-			theCatalogue.createCourseOffering(myCourse3, 2, 200);
-		}
-		
-		while(true) {
+		//Begin
+		Boolean check=true;
+		try {
+		while(check) {
 			int choice = 0;
 			try {
 				choice = Integer.parseInt(socketIn.readLine());
-				switch(choice) {
-					case(0):
-						break;
-					//search Catalogue
-					case(1):
-						result = theCatalogue.searchCatalogue(socketIn.readLine(), Integer.parseInt(socketIn.readLine()));
-						socketOut.flush();
-						socketOut.println(result);
-						break;
-						
-					//Add Registration
-					case(2):
-						result = theStudent.addRegistrationController(theCatalogue, socketIn.readLine(), Integer.parseInt(socketIn.readLine()));
-						socketOut.flush();
-						socketOut.println(result);
-						break;
-
-					//Remove Registration
-					case(3):
-						result = theStudent.removeRegistration(socketIn.readLine(), Integer.parseInt(socketIn.readLine()));
-						socketOut.flush();
-						socketOut.println(result);
-						break;
-
-					//Display Catalogue
-					case(4):
-						System.out.println("4");
-						socketOut.flush();
-						System.out.println(theCatalogue.toString());
-						socketOut.println(theCatalogue.toString());
-					break;
-					
-					//Display Courses Taken
-					case(5):
-						System.out.println("5");
-						socketOut.flush();
-						System.out.println(theStudent.toStringAllCoursesTaken());
-						socketOut.println(theStudent.toStringAllCoursesTaken());
-					break;
-					
-					//Display Courses registered for
-					case(6):
-						socketOut.flush();
-						System.out.println(theStudent.toStringAllRegistrations());
-						socketOut.println(theStudent.toStringAllRegistrations());
-					break;
-					
-				}
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				break;
+			} catch (NumberFormatException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 			
+			switch(choice) {
+			
+			case(1):
+				
+				theCatalogue.searchCatalogue();
+				socketOut.flush();
+				break;
+				
+			case(2):
+				
+				theStudent.addRegistirationInterface(theCatalogue);
+				socketOut.flush();
+				break;
+
+			case(3):
+				theStudent.removeRegistrationInterface();
+				break;
+
+			case(4):
+				socketOut.println(theCatalogue.toString());
+				socketOut.flush();
+				break;
+			
+			case(5):
+				socketOut.println(theStudent.toStringAllCoursesTaken());
+				socketOut.flush();
+				break;
+			
+			case(6):
+				socketOut.println(theStudent.toStringAllRegistrations());
+				socketOut.flush();
+				break;
+			
+			case(7):
+				check = false;
+			}
+		}
+		}catch (SocketException e) {
+			return;
+		}catch(IOException e) {
+			e.printStackTrace();
 		}
 	}
 }
-
