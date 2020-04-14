@@ -242,7 +242,7 @@ public class Controller {
 		theGUI.remove(theGUI.display);
 
 		theGUI.display = new JScrollPane(updateTextArea(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		theGUI.display.setSize(1080,720);
+		theGUI.display.setSize(1080,650);
 		theGUI.add("Center",theGUI.display);
         theGUI.add(theGUI.display);
         theGUI.pack();
@@ -264,7 +264,7 @@ public class Controller {
 			e.printStackTrace();
 		}
 		
-		JTextArea jta = new JTextArea(display, 40, 87);
+		JTextArea jta = new JTextArea(display, 35, 65);
 		jta.setForeground(Color.white);
 		jta.setBackground(Color.DARK_GRAY);
 		return jta;

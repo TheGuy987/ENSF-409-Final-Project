@@ -111,7 +111,7 @@ public class GUI extends JFrame {
 		
 		display = new JScrollPane();
 		
-		JTextArea ta = new JTextArea("",23,62);
+		JTextArea ta = new JTextArea("",35,62);
 		ta.setForeground(Color.white);
 		ta.setBackground(Color.DARK_GRAY);
 		
