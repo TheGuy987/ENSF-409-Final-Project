@@ -93,6 +93,9 @@ public class Controller {
     		};
     		
     		int option = JOptionPane.showConfirmDialog(null,field2, panelTitle, JOptionPane.CANCEL_OPTION);
+    		
+    		//sends option to server so it knows whether the user pressed "ok" or "cancel"
+        	socketOut.println(option);
 
     		if(option == JOptionPane.CANCEL_OPTION)
         		break;
