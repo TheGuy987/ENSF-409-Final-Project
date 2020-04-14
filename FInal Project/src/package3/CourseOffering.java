@@ -31,34 +31,66 @@ public class CourseOffering {
 		minReached = false;
 	}
 	/**
-	 * 
-	 * @return
+	 * Returns section number.
+	 * @return Integer holding the section number.
 	 */
 	public int getSecNum() {
 		return secNum;
 	}
+	/**
+	 * Sets the section number.
+	 * @param secNum Integer holding the new section number.
+	 */
 	public void setSecNum(int secNum) {
 		this.secNum = secNum;
 	}
+	/**
+	 * Returns the scetion capacity.
+	 * @return Integer holding the section capacity
+	 */
 	public int getSecCap() {
 		return secCap;
 	}
+	/**
+	 * Sets the section capacity.
+	 * @param secCap Integer holding the new section capacity.
+	 */
 	public void setSecCap(int secCap) {
 		this.secCap = secCap;
 	}
+	/**
+	 * Returns the course relating to this course offering.
+	 * @return Course object relating to this course offering.
+	 */
 	public Course getTheCourse() {
 		return theCourse;
 	}
+	/**
+	 * Sets the course relating to this course offering.
+	 * @param theCourse object relating to this course offering.
+	 */
 	public void setTheCourse(Course theCourse) {
 		this.theCourse = theCourse;
 	}
+	/**
+	 * Checks to see of the minimum number of students has been reached to run
+	 * a course, and updates variable minReached if it has.
+	 */
 	public void checkMinReached() {
 		if(offeringRegList.size()>8) minReached=true;
 		else minReached = false;
 	}
+	/**
+	 * Returns the size of variable offeringRegSize.
+	 * @return Integer holding the size of variable offeringRegSize.
+	 */
 	public int getOfferingRegListSize() {
 		return offeringRegList.size();
 	}
+	/**
+	 * Returns the courseOffering in String form.
+	 * @return String holding the contents of the object in String form.
+	 */
 	@Override
 	public String toString () {
 		String st = "\n";
@@ -67,6 +99,10 @@ public class CourseOffering {
 		//We also want to print the names of all students in the section
 		return st;
 	}
+	/**
+	 * Adds a registration to variable offeringRegList.
+	 * @param registration object to be added to variable offeringRegList.
+	 */
 	public void addRegistration(Registration registration) {
 		offeringRegList.add(registration);
 		
