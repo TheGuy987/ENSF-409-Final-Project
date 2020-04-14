@@ -5,8 +5,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 /**
- * The Student class that contains name, id, CourseOffering List and Registration List
- *
+ * Class that represents a student. The Student class contains name, id, CourseOffering List and
+ * Registration List
+ * @author Vaibhav Kapoor, Thomas Pan, and Matthew Wells
  */
 public class Student {
 	/*
@@ -34,7 +35,8 @@ public class Student {
 	 */
 	private PrintWriter socketOut;
 	/**
-	 * constructs the class student 
+	 * Constructor that takes in BufferedReader and PrintWriter objects, and assigns then to
+	 * their corrosponding instance variables.
 	 */
 	public Student (BufferedReader socketIn, PrintWriter socketOut) {
 		studentRegList = new ArrayList<Registration>();
@@ -55,14 +57,16 @@ public class Student {
 		System.out.println("Student "+studentName+" "+studentId);
 		System.out.println(toStringAllCoursesTaken());
 	}
-	/*
-	 * return studentName 
+	/**
+	 * Returns the name of the student.
+	 * @return String holding the student's name.
 	 */
 	public String getStudentName() {
 		return studentName;
 	}
-	/*
-	 * sets studentName
+	/**
+	 * Sets the student's name, using variable socketIn as input.
+	 * @throws SocketException that is thrown if the server has lost connection to the client.
 	 */
 	public void setStudentName() throws IOException {
 		try {
@@ -71,14 +75,16 @@ public class Student {
 			e.printStackTrace();
 		}
 	}
-	/*
-	 * returns StudentId 
+	/**
+	 * Returns the students ID number.
+	 * @return Integer holding the student's ID number.
 	 */
 	public int getStudentId() {
 		return studentId;
 	}
-	/*
-	 * sets studentId 
+	/**
+	 * Sets the student's ID, using variable socketIn as input.
+	 * @throws SocketException that is thrown if the server has lost connection to the client.
 	 */
 	public void setStudentId() {
 		try {
@@ -87,20 +93,31 @@ public class Student {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * Returns the students information in the form of a String.
+	 */
 	@Override
 	public String toString () {
 		String st = "Student Name: " + getStudentName() + "\n" +
 				"Student Id: " + getStudentId() + "\n\n";
 		return st;
 	}
-	/*
-	 * adds a Registration to studentRegList 
+	/**
+	 * Adds registration to student list.
+	 * @param registration object of type Registration to be added to student list.
 	 */
 	public void addRegistration(Registration registration) {
 		// TODO Auto-generated method stub
 		studentRegList.add(registration);
 	}
-	
+	/**
+	 * Removes a registration form student list.
+	 * @param courseName String holding the name of course the regisitration is for.
+	 * @param courseNum Integer holding the number of the course the registration is for.
+	 * @return String indicating if the operation was performed successfully.
+	 * @throws IOException Exception thrown if something goes wrong with the operation relating to
+	 * and IO operation.
+	 */
 	public String removeRegistration(String courseName, int courseNum) throws IOException {	
 		
 		for(int i=0;i < studentRegList.size();i++) {
@@ -111,7 +128,15 @@ public class Student {
 		}
 		return "0";
 	}
-	
+	/**
+	 * Registers the student to a course based on client input. It will then send a message to the client based
+	 * on whether or not the student was successfully added and why
+	 * @param list of courses to register for 
+	 * @param courseName is the name of the course to add
+	 * @param courseNum is the number of the course to add
+	 * @return void
+	 * @throws IOException Exception thrown if something goes wrong with the operation relating to an IO Operation
+	 */
 	public void addRegistirationInterface(CourseCatalogue list) throws IOException {
 		//cancels method if the user presses "Cancel"
 		String option = socketIn.readLine();
@@ -166,12 +191,20 @@ public class Student {
 			return;
 		}
 	}
-	
+	/**
+	 * Returns true if the student is registered in the maximum number of courses (6).
+	 * @return boolean holding a true if the student is already registered in 6 courses.
+	 */
 	public boolean maxCourseReg(){
 		if(studentRegList.size()>6) return true;
 		return false; 
 	}
-	
+	/**
+	 * Adds courses to an ArrayList of courese that the student has already taken.
+	 * @return ArrayList of Course objects representing all of the courses the student
+	 * has already taken.
+	 * @throws IOException
+	 */	
 	public ArrayList<Course> addCoursesTaken() throws IOException {
 		boolean check=true;
 		String courseName;
@@ -193,7 +226,11 @@ public class Student {
 		}
 		return temp;
 	}
-	
+	/**
+	 * Removes a coures from the list of courses that the student has already taken.
+	 * @param name String holding the name of the course to be removed.
+	 * @param num Integer holding the
+	 */	
 	public void removeCoursesTaken(String name,int num) {
 		for(int i=0;i<coursesTaken.size();i++) {
 			if(coursesTaken.get(i).getCourseName().equals(name)&&coursesTaken.get(i).getCourseNum()==num) {
@@ -203,7 +240,10 @@ public class Student {
 			}
 		}
 	}
-	
+	/**
+	 * Returns a String holding all the courses that the student has taken.
+	 * @return String holding all the courses that the student has taken.
+	 */
 	public String toStringAllCoursesTaken() {
 		String st = "All courses the student has taken: \n";
 		for (int i=0;i<coursesTaken.size();i++) {
@@ -212,7 +252,10 @@ public class Student {
 		}
 		return st;
 	}
-	
+	/**
+	 * Returns a String holding all the courses that the student is registered for.
+	 * @return String holding all the courses that the student is registered for.
+	 */	
 	public String toStringAllRegistrations() {
 		String st = "All courses the student has registered for: \n";
 		for (int i=0;i<studentRegList.size();i++) {

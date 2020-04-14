@@ -1,17 +1,27 @@
 package package3;
 
 import java.util.ArrayList;
-
-//This class is simulating a database for our
-//program
+/**
+ * Class that will read the SQL database in milestone III. Currently contains numerous hard-coded
+ * courses.
+ * @author Vaibhav Kapoor, Thomas Pan, and Matthew Wells
+ *
+ */
 public class DBManager {
 	
 	ArrayList <Course> courseList;
 
+	/**
+	 * Constructor that assigns variable courseList to a new ArrayList of type Course.
+	 */
 	public DBManager () {
 		courseList = new ArrayList<Course>();
 	}
-
+	/**
+	 * Class that currently simulates reading form a database using hard coded values. Will be 
+	 * updated in the future to read from an actual database.
+	 * @return
+	 */
 	public ArrayList readFromDataBase() {
 		// TODO Auto-generated method stub
 		courseList.add(new Course ("ENGG", 233));

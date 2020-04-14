@@ -6,7 +6,13 @@ import java.io.PrintWriter;
 
 import package3.*;
 
-
+/**
+* Class that represents a thread that a RegServer will run. It is responsible to passing information
+* between package3 classes and the client side of the application. It contains variables relating to
+* dataflow, as well as Student and CourseCatalogue objects.
+* @author Vaibhav Kapoor, Thomas Pan, and Matthew Wells
+*
+*/
 public class RegThread extends Thread {
 	
 	PrintWriter socketOut;
@@ -14,12 +20,23 @@ public class RegThread extends Thread {
 	BufferedReader socketIn;
  	private Student theStudent; 
  	private CourseCatalogue theCatalogue; 
-	
+	/**
+	 * Constructor that takes PrintWriter and BufferedReader objects as arguements and assigns the
+	 * respective variables to them.
+	 * @param socketOut PrintWriter object for sending information to the client.
+	 * @param socketIn BufferedReader object for receiving information from the client.
+	 */
 	public RegThread(PrintWriter socketOut, BufferedReader socketIn) {
 		this.socketIn = socketIn;
 		this.socketOut = socketOut;
 	}
-
+	/**
+	 * Assigns variables theStudent and theCatalogue to new Student and CourseCatalogue objects
+	 * respectively, using variables socketIn and socketOut. It then waits for input from the client
+	 * in the form of an Integer, which is then used in a switch statement to select an operation to
+	 * run. This process loops unitl the client disconnnects, at which point the run method will catch
+	 * and exception, causing it to break the loop and exit.
+	 */
 	public void run() {
  		theStudent = new Student(socketIn, socketOut);
  		theCatalogue = new CourseCatalogue(socketIn, socketOut);
@@ -58,21 +75,20 @@ public class RegThread extends Thread {
 			
 			switch(choice) {
 			case(0):
-				System.out.println("There was a problem with your selection. Please try again");
 				break;
 			case(1):
-				System.out.println("1");
 				try {
 					theCatalogue.searchCatalogue();
+					socketOut.flush();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			break;
 			case(2):
-				System.out.println("2");
 				try {
 					theStudent.addRegistirationInterface(theCatalogue);
+					socketOut.flush();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -80,7 +96,6 @@ public class RegThread extends Thread {
 			break;
 
 			case(3):
-				System.out.println("3");
 				/*try {
 					student.removeRegistration();
 				} catch (IOException e) {
@@ -90,23 +105,18 @@ public class RegThread extends Thread {
 			break;
 
 			case(4):
-				System.out.println("4");
-				socketOut.flush();
-				System.out.println(theCatalogue.toString());
 				socketOut.println(theCatalogue.toString());
+				socketOut.flush();
 			break;
 			
 			case(5):
-				System.out.println("5");
-				socketOut.flush();
-				System.out.println(theStudent.toStringAllCoursesTaken());
 				socketOut.println(theStudent.toStringAllCoursesTaken());
+				socketOut.flush();
 			break;
 			
 			case(6):
-				socketOut.flush();
-				System.out.println(theStudent.toStringAllRegistrations());
 				socketOut.println(theStudent.toStringAllRegistrations());
+				socketOut.flush();
 			break;
 			
 			case(7):
