@@ -62,12 +62,12 @@ public class RegThread extends Thread {
 				break;
 			case(1):
 				System.out.println("1");
-				/*try {
-					cat.searchCatalogue();
+				try {
+					theCatalogue.searchCatalogue();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}*/
+				}
 			break;
 			case(2):
 				System.out.println("2");

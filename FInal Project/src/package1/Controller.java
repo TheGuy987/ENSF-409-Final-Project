@@ -95,6 +95,31 @@ public class Controller {
 	
 	public void searchCataPressed() {
 		socketOut.println("1");
+		
+		JTextField courseName = new JTextField();
+		JTextField courseNum = new JTextField();
+		
+		Object[] field1 = {
+				"Course Name:", courseName,
+				"Course Number:", courseNum,
+		};
+		
+    	int option = JOptionPane.showConfirmDialog(null,field1, "Search Course Catalogue", JOptionPane.CANCEL_OPTION);
+    	
+    	socketOut.println(option);
+    	
+    	if(option == 0) {
+    		socketOut.println(courseName.getText());
+    		socketOut.println(courseNum.getText());
+    		
+    		theGUI.remove(theGUI.display);
+
+    		theGUI.display = new JScrollPane(updateTextArea(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    		theGUI.display.setSize(1080,720);
+    		theGUI.add("Center",theGUI.display);
+            theGUI.add(theGUI.display);
+            theGUI.pack();
+    	}
 	}
 	
 	public void addRegPressed() {

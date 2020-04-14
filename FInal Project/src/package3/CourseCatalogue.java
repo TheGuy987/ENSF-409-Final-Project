@@ -1,6 +1,7 @@
 package package3;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -36,6 +37,20 @@ public class CourseCatalogue {
 			c.addOffering(theOffering);
 		}
 	}
+	
+	public void searchCatalogue() throws NumberFormatException, IOException {
+		String option = socketIn.readLine();
+		if(option.contentEquals("0")) {
+			String name = socketIn.readLine();
+			int num = Integer.parseInt(socketIn.readLine());
+			Course found = searchCat(name,num);
+			if(found!=null)
+				socketOut.println(found.toString());
+			else
+				socketOut.println("The course "+name+" "+num+" could not be found");
+		}
+	}
+	
 	public Course searchCat (String courseName, int courseNum) {
 		for (Course c : courseList) {
 			if (courseName.equals(c.getCourseName()) &&
@@ -53,15 +68,6 @@ public class CourseCatalogue {
 		return courseList;
 	}
 	
-	public String searchCatalogue(String name, int num) {
-		
-		Course found = searchCat(name,num);
-		if(found==null)
-			return "0";
-		else
-			return found.toString();
-		
-	}
 	public void setCourseList(ArrayList <Course> courseList) {
 		this.courseList = courseList;
 	}
