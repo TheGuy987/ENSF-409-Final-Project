@@ -112,13 +112,7 @@ public class Controller {
     		socketOut.println(courseName.getText());
     		socketOut.println(courseNum.getText());
     		
-    		theGUI.remove(theGUI.display);
-
-    		theGUI.display = new JScrollPane(updateTextArea(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    		theGUI.display.setSize(1080,720);
-    		theGUI.add("Center",theGUI.display);
-            theGUI.add(theGUI.display);
-            theGUI.pack();
+    		updateScrollPanel();
     	}
 	}
 	
@@ -142,13 +136,7 @@ public class Controller {
     		socketOut.println(courseName.getText());
     		socketOut.println(courseNum.getText());
     		
-    		theGUI.remove(theGUI.display);
-
-    		theGUI.display = new JScrollPane(updateTextArea(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    		theGUI.display.setSize(1080,720);
-    		theGUI.add("Center",theGUI.display);
-            theGUI.add(theGUI.display);
-            theGUI.pack();
+    		updateScrollPanel();
     	}
 	}
 	
@@ -158,28 +146,20 @@ public class Controller {
 	
 	public void displayCataPressed() {
 		socketOut.println("4");
-		theGUI.remove(theGUI.display);
-
-		theGUI.display = new JScrollPane(updateTextArea(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		theGUI.display.setSize(1080,720);
-		theGUI.add("Center",theGUI.display);
-        theGUI.add(theGUI.display);
-        theGUI.pack();
+		updateScrollPanel();
 	}
 	
 	public void displayTakenPressed() {
 		socketOut.println("5");
-		theGUI.remove(theGUI.display);
-
-		theGUI.display = new JScrollPane(updateTextArea(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		theGUI.display.setSize(1080,720);
-		theGUI.add("Center",theGUI.display);
-        theGUI.add(theGUI.display);
-        theGUI.pack();
+		updateScrollPanel();
 	}
 	
 	public void displayRegPressed() {
 		socketOut.println("6");
+		updateScrollPanel();
+	}
+	
+	public void updateScrollPanel() {
 		theGUI.remove(theGUI.display);
 
 		theGUI.display = new JScrollPane(updateTextArea(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

@@ -115,7 +115,6 @@ public class Student {
 	public void addRegistirationInterface(CourseCatalogue list) throws IOException {
 		//cancels method if the user presses "Cancel"
 		String option = socketIn.readLine();
-		System.out.println("TEST1");
 		
 		if(option.contentEquals("1")) {
 			return;
@@ -124,7 +123,6 @@ public class Student {
 		String courseName = socketIn.readLine();
 		int courseNum = Integer.parseInt(socketIn.readLine());
 		int check=0;
-		System.out.println("TEST2");
 
 		if(maxCourseReg()) {
 			socketOut.println("You have already registered for a maximum of 6 courses.");
