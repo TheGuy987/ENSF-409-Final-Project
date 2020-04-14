@@ -51,6 +51,9 @@ public class Student {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		System.out.println("Student "+studentName+" "+studentId);
+		System.out.println(toStringAllCoursesTaken());
 	}
 	/*
 	 * return studentName 
@@ -62,12 +65,10 @@ public class Student {
 	 * sets studentName
 	 */
 	public void setStudentName() throws IOException {
-		socketOut.println("Please enter your name");
 		try {
 			studentName = socketIn.readLine(); 
 		}catch(Exception e) {
-			socketOut.println("Error - Try again");
-			setStudentName();
+			e.printStackTrace();
 		}
 	}
 	/*
@@ -80,12 +81,10 @@ public class Student {
 	 * sets studentId 
 	 */
 	public void setStudentId() {
-		socketOut.println("Please enter your id");
 		try {
 			studentId = Integer.parseInt(socketIn.readLine()); 
 		}catch(Exception e) {
-			socketOut.println("Error - Try again");
-			setStudentId();
+			e.printStackTrace();
 		}
 	}
 	@Override
@@ -102,32 +101,54 @@ public class Student {
 		studentRegList.add(registration);
 	}
 	
-	public String removeRegistration(String courseName, int courseNum) throws IOException {	
+	public void removeRegistration(String courseName, int courseNum) throws IOException {	
 		
 		for(int i=0;i < studentRegList.size();i++) {
 			if(courseName.contentEquals(studentRegList.get(i).getTheOffering().getTheCourse().getCourseName()) && courseNum==studentRegList.get(i).getTheOffering().getTheCourse().getCourseNum()) {
-			studentRegList.remove(i);
-			return "1";
+				studentRegList.remove(i);
+				socketOut.println("The course has been successfully removed from your registration");
+				return;
 			}
 		}
-		return "0";
+		socketOut.println("The course you have entered could not be found");
 	}
 	
-	public String addRegistrationController(CourseCatalogue list, String courseName, int courseNum) throws IOException {
-		//Returns:
-		//	"0" for already in 6 courses
-		//	"1" for course not found
-		//	"2" for wrong prereqs
-		//	"3" for course is full
-		//	"4" if the action was sucessful
-		int check=0;
+	public void removeRegistrationInterface() throws IOException {
 		
-		if(maxCourseReg()) {
-			return "0";
+		//cancels method if the user presses "Cancel"
+		String option = socketIn.readLine();
+		System.out.println("TEST "+option);
+		if(!option.contentEquals("0")) {
+			return;
 		}
+		
+		String courseName = socketIn.readLine();
+		int courseNum = Integer.parseInt(socketIn.readLine());
+		
+		removeRegistration(courseName, courseNum);
+	}
+	
+	public void addRegistirationInterface(CourseCatalogue list) throws IOException {
+		//cancels method if the user presses "Cancel"
+		String option = socketIn.readLine();
+		System.out.println("TEST "+option);
+		if(!option.contentEquals("0")) {
+			return;
+		}
+		
+		String courseName = socketIn.readLine();
+		int courseNum = Integer.parseInt(socketIn.readLine());
+		int check=0;
+
+		if(maxCourseReg()) {
+			socketOut.println("You have already registered for a maximum of 6 courses.");
+			return;
+		}
+		
 		Course reg = list.searchCat(courseName, courseNum);
 		if(reg==null) {
-			return "1";
+			socketOut.println("The course you have entered could not be found");
+			return;
 		}
 		
 		for(int i = 0;i < reg.getPreReq().size();i++) {
@@ -139,7 +160,8 @@ public class Student {
 		}
 		
 		if(check!=reg.getPreReq().size()) {
-			return "2";
+			socketOut.println("You do not meet the prerequisites for this course"); 
+			return;
 		}
 		
 		CourseOffering of;
@@ -150,14 +172,15 @@ public class Student {
 				of=reg.getCourseOfferingAt(i);
 				Registration r = new Registration();
 				r.completeRegistration(this, of);
-				//socketOut.println("You have been added to "+of.getTheCourse().getCourseName()+" "+of.getTheCourse().getCourseNum());
+				socketOut.println("You have been added to "+of.getTheCourse().getCourseName()+" "+of.getTheCourse().getCourseNum());
 				break;
 			}
 		}
+		
 		if(check==0) {
-			return "3";
+			socketOut.println("Registeration error. All course offering for this class is full");
+			return;
 		}
-		return "4";
 	}
 	
 	public boolean maxCourseReg(){
@@ -167,39 +190,21 @@ public class Student {
 	
 	public ArrayList<Course> addCoursesTaken() throws IOException {
 		boolean check=true;
-		String [] line;
-		String courseName, userInput;
+		String courseName;
+		int userInput;
 		int courseNum=0;
 		ArrayList<Course> temp = new ArrayList<Course>();
 	
 		
 		while(check) {
-			socketOut.println("Hi "+studentName+", please enter the name and number of the course you have taken");
 			courseName=socketIn.readLine();
-			line=courseName.split(" ");
-			courseName=line[0];
-			if(line[1].matches("\\d+")) {
-				courseNum=Integer.parseInt(line[1]);
-				Course c = new Course(courseName,courseNum);
-				temp.add(c);
-			}
-			else {
-				socketOut.println("You have entered an invalid input");
-			}
-			
-
+			courseNum =Integer.parseInt(socketIn.readLine());
+			Course c = new Course(courseName,courseNum);
+			temp.add(c);
 						
-			socketOut.println("Do you want to add another course? Please enter 'yes' or 'no':");
-			userInput=socketIn.readLine();
-			if(userInput.equals("no")) {
+			userInput=Integer.parseInt(socketIn.readLine());
+			if(userInput==1) {
 				check=false;
-			}
-			else if(userInput.equals("yes")) {
-				check = true;
-			}
-			else {
-				socketOut.println("You have enter and invalid input. Returning to main menu...");
-				break;
 			}
 		}
 		return temp;
