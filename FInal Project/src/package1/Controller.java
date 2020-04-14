@@ -1,5 +1,6 @@
 package package1;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,35 +22,75 @@ public class Controller {
 	}
 
 	public void startGUI() {
-		getStudentInfo();
 		theGUI = new GUI(this);
 		theGUI.setVisible(true);
+		getStudentInfo();
 	}
 	
 	public void getStudentInfo() {
-		String studentName = JOptionPane.showInputDialog("Please enter your name");
-		socketOut.println(studentName);
+		// Take Student Name and Id using a dialog pane
+        String nameIn = "";
+        String idIn = "";
+        String panelTitle = "Enter Student Details";
+        
+        do {
+    		JTextField studentName = new JTextField();
+    		JTextField studentId = new JTextField();
+    		
+    		Object[] field1 = {
+    				"Student Name:", studentName,
+    				"Student id:", studentId,
+    		};
+    		
+        	int option = JOptionPane.showConfirmDialog(null,field1, panelTitle, JOptionPane.CANCEL_OPTION);
+        	
+        	if(option == JOptionPane.CANCEL_OPTION)
+        		System.exit(0);
+        	
+            nameIn = studentName.getText();
+            idIn = studentId.getText();
+            
+            if (nameIn.matches("^[a-zA-Z]*$") && idIn.matches("^[0-9]*$") && !nameIn.equals("") && !idIn.equals("")) {
+        		socketOut.println(nameIn);
+        		socketOut.println(idIn);
+                break;
+            } else {
+            	panelTitle = "Error! Re-enter Student Details";
+            }
+        } while (!nameIn.matches("^[a-zA-Z]*$") || !idIn.matches("^[0-9]*$") || nameIn.equals("") || idIn.equals(""));
 		
-		String studentId = JOptionPane.showInputDialog("Please enter your id");
-		socketOut.println(studentId);
-		
-		JTextField courseName = new JTextField();
-		JTextField courseNum = new JTextField();
-		
-		Object[] fields = {
-				"Course Name:", courseName,
-				"Course Number: ", courseNum,
-		};
-		
-		int check = 0;
-		// Loop to ask students what courses they have taken 
-		while(check==0) {
-			JOptionPane.showConfirmDialog(null,fields,"Courses Taken", JOptionPane.CANCEL_OPTION);
-			socketOut.println(courseName.getText());
-			socketOut.println(courseNum.getText());
-			check =JOptionPane.showConfirmDialog(null, "Do you want to add another course?", "Courses Taken", JOptionPane.OK_OPTION);
-			socketOut.println(check);
-		}
+        // Ask students what courses they have taken using a dialog pane
+        int check = 0;
+        nameIn = "";
+        idIn = "";
+        panelTitle = "Courses Taken";
+        do {
+    		JTextField courseName = new JTextField();
+    		JTextField courseNum = new JTextField();
+    		
+    		Object[] field2 = {
+    				"Course Name:", courseName,
+    				"Course Number: ", courseNum,
+    		};
+    		
+    		int option = JOptionPane.showConfirmDialog(null,field2, panelTitle, JOptionPane.CANCEL_OPTION);
+    		
+    		if(option == JOptionPane.CANCEL_OPTION)
+        		System.exit(0);
+        	
+            nameIn = courseName.getText();
+            idIn = courseNum.getText();
+            
+            if (nameIn.matches("^[a-zA-Z]*$") && idIn.matches("^[0-9]*$") && !nameIn.equals("") && !idIn.equals("")) {
+        		socketOut.println(nameIn);
+        		socketOut.println(idIn);
+        		panelTitle = "Courses Taken";
+        		check =JOptionPane.showConfirmDialog(null, "Do you want to add another course?", panelTitle, JOptionPane.OK_OPTION);
+    			socketOut.println(check);   			
+            } else {
+            	panelTitle = "Error! Re-enter Courses Taken";
+            }
+        }while(check == 0 || !nameIn.matches("^[a-zA-Z]*$") || !idIn.matches("^[0-9]*$") || nameIn.equals("") || idIn.equals(""));
 	}
 	
 	public void searchCataPressed() {
@@ -110,6 +151,8 @@ public class Controller {
 		}
 		
 		JTextArea jta = new JTextArea(display, 40, 87);
+		jta.setForeground(Color.white);
+		jta.setBackground(Color.DARK_GRAY);
 		return jta;
 	}
 	
