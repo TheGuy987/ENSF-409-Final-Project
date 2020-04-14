@@ -74,24 +74,28 @@ public class RegThread extends Thread {
 				switch(choice) {
 					case(0):
 						break;
+					//search Catalogue
 					case(1):
 						result = theCatalogue.searchCatalogue(socketIn.readLine(), Integer.parseInt(socketIn.readLine()));
 						socketOut.flush();
 						socketOut.println(result);
 						break;
 						
+					//Add Registration
 					case(2):
 						result = theStudent.addRegistrationController(theCatalogue, socketIn.readLine(), Integer.parseInt(socketIn.readLine()));
 						socketOut.flush();
 						socketOut.println(result);
 						break;
 
+					//Remove Registration
 					case(3):
 						result = theStudent.removeRegistration(socketIn.readLine(), Integer.parseInt(socketIn.readLine()));
 						socketOut.flush();
 						socketOut.println(result);
 						break;
 
+					//Display Catalogue
 					case(4):
 						System.out.println("4");
 						socketOut.flush();
@@ -99,6 +103,7 @@ public class RegThread extends Thread {
 						socketOut.println(theCatalogue.toString());
 					break;
 					
+					//Display Courses Taken
 					case(5):
 						System.out.println("5");
 						socketOut.flush();
@@ -106,14 +111,13 @@ public class RegThread extends Thread {
 						socketOut.println(theStudent.toStringAllCoursesTaken());
 					break;
 					
+					//Display Courses registered for
 					case(6):
 						socketOut.flush();
 						System.out.println(theStudent.toStringAllRegistrations());
 						socketOut.println(theStudent.toStringAllRegistrations());
 					break;
 					
-					case(7):
-						return;
 				}
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
