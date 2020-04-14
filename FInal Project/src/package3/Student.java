@@ -241,6 +241,11 @@ public class Student {
 	
 		
 		while(check) {
+			String option = socketIn.readLine();
+			System.out.println("TEST "+option);
+			if(!option.contentEquals("0")) {
+				break;
+			}
 			courseName=socketIn.readLine();
 			courseNum =Integer.parseInt(socketIn.readLine());
 			Course c = new Course(courseName,courseNum);

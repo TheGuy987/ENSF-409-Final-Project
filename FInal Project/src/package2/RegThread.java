@@ -56,6 +56,8 @@ public class RegThread extends Thread {
 			} catch (NumberFormatException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
+			} catch(SocketException e) {
+				return;
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
