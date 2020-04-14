@@ -7,7 +7,13 @@ import java.net.SocketException;
 
 import package3.*;
 
-
+/**
+ * Class that represents a thread that a RegServer will run. It is responsible to passing information
+ * between package3 classes and the client side of the application. It contains variables relating to
+ * dataflow, as well as Student and CourseCatalogue objects.
+ * @author Vaibhav Kapoor, Thomas Pan, and Matthew Wells
+ *
+ */
 public class RegThread extends Thread {
 	
 	private PrintWriter socketOut;
@@ -15,11 +21,24 @@ public class RegThread extends Thread {
 	private Student theStudent;
 	private CourseCatalogue theCatalogue;
 	
+	/**
+	 * Constructor that takes PrintWriter and BufferedReader objects as arguements and assigns the
+	 * respective variables to them.
+	 * @param socketOut PrintWriter object for sending information to the client.
+	 * @param socketIn BufferedReader object for receiving information from the client.
+	 */
 	public RegThread(PrintWriter socketOut, BufferedReader socketIn) {
 		this.socketIn = socketIn;
 		this.socketOut = socketOut;
 	}
 	
+	/**
+	 * Assigns variables theStudent and theCatalogue to new Student and CourseCatalogue objects
+	 * respectively, using variables socketIn and socketOut. It then waits for input from the client
+	 * in the form of an Integer, which is then used in a switch statement to select an operation to
+	 * run. This process loops unitl the client disconnnects, at which point the run method will catch
+	 * and exception, causing it to break the loop and exit.
+	 */
 	public void run() {
 		
 		try {
@@ -57,16 +76,19 @@ public class RegThread extends Thread {
 						break;
 					case(1):
 						result = theCatalogue.searchCatalogue(socketIn.readLine(), Integer.parseInt(socketIn.readLine()));
+						socketOut.flush();
 						socketOut.println(result);
 						break;
 						
 					case(2):
 						result = theStudent.addRegistrationController(theCatalogue, socketIn.readLine(), Integer.parseInt(socketIn.readLine()));
+						socketOut.flush();
 						socketOut.println(result);
 						break;
 
 					case(3):
 						result = theStudent.removeRegistration(socketIn.readLine(), Integer.parseInt(socketIn.readLine()));
+						socketOut.flush();
 						socketOut.println(result);
 						break;
 

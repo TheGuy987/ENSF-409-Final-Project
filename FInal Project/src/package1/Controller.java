@@ -2,9 +2,13 @@ package package1;
 
 import java.awt.Color;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class Controller {
@@ -16,7 +20,7 @@ public class Controller {
 		this.socketIn = socketIn;
 		this.socketOut = socketOut;
 	}
-	//Default controller to have eclipse stop yelling at me 
+
 	public void startGUI() {
 		theGUI = new GUI(this);
 		theGUI.setVisible(true);
@@ -24,7 +28,6 @@ public class Controller {
 	}
 	
 	public void getStudentInfo() {
-		
 		// Take Student Name and Id using a dialog pane
         String nameIn = "";
         String idIn = "";
@@ -94,23 +97,63 @@ public class Controller {
 		socketOut.println("1");
 	}
 	
-	public void removeRegPressed() {
+	public void addRegPressed() {
 		socketOut.println("2");
-
+	}
+	
+	public void removeRegPressed() {
+		socketOut.println("3");
 	}
 	
 	public void displayCataPressed() {
-		socketOut.println("3");
+		socketOut.println("4");
+		theGUI.remove(theGUI.display);
 
+		theGUI.display = new JScrollPane(updateTextArea(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		theGUI.display.setSize(1080,720);
+		theGUI.add("Center",theGUI.display);
+        theGUI.add(theGUI.display);
+        theGUI.pack();
 	}
 	
 	public void displayTakenPressed() {
-		socketOut.println("4");
+		socketOut.println("5");
+		theGUI.remove(theGUI.display);
 
+		theGUI.display = new JScrollPane(updateTextArea(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		theGUI.display.setSize(1080,720);
+		theGUI.add("Center",theGUI.display);
+        theGUI.add(theGUI.display);
+        theGUI.pack();
 	}
 	
 	public void displayRegPressed() {
-		socketOut.println("5");
+		socketOut.println("6");
+		theGUI.remove(theGUI.display);
 
+		theGUI.display = new JScrollPane(updateTextArea(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		theGUI.display.setSize(1080,720);
+		theGUI.add("Center",theGUI.display);
+        theGUI.add(theGUI.display);
+        theGUI.pack();
 	}
+	
+	public JTextArea updateTextArea() {
+		String display="";
+		try {
+			while(socketIn.ready()) {
+				display+=socketIn.readLine();
+				display+="\n";
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		JTextArea jta = new JTextArea(display, 40, 87);
+		jta.setForeground(Color.white);
+		jta.setBackground(Color.DARK_GRAY);
+		return jta;
+	}
+	
 }

@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import java.awt.Color;
 import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -24,7 +25,7 @@ import javax.swing.JTextField;
  */
 
 public class GUI extends JFrame {
-	JButton searchCata, removeReg, displayCata, displayTaken, displayReg;
+	JButton searchCata, addReg, removeReg, displayCata, displayTaken, displayReg;
 	JLabel title;
 	JPanel titlePanel, buttonPanel;
 	JScrollPane display;
@@ -42,12 +43,18 @@ public class GUI extends JFrame {
 		titlePanel = new JPanel();
 		title = new JLabel("Course Registeration App");
 		title.setForeground(Color.white);
+		title.setBackground(Color.gray);
 		titlePanel.add(title);
 		
 		searchCata = new JButton("Search Course Catalogue");
 		searchCata.setForeground(Color.white);
 		searchCata.setBackground(Color.gray);
 		searchCata.setFocusPainted(false);
+		
+		addReg = new JButton("Register for a Course");
+		addReg.setForeground(Color.white);
+		addReg.setBackground(Color.gray);
+		addReg.setFocusPainted(false);
 		
 		removeReg = new JButton("Remove Registeration");
 		removeReg.setForeground(Color.white);
@@ -69,9 +76,12 @@ public class GUI extends JFrame {
 		displayReg.setBackground(Color.gray);
 		displayReg.setFocusPainted(false);
 		
-		
 		searchCata.addActionListener((ActionEvent e) -> { 
 			control.searchCataPressed();
+			});
+		
+		addReg.addActionListener((ActionEvent e) -> { 
+			control.addRegPressed();
 			});
 		
 		removeReg.addActionListener((ActionEvent e) -> { 
@@ -87,16 +97,19 @@ public class GUI extends JFrame {
 			});
 		
 		displayReg.addActionListener((ActionEvent e) -> { 
-			control.displayRegPressed();
+				control.displayRegPressed();
 			});
 		
 		
 		buttonPanel = new JPanel();
 		buttonPanel.add(searchCata);
+		buttonPanel.add(addReg);
 		buttonPanel.add(removeReg);
 		buttonPanel.add(displayCata);
 		buttonPanel.add(displayTaken);
 		buttonPanel.add(displayReg);
+		
+		display = new JScrollPane();
 		
 		JTextArea ta = new JTextArea("",23,62);
 		ta.setForeground(Color.white);
@@ -108,7 +121,7 @@ public class GUI extends JFrame {
 		this.add("South",buttonPanel);
 		this.add("North",titlePanel);
 		this.add("Center",display);
-		this.setSize(1080,650);
+		this.setSize(1080,720);
 		this.setLocationRelativeTo(null);
 		
 		titlePanel.setBackground(Color.DARK_GRAY);
