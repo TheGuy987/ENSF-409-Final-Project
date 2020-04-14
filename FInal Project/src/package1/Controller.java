@@ -63,8 +63,10 @@ public class Controller {
     		
         	int option = JOptionPane.showConfirmDialog(null,field1, panelTitle, JOptionPane.CANCEL_OPTION);
         	
-        	if(option == JOptionPane.CANCEL_OPTION)
+        	if(option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION) {
+        		socketOut.println("0");
         		System.exit(0);
+        	}
         	
             nameIn = studentName.getText();
             idIn = studentId.getText();
@@ -93,7 +95,8 @@ public class Controller {
     		};
     		
     		int option = JOptionPane.showConfirmDialog(null,field2, panelTitle, JOptionPane.CANCEL_OPTION);
-
+        	socketOut.println(option);
+        	
     		if(option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION)
         		break;
     		

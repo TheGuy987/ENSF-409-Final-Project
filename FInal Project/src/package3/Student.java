@@ -3,6 +3,7 @@ package package3;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.SocketException;
 import java.util.ArrayList;
 /**
  * Class that represents a student. The Student class contains name, id, CourseOffering List and
@@ -38,7 +39,7 @@ public class Student {
 	 * Constructor that takes in BufferedReader and PrintWriter objects, and assigns then to
 	 * their corrosponding instance variables.
 	 */
-	public Student (BufferedReader socketIn, PrintWriter socketOut) {
+	public Student (BufferedReader socketIn, PrintWriter socketOut)throws SocketException {
 		studentRegList = new ArrayList<Registration>();
 		
 		this.socketIn = socketIn;
@@ -48,14 +49,20 @@ public class Student {
 			setStudentName();
 			setStudentId();
 			coursesTaken = addCoursesTaken();
-
+		}catch(SocketException e) {
+			throw new SocketException();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		System.out.println("Student "+studentName+" "+studentId);
-		System.out.println(toStringAllCoursesTaken());
+		try {
+			System.out.println(toStringAllCoursesTaken());
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	/**
 	 * Returns the name of the student.
@@ -68,9 +75,11 @@ public class Student {
 	 * Sets the student's name, using variable socketIn as input.
 	 * @throws SocketException that is thrown if the server has lost connection to the client.
 	 */
-	public void setStudentName() throws IOException {
+	public void setStudentName() throws SocketException {
 		try {
 			studentName = socketIn.readLine(); 
+		}catch(SocketException e) {
+			throw new SocketException();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -86,9 +95,11 @@ public class Student {
 	 * Sets the student's ID, using variable socketIn as input.
 	 * @throws SocketException that is thrown if the server has lost connection to the client.
 	 */
-	public void setStudentId() {
+	public void setStudentId()throws SocketException {
 		try {
 			studentId = Integer.parseInt(socketIn.readLine()); 
+		}catch(SocketException e) {
+			throw new SocketException();
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -229,6 +240,10 @@ public class Student {
 	
 		
 		while(check) {
+			String option = socketIn.readLine();
+			if(!option.contentEquals("0")) {
+				break;
+			}
 			courseName=socketIn.readLine();
 			courseNum =Integer.parseInt(socketIn.readLine());
 			Course c = new Course(courseName,courseNum);
@@ -259,7 +274,7 @@ public class Student {
 	 * Returns a String holding all the courses that the student has taken.
 	 * @return String holding all the courses that the student has taken.
 	 */
-	public String toStringAllCoursesTaken() {
+	public String toStringAllCoursesTaken() throws SocketException{
 		String st = "All courses the student has taken: \n";
 		for (int i=0;i<coursesTaken.size();i++) {
 			st += coursesTaken.get(i).toString();  //This line invokes the toString() method of Course
