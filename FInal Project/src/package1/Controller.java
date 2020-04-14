@@ -210,13 +210,7 @@ public class Controller {
     		socketOut.println(courseName.getText());
     		socketOut.println(courseNum.getText());
     		
-    		try {
-				while(!socketIn.ready());
-	    		updateScrollPanel();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+    		updateScrollPanel();
     	}
 	}
 	/**
