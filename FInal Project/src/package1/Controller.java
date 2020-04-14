@@ -94,8 +94,10 @@ public class Controller {
     		
     		int option = JOptionPane.showConfirmDialog(null,field2, panelTitle, JOptionPane.CANCEL_OPTION);
 
-    		if(option == JOptionPane.CANCEL_OPTION)
+    		if(option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION)
         		break;
+    		
+    		
         	
             nameIn = courseName.getText();
             idIn = courseNum.getText();
@@ -190,7 +192,7 @@ public class Controller {
 	
 	public void removeRegPressed() {
 		socketOut.println("3");
-				
+		
 		JTextField courseName = new JTextField();
 		JTextField courseNum = new JTextField();
 		

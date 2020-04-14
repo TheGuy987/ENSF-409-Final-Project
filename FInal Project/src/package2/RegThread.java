@@ -96,12 +96,13 @@ public class RegThread extends Thread {
 			break;
 
 			case(3):
-				/*try {
-					student.removeRegistration();
+				try {
+					theStudent.removeRegistrationInterface();
+					socketOut.flush();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}*/
+				}
 			break;
 
 			case(4):
