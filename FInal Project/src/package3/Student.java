@@ -115,8 +115,8 @@ public class Student {
 	public void addRegistirationInterface(CourseCatalogue list) throws IOException {
 		//cancels method if the user presses "Cancel"
 		String option = socketIn.readLine();
-		
-		if(option.contentEquals("1")) {
+		System.out.println("TEST "+option);
+		if(!option.contentEquals("0")) {
 			return;
 		}
 		

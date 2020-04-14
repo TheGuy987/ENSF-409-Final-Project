@@ -136,7 +136,13 @@ public class Controller {
     		socketOut.println(courseName.getText());
     		socketOut.println(courseNum.getText());
     		
-    		updateScrollPanel();
+    		try {
+				while(!socketIn.ready());
+	    		updateScrollPanel();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	}
 	}
 	
@@ -176,6 +182,7 @@ public class Controller {
 				display+=socketIn.readLine();
 				display+="\n";
 			}
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
