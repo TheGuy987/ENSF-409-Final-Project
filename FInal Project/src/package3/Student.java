@@ -118,15 +118,31 @@ public class Student {
 	 * @throws IOException Exception thrown if something goes wrong with the operation relating to
 	 * and IO operation.
 	 */
-	public String removeRegistration(String courseName, int courseNum) throws IOException {	
+	public void removeRegistration(String courseName, int courseNum) throws IOException {	
 		
 		for(int i=0;i < studentRegList.size();i++) {
 			if(courseName.contentEquals(studentRegList.get(i).getTheOffering().getTheCourse().getCourseName()) && courseNum==studentRegList.get(i).getTheOffering().getTheCourse().getCourseNum()) {
-			studentRegList.remove(i);
-			return "1";
+				studentRegList.remove(i);
+				socketOut.println("The course has been successfully removed from your registration");
+				return;
 			}
 		}
-		return "0";
+		socketOut.println("The course you have entered could not be found");
+	}
+	
+	public void removeRegistrationInterface() throws IOException {
+		
+		//cancels method if the user presses "Cancel"
+		String option = socketIn.readLine();
+		System.out.println("TEST "+option);
+		if(!option.contentEquals("0")) {
+			return;
+		}
+		
+		String courseName = socketIn.readLine();
+		int courseNum = Integer.parseInt(socketIn.readLine());
+		
+		removeRegistration(courseName, courseNum);
 	}
 	/**
 	 * Registers the student to a course based on client input. It will then send a message to the client based
