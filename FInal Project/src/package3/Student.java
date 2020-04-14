@@ -113,22 +113,27 @@ public class Student {
 	}
 	
 	public void addRegistirationInterface(CourseCatalogue list) throws IOException {
-		String courseName;
-		int courseNum, check=0;
+		//cancels method if the user presses "Cancel"
+		String option = socketIn.readLine();
+		System.out.println("TEST1");
 		
-		if(maxCourseReg()) {
-			socketOut.println("You have already registered for a maximum of 6 courses. Returning to main menu...");
+		if(option.contentEquals("1")) {
 			return;
 		}
 		
-		socketOut.println("Hi "+studentName+", please enter the name of the course you would like to register for:");
-		courseName=socketIn.readLine();
-		socketOut.println("Please eneter the course number:");
-		courseNum=Integer.parseInt(socketIn.readLine());
+		String courseName = socketIn.readLine();
+		int courseNum = Integer.parseInt(socketIn.readLine());
+		int check=0;
+		System.out.println("TEST2");
+
+		if(maxCourseReg()) {
+			socketOut.println("You have already registered for a maximum of 6 courses.");
+			return;
+		}
 		
 		Course reg = list.searchCat(courseName, courseNum);
 		if(reg==null) {
-			socketOut.println("The course you have entered could not be found. Returning to main menu");
+			socketOut.println("The course you have entered could not be found");
 			return;
 		}
 		
@@ -141,7 +146,7 @@ public class Student {
 		}
 		
 		if(check!=reg.getPreReq().size()) {
-			socketOut.println("You do not meet the prerequisites for this course. Returning to main menu"); 
+			socketOut.println("You do not meet the prerequisites for this course"); 
 			return;
 		}
 		
@@ -157,8 +162,9 @@ public class Student {
 				break;
 			}
 		}
+		
 		if(check==0) {
-			socketOut.println("Registeration error. All course offering for this class is full. Returning to main menu");
+			socketOut.println("Registeration error. All course offering for this class is full");
 			return;
 		}
 	}

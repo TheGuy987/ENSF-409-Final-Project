@@ -71,12 +71,12 @@ public class RegThread extends Thread {
 			break;
 			case(2):
 				System.out.println("2");
-				/*try {
-					student.addRegistirationInterface(cat);
+				try {
+					theStudent.addRegistirationInterface(theCatalogue);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}*/
+				}
 			break;
 
 			case(3):
