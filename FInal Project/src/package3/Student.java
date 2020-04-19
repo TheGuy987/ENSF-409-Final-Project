@@ -145,7 +145,6 @@ public class Student {
 		
 		//cancels method if the user presses "Cancel"
 		String option = socketIn.readLine();
-		System.out.println("TEST "+option);
 		if(!option.contentEquals("0")) {
 			return;
 		}
@@ -242,7 +241,6 @@ public class Student {
 		
 		while(check) {
 			String option = socketIn.readLine();
-			System.out.println("TEST "+option);
 			if(!option.contentEquals("0")) {
 				break;
 			}

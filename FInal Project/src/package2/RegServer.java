@@ -8,7 +8,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 /**
  * Class that represents the server of the Course registration system. It has variables for
  * data flow between the server and client sides of the application, serverSocket and Socket
@@ -23,7 +22,6 @@ public class RegServer {
 	private ServerSocket serverSocket;
 	private ExecutorService pool;
 	private Socket socket;
-	
 	/**
 	 * Constructor that takes a port number as input, and uses it to create a serverSocket object.
 	 * It also assisns the variable pool to a new cached threadpool.
@@ -37,12 +35,11 @@ public class RegServer {
 			e.printStackTrace();
 		}
 	}
-	
 	/**
 	 * Constantly searches for new clients, and assings a new thread to them to handle their requests.
 	 * The new thread is created using variable pool, and is passed PrintWriter and BufferedReader
 	 * variables for data flow.
-	 */
+	 */	
 	public void clientSearch() {
 		while(true) {
 			try {
@@ -65,12 +62,11 @@ public class RegServer {
 		}
 		
 	}
-	
 	/**
 	 * Main method of the server. It creates a new RegServer object, then uses it to call the method
 	 * clientSearch.
 	 * @param args String Array that can be read form the command line.
-	 */
+	 */	
 	public static void main(String[] args) {
 		RegServer theServer = new RegServer(8099);
 		System.out.println("Server is now running");

@@ -63,8 +63,10 @@ public class Controller {
     		
         	int option = JOptionPane.showConfirmDialog(null,field1, panelTitle, JOptionPane.CANCEL_OPTION);
         	
-        	if(option == JOptionPane.CANCEL_OPTION)
+        	if(option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION) {
+        		socketOut.println("0");
         		System.exit(0);
+        	}
         	
             nameIn = studentName.getText();
             idIn = studentId.getText();
@@ -93,12 +95,12 @@ public class Controller {
     		};
     		
     		int option = JOptionPane.showConfirmDialog(null,field2, panelTitle, JOptionPane.CANCEL_OPTION);
-    		
-    		//sends option to server so it knows whether the user pressed "ok" or "cancel"
         	socketOut.println(option);
-
-    		if(option == JOptionPane.CANCEL_OPTION)
+        	
+    		if(option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION)
         		break;
+    		
+    		
         	
             nameIn = courseName.getText();
             idIn = courseNum.getText();
@@ -193,7 +195,7 @@ public class Controller {
 	
 	public void removeRegPressed() {
 		socketOut.println("3");
-				
+		
 		JTextField courseName = new JTextField();
 		JTextField courseNum = new JTextField();
 		
@@ -211,13 +213,7 @@ public class Controller {
     		socketOut.println(courseName.getText());
     		socketOut.println(courseNum.getText());
     		
-    		try {
-				while(!socketIn.ready());
-	    		updateScrollPanel();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+    		updateScrollPanel();
     	}
 	}
 	/**
@@ -249,7 +245,7 @@ public class Controller {
 		theGUI.remove(theGUI.display);
 
 		theGUI.display = new JScrollPane(updateTextArea(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		theGUI.display.setSize(1080,720);
+		theGUI.display.setSize(1080,650);
 		theGUI.add("Center",theGUI.display);
         theGUI.add(theGUI.display);
         theGUI.pack();
@@ -271,7 +267,7 @@ public class Controller {
 			e.printStackTrace();
 		}
 		
-		JTextArea jta = new JTextArea(display, 40, 87);
+		JTextArea jta = new JTextArea(display, 35, 65);
 		jta.setForeground(Color.white);
 		jta.setBackground(Color.DARK_GRAY);
 		return jta;

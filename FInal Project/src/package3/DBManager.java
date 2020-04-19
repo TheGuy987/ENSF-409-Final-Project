@@ -1,5 +1,7 @@
 package package3;
 
+import java.sql.*;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -12,15 +14,25 @@ import java.util.ArrayList;
  * @author Vaibhav Kapoor, Thomas Pan, and Matthew Wells
  *
  */
-public class DBManager {
+public class DBManager implements DBCredentials {
 	
 	ArrayList <Course> courseList;
+	private Connection theConn;
+	private Statement theStmt;
+	private ResultSet rs;
 
 	/**
 	 * Constructor that assigns variable courseList to a new ArrayList of type Coures.
 	 */
 	public DBManager () {
 		courseList = new ArrayList<Course>();
+		try {
+			theConn = DriverManager.getConnection(URL, USER, PASS);
+			theStmt = theConn.createStatement();
+			rs = theStmt.executeQuery("select * from employees");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -84,6 +96,10 @@ public class DBManager {
 		} catch(NullPointerException e) {
 			e.printStackTrace();
 		}	
+	}
+	
+	public static void main(String[] args) {
+		
 	}
 
 }

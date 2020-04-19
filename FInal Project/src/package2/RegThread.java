@@ -42,68 +42,75 @@ public class RegThread extends Thread {
  		try {
 			theStudent = new Student(socketIn, socketOut);
 		} catch (SocketException e2) {
-			return;
+			e2.printStackTrace();
 		}
  		theCatalogue = new CourseCatalogue(socketIn, socketOut);
 		
 		//Begin
 		Boolean check=true;
 		try {
-		while(check) {
-			int choice = 0;
-			try {
-				choice = Integer.parseInt(socketIn.readLine());
-			} catch (NumberFormatException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch(SocketException e) {
-				return;
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			while(check) {
+				int choice = 0;
+				try {
+					choice = Integer.parseInt(socketIn.readLine());
+				} catch (NumberFormatException e1) {
+					e1.printStackTrace();
+				} catch(SocketException e) {
+					return;
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				
+				switch(choice) {
+				case(0):
+					break;
+				case(1):
+					try {
+						theCatalogue.searchCatalogue();
+						socketOut.flush();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				break;
+				case(2):
+					try {
+						theStudent.addRegistirationInterface(theCatalogue);
+						socketOut.flush();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				break;
+	
+				case(3):
+					try {
+						theStudent.removeRegistrationInterface();
+						socketOut.flush();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				break;
+	
+				case(4):
+					socketOut.println(theCatalogue.toString());
+					socketOut.flush();
+				break;
+				
+				case(5):
+					socketOut.println(theStudent.toStringAllCoursesTaken());
+					socketOut.flush();
+				break;
+				
+				case(6):
+					socketOut.println(theStudent.toStringAllRegistrations());
+					socketOut.flush();
+				break;
+				
+				case(7):
+					check = false;
+				}
 			}
-			
-			switch(choice) {
-			
-			case(1):
-				
-				theCatalogue.searchCatalogue();
-				socketOut.flush();
-				break;
-				
-			case(2):
-				
-				theStudent.addRegistirationInterface(theCatalogue);
-				socketOut.flush();
-				break;
-
-			case(3):
-				theStudent.removeRegistrationInterface();
-				break;
-
-			case(4):
-				socketOut.println(theCatalogue.toString());
-				socketOut.flush();
-				break;
-			
-			case(5):
-				socketOut.println(theStudent.toStringAllCoursesTaken());
-				socketOut.flush();
-				break;
-			
-			case(6):
-				socketOut.println(theStudent.toStringAllRegistrations());
-				socketOut.flush();
-				break;
-			
-			case(7):
-				check = false;
-			}
-		}
-		}catch (SocketException e) {
+		}catch(SocketException e) {
 			return;
-		}catch(IOException e) {
-			e.printStackTrace();
 		}
 	}
 }
