@@ -25,9 +25,9 @@ import javax.swing.JTextField;
  */
 
 public class GUI extends JFrame {
-	JButton searchCata, addReg, removeReg, displayCata, displayTaken, displayReg;
+	JButton searchCata, addReg, removeReg, displayCata, displayTaken, displayReg, logout;
 	JLabel title;
-	JPanel titlePanel, buttonPanel;
+	JPanel titlePanel, buttonPanel, logoutPanel;
 	JScrollPane display;
 	Controller control;
 	
@@ -76,6 +76,11 @@ public class GUI extends JFrame {
 		displayReg.setBackground(Color.gray);
 		displayReg.setFocusPainted(false);
 		
+		logout = new JButton("Logout");
+		logout.setForeground(Color.white);
+		logout.setBackground(Color.gray);
+		logout.setFocusPainted(false);
+		
 		searchCata.addActionListener((ActionEvent e) -> { 
 			control.searchCataPressed();
 			});
@@ -100,6 +105,11 @@ public class GUI extends JFrame {
 				control.displayRegPressed();
 			});
 		
+		logout.addActionListener((ActionEvent e) -> { 
+			control.logoutPressed();
+			return;
+		});
+		
 		
 		buttonPanel = new JPanel();
 		buttonPanel.add(searchCata);
@@ -108,6 +118,10 @@ public class GUI extends JFrame {
 		buttonPanel.add(displayCata);
 		buttonPanel.add(displayTaken);
 		buttonPanel.add(displayReg);
+		
+		logoutPanel = new JPanel();
+		logoutPanel.add(logout);
+		
 		
 		display = new JScrollPane();
 		
@@ -118,6 +132,7 @@ public class GUI extends JFrame {
 		display = new JScrollPane(ta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		display.setBackground(Color.DARK_GRAY);
 		
+		this.add("West", logoutPanel);
 		this.add("South",buttonPanel);
 		this.add("North",titlePanel);
 		this.add("Center",display);

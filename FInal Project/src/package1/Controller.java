@@ -237,6 +237,13 @@ public class Controller {
 		socketOut.println("6");
 		updateScrollPanel();
 	}
+	
+	public void logoutPressed() {
+		socketOut.println("7");
+		theGUI.dispose();
+		startGUI();
+	}
+	
 	/**
 	 * Method updateScrollPanel removes the previous scroll panel, calls updateTextArea and then displays a new
 	 * scroll panel with the updated text
@@ -272,9 +279,5 @@ public class Controller {
 		jta.setBackground(Color.DARK_GRAY);
 		return jta;
 	}
-	
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> refs/remotes/origin/Matt_FP
+

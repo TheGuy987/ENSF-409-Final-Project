@@ -69,7 +69,7 @@ public class RegServer {
 	 */	
 	public static void main(String[] args) {
 		RegServer theServer = new RegServer(8099);
-		System.out.println("Server is now running");
+		System.out.println("Server is now running..YAY");
 		theServer.clientSearch();
 	}
 	
