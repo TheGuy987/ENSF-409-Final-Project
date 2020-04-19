@@ -46,52 +46,35 @@ public class DBManager {
 	 * @return
 	 */
 	public ArrayList<Course> readFromDataBase() {
+		ResultSet rs;
+		ResultSet temp;
+
 		try {
-			ResultSet rs = state.executeQuery("SELECT * FROM registration.courses");
+			rs = state.executeQuery("SELECT * FROM registration.courses");
+
+			while(rs.next()) {
+				Course c = new Course(rs.getString(1),Integer.parseInt(rs.getString(2)));
+				int num_of_sections =rs.getInt(3);
+				int idcourse = rs.getInt(0);
+				
+				//reads course sections number and size and adds it to course offering 
+				temp = state.executeQuery("SELECT * FROM sections WHERE idcourse = '"+idcourse+"'");
+				for(int i=0; i<num_of_sections; i++) {
+					CourseOffering co = new CourseOffering(rs.getInt(2), rs.getInt(3));
+					c.addOffering(co);
+				}
+				
+				ArrayList<Course> preReq = new ArrayList<Course>();
+				temp = state.executeQuery("SELECT * FROM prereqs WHERE idcourse = '"+idcourse+"'");
+				while(rs.next()) {
+					preReq.add(new Course(rs.getString(2), rs.getInt(3)));
+				}
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
 		return courseList;
 	}
-	
-	/**
-	 * Reads from a text file, and uses the contents to create Course objects.
-	 * @param input BufferedReader object conencted to a text file.
-	 */
-	public void formatInput(BufferedReader input) {
-		String name = "";
-		int num = 0;
-		int secNum = 0;
-		int secCap = 0;
-		String line = null;
-		Course c = null;
-		CourseOffering co = null;
-		try {
-			line = input.readLine();
-			while(line != null) {
-				name = line;
-				line = input.readLine();
-				num = Integer.parseInt(line);
-				c = new Course(name, num);
-				for(int i = 0; i < 2; i++) {
-					line = input.readLine();
-					secNum = Integer.parseInt(line);
-					line = input.readLine();
-					secCap = Integer.parseInt(line);
-					co = new CourseOffering(secNum,secCap);
-					c.addOffering(co);
-				}
-				courseList.add(c);
-				line = input.readLine();
-				}
-				
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch(NullPointerException e) {
-			e.printStackTrace();
-		}	
-	}
-
 }
