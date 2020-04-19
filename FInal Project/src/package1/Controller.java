@@ -20,6 +20,8 @@ public class Controller {
 	private GUI theGUI;	
 	private BufferedReader socketIn;
 	private PrintWriter socketOut;
+	private int admin = 0;
+	
 	/**
 	 * The constructor for controller constructs the controller class and passes a BufferedReader and a Printwriter
 	 * to it. 
@@ -76,9 +78,7 @@ public class Controller {
         		socketOut.println(iDIn);
         		socketOut.println(passwordIn);
         		try {
-        			System.out.println(foundUser);
         			foundUser = socketIn.readLine();
-        			System.out.println("PASS");
 					if(foundUser == "1")
 						break;
 					else
@@ -207,6 +207,11 @@ public class Controller {
 		startGUI();
 	}
 	
+	public void createCoursePressed() {
+		socketOut.println("8");
+		updateScrollPanel();
+	}
+	
 	/**
 	 * Method updateScrollPanel removes the previous scroll panel, calls updateTextArea and then displays a new
 	 * scroll panel with the updated text
@@ -241,6 +246,13 @@ public class Controller {
 		jta.setForeground(Color.white);
 		jta.setBackground(Color.DARK_GRAY);
 		return jta;
+	}
+	
+	public int getAdmin() {
+		return admin;
+	}
+	public void setAdmin(int admin) {
+		this.admin = admin;
 	}
 	
 }

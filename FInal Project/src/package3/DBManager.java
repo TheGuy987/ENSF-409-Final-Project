@@ -71,7 +71,7 @@ public class DBManager implements DBCredentials{
 	public String checkStudentDetails(int id, String password) {
 		
 		try {
-			myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306","root", "ENSF409W20Final_Project");
+			myConn = DriverManager.getConnection(URL,USER, PASS);
 			
 			String query1 = "SELECT * FROM " + DBNAME + ".students WHERE studentid LIKE ?";
 			
@@ -89,6 +89,25 @@ public class DBManager implements DBCredentials{
 			e.printStackTrace();
 		}
 		return null;
+		
+	}
+	
+	public ArrayList<Course> readCoursesTaken(int studentId){
+		
+		ArrayList<Course> taken = new ArrayList<Course>();	
+		
+		try {
+			
+			myConn = DriverManager.getConnection(URL,USER, PASS);
+			String query1 = "SELECT * FROM " + DBNAME + ".studentcoursestaken WHERE studentid LIKE ?";
+			PreparedStatement state1 = myConn.prepareStatement(query1);
+			state1.setInt(1, id);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return taken;
 		
 	}
 	

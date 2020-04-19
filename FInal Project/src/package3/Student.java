@@ -48,6 +48,8 @@ public class Student {
 		this.socketOut = socketOut;
 		DB = new DBManager();
 		
+		//attempt to match the user entered credentials with the database.
+		
 		try {
 			while(true) {
 				
@@ -65,7 +67,10 @@ public class Student {
 			}
 			
 			
-			coursesTaken = addCoursesTaken();
+			coursesTaken = DB.readCoursesTaken(studentId);
+		
+		
+		
 		}catch(SocketException e) {
 			throw new SocketException();
 		} catch (IOException e) {
@@ -230,6 +235,7 @@ public class Student {
 				of=reg.getCourseOfferingAt(i);
 				Registration r = new Registration();
 				r.completeRegistration(this, of);
+				
 				socketOut.println("You have been added to "+of.getTheCourse().getCourseName()+" "+of.getTheCourse().getCourseNum());
 				break;
 			}
@@ -248,37 +254,7 @@ public class Student {
 		if(studentRegList.size()>6) return true;
 		return false; 
 	}
-	/**
-	 * Adds courses to an ArrayList of courese that the student has already taken.
-	 * @return ArrayList of Course objects representing all of the courses the student
-	 * has already taken.
-	 * @throws IOException
-	 */	
-	public ArrayList<Course> addCoursesTaken() throws IOException {
-		boolean check=true;
-		String courseName;
-		int userInput;
-		int courseNum=0;
-		ArrayList<Course> temp = new ArrayList<Course>();
-	
-		
-		while(check) {
-			String option = socketIn.readLine();
-			if(!option.contentEquals("0")) {
-				break;
-			}
-			courseName=socketIn.readLine();
-			courseNum =Integer.parseInt(socketIn.readLine());
-			Course c = new Course(courseName,courseNum);
-			temp.add(c);
-						
-			userInput=Integer.parseInt(socketIn.readLine());
-			if(userInput==1) {
-				check=false;
-			}
-		}
-		return temp;
-	}
+
 	/**
 	 * Removes a coures from the list of courses that the student has already taken.
 	 * @param name String holding the name of the course to be removed.
