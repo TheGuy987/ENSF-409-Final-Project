@@ -22,7 +22,6 @@ public class DBManager {
 	 * Constructor that assigns variable courseList to a new ArrayList of type Coures.
 	 */
 	public DBManager () {
-		System.out.println("YAY2");
 		courseList = new ArrayList<Course>();
 	}
 	
