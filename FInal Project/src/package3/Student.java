@@ -39,15 +39,32 @@ public class Student {
 	 * Constructor that takes in BufferedReader and PrintWriter objects, and assigns then to
 	 * their corrosponding instance variables.
 	 */
+	private DBManager DB;
+	
 	public Student (BufferedReader socketIn, PrintWriter socketOut)throws SocketException {
 		studentRegList = new ArrayList<Registration>();
 		
 		this.socketIn = socketIn;
 		this.socketOut = socketOut;
+		DB = new DBManager();
 		
 		try {
-			setStudentName();
-			setStudentId();
+			while(true) {
+				
+				setStudentId();
+				String pass = getStudentPassword();
+			
+				studentName = DB.checkStudentDetails(studentId, pass);
+				if(studentName != null) {
+					socketOut.println("1");
+					break;
+				}
+				else {
+					socketOut.println("0");
+				}
+			}
+			
+			
 			coursesTaken = addCoursesTaken();
 		}catch(SocketException e) {
 			throw new SocketException();
@@ -75,14 +92,8 @@ public class Student {
 	 * Sets the student's name, using variable socketIn as input.
 	 * @throws SocketException that is thrown if the server has lost connection to the client.
 	 */
-	public void setStudentName() throws SocketException {
-		try {
-			studentName = socketIn.readLine(); 
-		}catch(SocketException e) {
-			throw new SocketException();
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
+	public void setStudentName(String name){
+		studentName = name;
 	}
 	/**
 	 * Returns the students ID number.
@@ -103,6 +114,18 @@ public class Student {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public String getStudentPassword()throws SocketException {
+		try {
+			String pass = socketIn.readLine(); 
+			return pass;
+		}catch(SocketException e) {
+			throw new SocketException();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	/**
 	 * Returns the students information in the form of a String.

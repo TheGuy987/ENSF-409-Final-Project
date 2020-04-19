@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Scanner;
 /**
  * Class representing the course catalogue of a course registration system. It has variables
  * holding data streams to a client, and an ArrayList containing all courses.
@@ -29,7 +28,7 @@ public class CourseCatalogue {
 	 * @param socketOut PrintWriter object that sends data to the client.
 	 */
 	public CourseCatalogue (BufferedReader socketIn, PrintWriter socketOut) {
-		loadFromDataBase ();
+		loadFromDataBase();
 		this.socketIn = socketIn;
 		this.socketOut = socketOut;
 	}

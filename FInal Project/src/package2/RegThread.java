@@ -39,12 +39,13 @@ public class RegThread extends Thread {
 	 * and exception, causing it to break the loop and exit.
 	 */
 	public void run() {
+		
  		try {
-			theStudent = new Student(socketIn, socketOut);
+ 			theStudent = new Student(socketIn, socketOut);
+ 			theCatalogue = new CourseCatalogue(socketIn, socketOut);
 		} catch (SocketException e2) {
-			e2.printStackTrace();
+			return;
 		}
- 		theCatalogue = new CourseCatalogue(socketIn, socketOut);
 		
 		//Begin
 		Boolean check=true;
