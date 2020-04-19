@@ -107,6 +107,8 @@ public class RegThread extends Thread {
 				
 				case(7):
 					check = false;
+					this.run();
+					break;
 				}
 			}
 		}catch(SocketException e) {

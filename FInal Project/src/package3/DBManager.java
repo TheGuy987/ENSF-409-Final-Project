@@ -29,8 +29,18 @@ public class DBManager implements DBCredentials {
 		try {
 			theConn = DriverManager.getConnection(URL, USER, PASS);
 			theStmt = theConn.createStatement();
-			rs = theStmt.executeQuery("select * from employees");
+			
 		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void close() {
+		try {
+			theStmt.close();
+			rs.close();
+			theConn.close();
+		} catch(SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -41,64 +51,51 @@ public class DBManager implements DBCredentials {
 	 * @return
 	 */
 	public ArrayList<Course> readFromDataBase() {
-		formatInput(connectFile());
+		//formatInput();
 		return courseList;
-	}
-	/**
-	 * Connects a file to a BufferedReader.
-	 * @return BufferedReader object used to link to a text file.
-	 */
-	public BufferedReader connectFile() {
-		BufferedReader input = null;
-		try {
-			input = new BufferedReader(new FileReader("Courses.txt"));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		return input;
 	}
 	
 	/**
 	 * Reads from a text file, and uses the contents to create Course objects.
 	 * @param input BufferedReader object conencted to a text file.
 	 */
-	public void formatInput(BufferedReader input) {
-		String name = "";
-		int num = 0;
-		int secNum = 0;
-		int secCap = 0;
-		String line = null;
-		Course c = null;
-		CourseOffering co = null;
-		try {
-			line = input.readLine();
-			while(line != null) {
-				name = line;
-				line = input.readLine();
-				num = Integer.parseInt(line);
-				c = new Course(name, num);
-				for(int i = 0; i < 2; i++) {
-					line = input.readLine();
-					secNum = Integer.parseInt(line);
-					line = input.readLine();
-					secCap = Integer.parseInt(line);
-					co = new CourseOffering(secNum,secCap);
-					c.addOffering(co);
-				}
-				courseList.add(c);
-				line = input.readLine();
-				}
-				
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch(NullPointerException e) {
-			e.printStackTrace();
-		}	
-	}
+//	public void formatInput() {
+//		String name = "";
+//		int num = 0;
+//		int secNum = 0;
+//		int secCap = 0;
+//		String line = null;
+//		Course c = null;
+//		CourseOffering co = null;
+//		try {
+//			line = input.readLine();
+//			while(line != null) {
+//				name = line;
+//				line = input.readLine();
+//				num = Integer.parseInt(line);
+//				c = new Course(name, num);
+//				for(int i = 0; i < 2; i++) {
+//					line = input.readLine();
+//					secNum = Integer.parseInt(line);
+//					line = input.readLine();
+//					secCap = Integer.parseInt(line);
+//					co = new CourseOffering(secNum,secCap);
+//					c.addOffering(co);
+//				}
+//				courseList.add(c);
+//				line = input.readLine();
+//				}
+//				
+//			
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		} catch(NullPointerException e) {
+//			e.printStackTrace();
+//		}	
+//	}
 	
 	public static void main(String[] args) {
-		DBManager 
+		DBManager test = new DBManager(); 
 	}
 
 }
