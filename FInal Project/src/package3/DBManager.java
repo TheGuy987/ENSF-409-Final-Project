@@ -4,6 +4,11 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
@@ -15,12 +20,24 @@ import java.util.ArrayList;
 public class DBManager {
 	
 	ArrayList <Course> courseList;
+	
+	Statement state;
+	Connection myConn;
 
 	/**
 	 * Constructor that assigns variable courseList to a new ArrayList of type Coures.
 	 */
 	public DBManager () {
 		courseList = new ArrayList<Course>();
+		
+		try {
+			myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306","root", "password");
+			//Create a Statement
+			state = myConn.createStatement();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -29,22 +46,13 @@ public class DBManager {
 	 * @return
 	 */
 	public ArrayList<Course> readFromDataBase() {
-		formatInput(connectFile());
-		return courseList;
-	}
-	
-	/**
-	 * Connects a file to a BufferedReader.
-	 * @return BufferedReader object used to link to a text file.
-	 */
-	public BufferedReader connectFile() {
-		BufferedReader input = null;
 		try {
-			input = new BufferedReader(new FileReader("Courses.txt"));
-		} catch (FileNotFoundException e) {
+			ResultSet rs = state.executeQuery("SELECT * FROM registration.courses");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return input;
+		return courseList;
 	}
 	
 	/**
