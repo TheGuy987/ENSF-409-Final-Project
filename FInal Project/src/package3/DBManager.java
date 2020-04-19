@@ -51,7 +51,7 @@ public class DBManager {
 
 		try {
 			rs = state.executeQuery("SELECT * FROM registration.courses");
-
+			System.out.println("SQL Test");
 			while(rs.next()) {
 				Course c = new Course(rs.getString(1),Integer.parseInt(rs.getString(2)));
 				int num_of_sections =rs.getInt(3);

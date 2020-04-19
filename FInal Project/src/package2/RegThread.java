@@ -42,10 +42,7 @@ public class RegThread extends Thread {
  		try {
 			theStudent = new Student(socketIn, socketOut);
 		} catch (SocketException e2) {
-<<<<<<< HEAD
 			// TODO Auto-generated catch block
-=======
->>>>>>> refs/remotes/origin/Matt_FP
 			e2.printStackTrace();
 		}
  		theCatalogue = new CourseCatalogue(socketIn, socketOut);
@@ -58,7 +55,6 @@ public class RegThread extends Thread {
 				try {
 					choice = Integer.parseInt(socketIn.readLine());
 				} catch (NumberFormatException e1) {
-<<<<<<< HEAD
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				} catch(SocketException e) {
@@ -76,24 +72,6 @@ public class RegThread extends Thread {
 						theCatalogue.searchCatalogue();
 						socketOut.flush();
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-=======
-					e1.printStackTrace();
-				} catch(SocketException e) {
-					return;
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-				
-				switch(choice) {
-				case(0):
-					break;
-				case(1):
-					try {
-						theCatalogue.searchCatalogue();
-						socketOut.flush();
-					} catch (IOException e1) {
->>>>>>> refs/remotes/origin/Matt_FP
 						e1.printStackTrace();
 					}
 				break;
@@ -102,7 +80,6 @@ public class RegThread extends Thread {
 						theStudent.addRegistirationInterface(theCatalogue);
 						socketOut.flush();
 					} catch (IOException e) {
-<<<<<<< HEAD
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
@@ -114,17 +91,6 @@ public class RegThread extends Thread {
 						socketOut.flush();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
-=======
-						e.printStackTrace();
-					}
-				break;
-	
-				case(3):
-					try {
-						theStudent.removeRegistrationInterface();
-						socketOut.flush();
-					} catch (IOException e) {
->>>>>>> refs/remotes/origin/Matt_FP
 						e.printStackTrace();
 					}
 				break;
