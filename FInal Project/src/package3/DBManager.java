@@ -44,7 +44,6 @@ public class DBManager implements DBCredentials {
 		formatInput(connectFile());
 		return courseList;
 	}
-	
 	/**
 	 * Connects a file to a BufferedReader.
 	 * @return BufferedReader object used to link to a text file.
@@ -99,7 +98,7 @@ public class DBManager implements DBCredentials {
 	}
 	
 	public static void main(String[] args) {
-		
+		DBManager 
 	}
 
 }
