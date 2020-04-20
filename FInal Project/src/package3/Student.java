@@ -41,7 +41,7 @@ public class Student {
 	 */
 	private DBManager DB;
 	
-	public Student (BufferedReader socketIn, PrintWriter socketOut)throws SocketException {
+	public Student (BufferedReader socketIn, PrintWriter socketOut, CourseCatalogue theCat)throws SocketException {
 		studentRegList = new ArrayList<Registration>();
 		
 		this.socketIn = socketIn;
@@ -68,6 +68,7 @@ public class Student {
 			
 			
 			coursesTaken = DB.readCoursesTaken(studentId);
+			studentRegList = DB.readCoursesRegistered(studentId, this);
 		
 		
 		
@@ -292,5 +293,9 @@ public class Student {
 			st += "\n";
 		}
 		return st;
+	}
+	
+	public DBManager getDB() {
+		return DB;
 	}
 }

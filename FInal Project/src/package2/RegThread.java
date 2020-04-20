@@ -41,8 +41,8 @@ public class RegThread extends Thread {
 	public void run() {
 		
  		try {
- 			theStudent = new Student(socketIn, socketOut);
  			theCatalogue = new CourseCatalogue(socketIn, socketOut);
+ 			theStudent = new Student(socketIn, socketOut, theCatalogue);
 		} catch (SocketException e2) {
 			return;
 		}

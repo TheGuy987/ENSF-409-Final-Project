@@ -39,8 +39,8 @@ public class CourseCatalogue {
 		// TODO Auto-generated method stub
 		DBManager db = new DBManager();
 		setCourseList(db.readFromDataBase());
-		
 	}
+
 	/**
 	 * Creates a new course offering
 	 * @param c Course object representing the class the new course offering will be.

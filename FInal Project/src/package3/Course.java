@@ -31,6 +31,7 @@ public class Course {
 	 * Adds an offering to the course. Checks to make sure the offering is for this course.
 	 * @param offering Course offering to be added to the course.
 	 */
+	
 	public void addOffering(CourseOffering offering) {
 		if (offering != null && offering.getTheCourse() == null) {
 			offering.setTheCourse(this);

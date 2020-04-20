@@ -125,6 +125,60 @@ public class DBManager implements DBCredentials{
 		
 	}
 	
+	public ArrayList<Registration> readCoursesRegistered(int studentId, Student theStudent) {
+		ArrayList<Registration> registered = new ArrayList<Registration>();
+		Course courseTemp;
+		Registration regTemp;
+		CourseOffering coTemp;
+		
+		try {
+			
+			myConn = DriverManager.getConnection(URL,USER, PASS);
+			
+			int courseId;
+			int sectionId;
+			String query1 = "SELECT * FROM " + DBNAME + ".studentcoursesreg WHERE studentid LIKE ?";
+			String courseQuery = "SELECT * FROM " + DBNAME + ".courses WHERE idcourse LIKE ?";
+			String sectionIDQuery = "SELECT * FROM " + DBNAME + ".sections WHERE id LIKE ?";
+			PreparedStatement state1 = myConn.prepareStatement(query1);
+			PreparedStatement state2;
+			PreparedStatement state3;
+			state1.setInt(1, studentId);
+			ResultSet rs = state1.executeQuery();
+			ResultSet courseRS;
+			ResultSet sectionRS;
+			while(rs.next()) {
+				sectionId = rs.getInt(3);
+				state3 = myConn.prepareStatement(sectionIDQuery);
+				state3.setInt(1, sectionId);
+				sectionRS = state3.executeQuery();
+				
+				if(sectionRS.next()) {
+					courseId = sectionRS.getInt(2);
+					state2 = myConn.prepareStatement(courseQuery);
+					state2.setInt(1, courseId);
+					courseRS = state2.executeQuery();
+			
+					if(courseRS.next()) {
+						courseTemp = new Course(courseRS.getString(2), courseRS.getInt(3));
+						regTemp = new Registration();
+						regTemp.setTheStudent(theStudent);
+						coTemp = new CourseOffering(sectionRS.getInt(3), sectionRS.getInt(4));
+						coTemp.setTheCourse(courseTemp);
+						regTemp.setTheOffering(coTemp);
+						System.out.println("HERERERERERER");
+						registered.add(regTemp);
+					}
+				}
+			}
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return registered;
+	}
+	
 	public void close() {
 		try {
 			myConn.close();
@@ -133,8 +187,3 @@ public class DBManager implements DBCredentials{
 		}
 	}
 }
-	/**
-	 * Class that currently simulates reading form a database using values form a text file.
-	 * Will be updated in the future to read from an actual database.
-	 * @return
-	 */
