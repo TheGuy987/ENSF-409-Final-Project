@@ -77,7 +77,6 @@ public class DBManager implements DBCredentials{
 			
 			PreparedStatement state1 = myConn.prepareStatement(query1);
 			state1.setInt(1, id);
-			//state1.setString(2, password);
 			ResultSet rs = state1.executeQuery();
 			if(rs.next()) {
 				if(rs.getInt(2) == id && rs.getString(3).equals(password)) {
@@ -99,9 +98,24 @@ public class DBManager implements DBCredentials{
 		try {
 			
 			myConn = DriverManager.getConnection(URL,USER, PASS);
+			
+			int courseId;
 			String query1 = "SELECT * FROM " + DBNAME + ".studentcoursestaken WHERE studentid LIKE ?";
+			String courseQuery = "SELECT * FROM " + DBNAME + ".courses WHERE idcourse LIKE ?";
 			PreparedStatement state1 = myConn.prepareStatement(query1);
-			state1.setInt(1, id);
+			PreparedStatement state2;
+			state1.setInt(1, studentId);
+			ResultSet rs = state1.executeQuery();
+			ResultSet courseRS;
+			while(rs.next()) {
+				courseId = rs.getInt(3);
+				state2 = myConn.prepareStatement(courseQuery);
+				state2.setInt(1, courseId);
+				courseRS = state2.executeQuery();
+				if(courseRS.next()) {
+					taken.add(new Course(courseRS.getString(2), courseRS.getInt(3)));
+				}
+			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

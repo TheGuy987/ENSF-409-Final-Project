@@ -25,11 +25,12 @@ import javax.swing.JTextField;
  */
 
 public class GUI extends JFrame {
-	JButton searchCata, addReg, removeReg, displayCata, displayTaken, displayReg, logout, createCourse;
+	JButton searchCata, addReg, removeReg, displayCata, displayTaken, displayReg, logout;
 	JLabel title;
 	JPanel titlePanel, buttonPanel, logoutPanel;
 	JScrollPane display;
 	Controller control;
+	
 	
 	/**
 	 * Constructor that takes no input and creates a frame representing the menu screen
@@ -37,108 +38,91 @@ public class GUI extends JFrame {
 	 * presses, which interact with variable control.
 	 */
 	public GUI(Controller control) {
-		this.control = control;		
-		buttonPanel = new JPanel();
-		
-		if(control.getAdmin() != 0) {	
-			
-			// Admin Options
-			if(control.getAdmin() == 1) {
-				createCourse = new JButton("Create Course");
-				createCourse.setForeground(Color.white);
-				createCourse.setBackground(Color.gray);
-				createCourse.setFocusPainted(false);
-				
-				createCourse.addActionListener((ActionEvent e) -> { 
-					control.createCoursePressed();
-					});
-					
-				buttonPanel.add(createCourse);
-			}
-			
-			// Student Options
-			if(control.getAdmin() == 2) {
-				addReg = new JButton("Register for a Course");
-				addReg.setForeground(Color.white);
-				addReg.setBackground(Color.gray);
-				addReg.setFocusPainted(false);
-				
-				removeReg = new JButton("Remove Registeration");
-				removeReg.setForeground(Color.white);
-				removeReg.setBackground(Color.gray);
-				removeReg.setFocusPainted(false);
-				
-				displayTaken = new JButton("Display Courses Taken");
-				displayTaken.setForeground(Color.white);
-				displayTaken.setBackground(Color.gray);
-				displayTaken.setFocusPainted(false);
-				
-				displayReg = new JButton("Display Registered Courses");
-				displayReg.setForeground(Color.white);
-				displayReg.setBackground(Color.gray);
-				displayReg.setFocusPainted(false);
-				
-				addReg.addActionListener((ActionEvent e) -> { 
-					control.addRegPressed();
-					});
-				
-				removeReg.addActionListener((ActionEvent e) -> { 
-					control.removeRegPressed();
-					});
-				
-				displayTaken.addActionListener((ActionEvent e) -> { 
-					control.displayTakenPressed();
-					});
-				
-				displayReg.addActionListener((ActionEvent e) -> { 
-						control.displayRegPressed();
-					});
-				
-				buttonPanel.add(addReg);
-				buttonPanel.add(removeReg);
-				buttonPanel.add(displayTaken);
-				buttonPanel.add(displayReg);
-			}
-			
-			searchCata = new JButton("Search Course Catalogue");
-			searchCata.setForeground(Color.white);
-			searchCata.setBackground(Color.gray);
-			searchCata.setFocusPainted(false);
-			
-			displayCata = new JButton("Display Course Catalogue");
-			displayCata.setForeground(Color.white);
-			displayCata.setBackground(Color.gray);
-			displayCata.setFocusPainted(false);		
-			
-			searchCata.addActionListener((ActionEvent e) -> { 
-				control.searchCataPressed();
-				});			
-			
-			displayCata.addActionListener((ActionEvent e) -> { 
-				control.displayCataPressed();
-				});
-			
-			buttonPanel.add(searchCata);		
-			buttonPanel.add(displayCata);
-		}
-		
-		logout = new JButton("Logout");
-		logout.setForeground(Color.white);
-		logout.setBackground(Color.gray);
-		logout.setFocusPainted(false);
-		
-		logout.addActionListener((ActionEvent e) -> { 
-			control.logoutPressed();
-			return;
-		});
+		this.control = control;
 		
 		titlePanel = new JPanel();
 		title = new JLabel("Course Registeration App");
 		title.setForeground(Color.white);
 		title.setBackground(Color.gray);
 		titlePanel.add(title);
-		logout.setBounds(975, 3, 75, 20);
-		this.add(logout);		
+		
+		searchCata = new JButton("Search Course Catalogue");
+		searchCata.setForeground(Color.white);
+		searchCata.setBackground(Color.gray);
+		searchCata.setFocusPainted(false);
+		
+		addReg = new JButton("Register for a Course");
+		addReg.setForeground(Color.white);
+		addReg.setBackground(Color.gray);
+		addReg.setFocusPainted(false);
+		
+		removeReg = new JButton("Remove Registeration");
+		removeReg.setForeground(Color.white);
+		removeReg.setBackground(Color.gray);
+		removeReg.setFocusPainted(false);
+		
+		displayCata = new JButton("Display Course Catalogue");
+		displayCata.setForeground(Color.white);
+		displayCata.setBackground(Color.gray);
+		displayCata.setFocusPainted(false);
+		
+		displayTaken = new JButton("Display Courses Taken");
+		displayTaken.setForeground(Color.white);
+		displayTaken.setBackground(Color.gray);
+		displayTaken.setFocusPainted(false);
+		
+		displayReg = new JButton("Display Registered Courses");
+		displayReg.setForeground(Color.white);
+		displayReg.setBackground(Color.gray);
+		displayReg.setFocusPainted(false);
+		
+		logout = new JButton("Logout");
+		logout.setForeground(Color.white);
+		logout.setBackground(Color.gray);
+		logout.setFocusPainted(false);
+		
+		searchCata.addActionListener((ActionEvent e) -> { 
+			control.searchCataPressed();
+			});
+		
+		addReg.addActionListener((ActionEvent e) -> { 
+			control.addRegPressed();
+			});
+		
+		removeReg.addActionListener((ActionEvent e) -> { 
+			control.removeRegPressed();
+			});
+		
+		displayCata.addActionListener((ActionEvent e) -> { 
+			control.displayCataPressed();
+			});
+		
+		displayTaken.addActionListener((ActionEvent e) -> { 
+			control.displayTakenPressed();
+			});
+		
+		displayReg.addActionListener((ActionEvent e) -> { 
+				control.displayRegPressed();
+			});
+		
+		logout.addActionListener((ActionEvent e) -> { 
+			control.logoutPressed();
+			return;
+		});
+		
+		
+		buttonPanel = new JPanel();
+		buttonPanel.add(searchCata);
+		buttonPanel.add(addReg);
+		buttonPanel.add(removeReg);
+		buttonPanel.add(displayCata);
+		buttonPanel.add(displayTaken);
+		buttonPanel.add(displayReg);
+		
+		logoutPanel = new JPanel();
+		logoutPanel.add(logout);
+		
+		
 		display = new JScrollPane();
 		
 		JTextArea ta = new JTextArea("",35,62);
@@ -148,6 +132,7 @@ public class GUI extends JFrame {
 		display = new JScrollPane(ta, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		display.setBackground(Color.DARK_GRAY);
 		
+		this.add("West", logoutPanel);
 		this.add("South",buttonPanel);
 		this.add("North",titlePanel);
 		this.add("Center",display);
