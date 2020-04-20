@@ -126,7 +126,19 @@ public class DBManager implements DBCredentials {
 	}
 	
 	public void registerStudent(int studentId, CourseOffering co) {
-		
+		try {
+			Statement state1 = myConn.createStatement();
+			Statement state2 = myConn.createStatement();
+
+			ResultSet rs1 = state1.executeQuery("SELECT * FROM "+DBNAME+".courses WHERE courseName = '"+co.getTheCourse().getCourseName()+"' AND courseNum ='"+co.getTheCourse().getCourseName()+"'");
+			if(rs1.next()) {
+				int courseid = rs1.getInt(1);
+				state2.execute("INSERT INTO "+DBNAME+".studentcoursesreg (studentid, courseid) VALUES ( "+studentId+", "+courseid+")");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void close() {
