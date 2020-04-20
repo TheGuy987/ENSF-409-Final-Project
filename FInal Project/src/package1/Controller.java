@@ -51,6 +51,8 @@ public class Controller {
         String panelTitle = "Enter Login Information";
         boolean duplicate;
         String foundUser = "0";
+        socketOut.flush();
+        socketOut.println("1");
         
         do {
     		JTextField adminID = new JTextField();
@@ -66,6 +68,7 @@ public class Controller {
         	
         	// Show student login
         	if(option == JOptionPane.CANCEL_OPTION) {
+        		socketOut.println("-1");
         		getStudentInfo();
         		return;
         	}
@@ -117,6 +120,8 @@ public class Controller {
         String panelTitle = "Enter Login Information";
         boolean duplicate;
         String foundUser = "0";
+        socketOut.flush();
+        socketOut.println("0");
         
         
         do {
@@ -133,6 +138,7 @@ public class Controller {
         	
         	// Show admin login
         	if(option == JOptionPane.CANCEL_OPTION) {
+        		socketOut.println("-1");
         		getAdminInfo();
         		return;
         	}
@@ -304,13 +310,14 @@ public class Controller {
     		socketOut.println(courseName.getText().toUpperCase());
     		socketOut.println(courseNum.getText());
     		
+    		/*
     		try {
 				while(!socketIn.ready());
 	    		updateScrollPanel();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}*/
     	}
 		updateScrollPanel();
 	}

@@ -42,7 +42,7 @@ public class Student {
 	 * their corrosponding instance variables.
 	 */
 	
-	public Student (BufferedReader socketIn, PrintWriter socketOut)throws SocketException {
+	public Student (BufferedReader socketIn, PrintWriter socketOut)throws SocketException, LoginException {
 		studentRegList = new ArrayList<Registration>();
 		
 		this.socketIn = socketIn;
@@ -55,6 +55,9 @@ public class Student {
 			while(true) {
 				
 				setStudentId();
+				if(studentId < 0) {
+					throw new LoginException();
+				}
 				String pass = getStudentPassword();
 			
 				studentName = DB.checkStudentDetails(studentId, pass);
@@ -80,13 +83,6 @@ public class Student {
 			e.printStackTrace();
 		}
 		
-		System.out.println("Student "+studentName+" "+studentId);
-		try {
-			System.out.println(toStringAllCoursesTaken());
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	/**
 	 * Returns the name of the student.
@@ -119,7 +115,7 @@ public class Student {
 		}catch(SocketException e) {
 			throw new SocketException();
 		}catch(Exception e) {
-			e.printStackTrace();
+			
 		}
 	}
 	
@@ -197,7 +193,6 @@ public class Student {
 	public void addRegistirationInterface(CourseCatalogue list) throws IOException {
 		//cancels method if the user presses "Cancel"
 		String option = socketIn.readLine();
-		System.out.println("TEST "+option);
 		if(!option.contentEquals("0")) {
 			return;
 		}

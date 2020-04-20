@@ -44,11 +44,9 @@ public class DBManager implements DBCredentials{
 
 			//ResultSet from courses table
 			ResultSet rs1 = state1.executeQuery("SELECT * FROM " + DBNAME + ".courses");
-			System.out.println("SQL Test");
 			while(rs1.next()) {
 				Course c = new Course(rs1.getString(2),Integer.parseInt(rs1.getString(3)));
 				int idcourse = rs1.getInt(1);
-				System.out.println(c.toString());
 				//reads course sections number and size and adds it to course offering
 				ResultSet rs2 = state2.executeQuery("SELECT * FROM " + DBNAME + ".sections WHERE idcourse = '"+idcourse+"'");
 				while(rs2.next()) {
@@ -78,6 +76,28 @@ public class DBManager implements DBCredentials{
 		try {
 			
 			String query1 = "SELECT * FROM " + DBNAME + ".students WHERE studentid LIKE ?";
+			
+			PreparedStatement state1 = myConn.prepareStatement(query1);
+			state1.setInt(1, id);
+			ResultSet rs = state1.executeQuery();
+			if(rs.next()) {
+				if(rs.getInt(2) == id && rs.getString(3).equals(password)) {
+					return rs.getString(4);
+				}
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+	
+	public String checkAdminDetails(int id, String password) {
+		
+		try {
+			
+			String query1 = "SELECT * FROM " + DBNAME + ".adminusers WHERE adminid LIKE ?";
 			
 			PreparedStatement state1 = myConn.prepareStatement(query1);
 			state1.setInt(1, id);
@@ -168,7 +188,6 @@ public class DBManager implements DBCredentials{
 						coTemp = new CourseOffering(sectionRS.getInt(3), sectionRS.getInt(4));
 						coTemp.setTheCourse(courseTemp);
 						regTemp.setTheOffering(coTemp);
-						System.out.println("HERERERERERER");
 						registered.add(regTemp);
 					}
 				}

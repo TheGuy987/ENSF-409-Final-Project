@@ -20,6 +20,7 @@ public class RegThread extends Thread {
 	
 	BufferedReader socketIn;
  	private Student theStudent; 
+ 	private Admin theAdmin;
  	private CourseCatalogue theCatalogue; 
 	/**
 	 * Constructor that takes PrintWriter and BufferedReader objects as arguements and assigns the
@@ -41,9 +42,26 @@ public class RegThread extends Thread {
 	public void run() {
 		
  		try {
+ 			int user = Integer.parseInt(socketIn.readLine());
+ 			if(user == 0) {
+ 				System.out.println("student");
+ 				theStudent = new Student(socketIn, socketOut);
+ 				
+ 			}
+ 			else if(user == 1) {
+ 				System.out.println("admin");
+ 				theAdmin = new Admin(socketIn, socketOut);
+ 				
+ 			}
  			theCatalogue = new CourseCatalogue(socketIn, socketOut);
- 			theStudent = new Student(socketIn, socketOut);
+ 			
+ 			
 		} catch (SocketException e2) {
+			return;
+		} catch (IOException e) {
+			return;
+		} catch (LoginException e) {
+			this.run();
 			return;
 		}
 		
@@ -109,10 +127,24 @@ public class RegThread extends Thread {
 					check = false;
 					this.run();
 					break;
+						
+				case(8):
+					try {
+						theAdmin.createCourseInterface();
+						socketOut.flush();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		}catch(SocketException e) {
 			return;
 		}
+	}
+	public Admin getTheAdmin() {
+		return theAdmin;
+	}
+	public void setTheAdmin(Admin theAdmin) {
+		this.theAdmin = theAdmin;
 	}
 }
