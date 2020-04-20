@@ -122,6 +122,8 @@ public class RegThread extends Thread {
 			
 			case(7):
 				check = false;
+				
+			case(8):
 			}
 		}
 	}
