@@ -40,43 +40,49 @@ public class GUI extends JFrame {
 		this.control = control;		
 		buttonPanel = new JPanel();
 		
-		if(control.getAdmin() != 0) {	
+		if(control.getUser() != 0) {	
 			
 			// Admin Options
-			if(control.getAdmin() == 1) {
+			if(control.getUser() == 1) {
 				createCourse = new JButton("Create Course");
 				createCourse.setForeground(Color.white);
 				createCourse.setBackground(Color.gray);
 				createCourse.setFocusPainted(false);
+				createCourse.setVisible(true);
 				
 				createCourse.addActionListener((ActionEvent e) -> { 
 					control.createCoursePressed();
 					});
 					
 				buttonPanel.add(createCourse);
+				buttonPanel.revalidate();
 			}
 			
 			// Student Options
-			if(control.getAdmin() == 2) {
+			if(control.getUser() == 2) {
 				addReg = new JButton("Register for a Course");
 				addReg.setForeground(Color.white);
 				addReg.setBackground(Color.gray);
 				addReg.setFocusPainted(false);
+				addReg.setVisible(true);
 				
 				removeReg = new JButton("Remove Registeration");
 				removeReg.setForeground(Color.white);
 				removeReg.setBackground(Color.gray);
 				removeReg.setFocusPainted(false);
+				removeReg.setVisible(true);
 				
 				displayTaken = new JButton("Display Courses Taken");
 				displayTaken.setForeground(Color.white);
 				displayTaken.setBackground(Color.gray);
 				displayTaken.setFocusPainted(false);
+				displayTaken.setVisible(true);
 				
 				displayReg = new JButton("Display Registered Courses");
 				displayReg.setForeground(Color.white);
 				displayReg.setBackground(Color.gray);
 				displayReg.setFocusPainted(false);
+				displayReg.setVisible(true);
 				
 				addReg.addActionListener((ActionEvent e) -> { 
 					control.addRegPressed();
@@ -95,20 +101,26 @@ public class GUI extends JFrame {
 					});
 				
 				buttonPanel.add(addReg);
+				buttonPanel.revalidate();
 				buttonPanel.add(removeReg);
+				buttonPanel.revalidate();
 				buttonPanel.add(displayTaken);
+				buttonPanel.revalidate();
 				buttonPanel.add(displayReg);
+				buttonPanel.revalidate();
 			}
 			
 			searchCata = new JButton("Search Course Catalogue");
 			searchCata.setForeground(Color.white);
 			searchCata.setBackground(Color.gray);
 			searchCata.setFocusPainted(false);
+			searchCata.setVisible(true);
 			
 			displayCata = new JButton("Display Course Catalogue");
 			displayCata.setForeground(Color.white);
 			displayCata.setBackground(Color.gray);
-			displayCata.setFocusPainted(false);		
+			displayCata.setFocusPainted(false);	
+			displayCata.setVisible(true);
 			
 			searchCata.addActionListener((ActionEvent e) -> { 
 				control.searchCataPressed();
@@ -118,14 +130,17 @@ public class GUI extends JFrame {
 				control.displayCataPressed();
 				});
 			
-			buttonPanel.add(searchCata);		
+			buttonPanel.add(searchCata);
+			buttonPanel.revalidate();
 			buttonPanel.add(displayCata);
+			buttonPanel.revalidate();
 		}
 		
 		logout = new JButton("Logout");
 		logout.setForeground(Color.white);
 		logout.setBackground(Color.gray);
 		logout.setFocusPainted(false);
+		logout.setVisible(true);
 		
 		logout.addActionListener((ActionEvent e) -> { 
 			control.logoutPressed();
@@ -137,6 +152,7 @@ public class GUI extends JFrame {
 		title.setForeground(Color.white);
 		title.setBackground(Color.gray);
 		titlePanel.add(title);
+		titlePanel.revalidate();
 		logout.setBounds(975, 3, 75, 20);
 		this.add(logout);		
 		display = new JScrollPane();

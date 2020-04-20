@@ -1,6 +1,8 @@
 package package1;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,7 +22,7 @@ public class Controller {
 	private GUI theGUI;	
 	private BufferedReader socketIn;
 	private PrintWriter socketOut;
-	private int admin = 0;
+	private int user = 0;
 	
 	/**
 	 * The constructor for controller constructs the controller class and passes a BufferedReader and a Printwriter
@@ -82,8 +84,15 @@ public class Controller {
         		socketOut.println(passwordIn);
         		try {
         			foundUser = socketIn.readLine();
-					if(foundUser == "1")
+					if(foundUser.equals("1")) {
+						setUser(1);
+						theGUI.setVisible(false);
+						theGUI.dispose();
+						theGUI = new GUI(this);
+						theGUI.setVisible(true);
+						// call the admin here
 						break;
+					}
 					else
 						panelTitle = "Error! Re-enter Admin Details";
 						
@@ -141,8 +150,14 @@ public class Controller {
         		socketOut.println(passwordIn);
         		try {
         			foundUser = socketIn.readLine();
-					if(foundUser == "1")
+					if(foundUser.equals("1")) {						
+						setUser(2);
+						theGUI.setVisible(false);
+						theGUI.dispose();
+						theGUI = new GUI(this);
+						theGUI.setVisible(true);
 						break;
+					}
 					else
 						panelTitle = "Error! Re-enter Student Details";
 						
@@ -271,6 +286,32 @@ public class Controller {
 	
 	public void createCoursePressed() {
 		socketOut.println("8");
+		
+		JTextField courseName = new JTextField();
+		JTextField courseNum = new JTextField();
+		
+		Object[] field1 = {
+				"Course Name:", courseName,
+				"Course Number:", courseNum,
+		};
+		
+    	int option = JOptionPane.showConfirmDialog(null,field1, "Create New Course Wizard", JOptionPane.CANCEL_OPTION);
+    	
+    	//sends option to server so it knows whether the user pressed "ok" or "cancel"
+    	socketOut.println(option);
+    	
+    	if(option == 0) {
+    		socketOut.println(courseName.getText().toUpperCase());
+    		socketOut.println(courseNum.getText());
+    		
+    		try {
+				while(!socketIn.ready());
+	    		updateScrollPanel();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
 		updateScrollPanel();
 	}
 	
@@ -280,7 +321,6 @@ public class Controller {
 	 */
 	public void updateScrollPanel() {
 		theGUI.remove(theGUI.display);
-
 		theGUI.display = new JScrollPane(updateTextArea(), JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		theGUI.display.setSize(1080,650);
 		theGUI.add("Center",theGUI.display);
@@ -310,11 +350,11 @@ public class Controller {
 		return jta;
 	}
 	
-	public int getAdmin() {
-		return admin;
+	public int getUser() {
+		return user;
 	}
-	public void setAdmin(int admin) {
-		this.admin = admin;
+	public void setUser(int user) {
+		this.user = user;
 	}
 	
 }

@@ -24,6 +24,12 @@ public class DBManager implements DBCredentials{
 	 */
 	public DBManager () {
 		courseList = new ArrayList<Course>();
+		try {
+				myConn = DriverManager.getConnection(URL,USER, PASS);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			                }
+		
 	}
 	
 	public ArrayList<Course> readFromDataBase(){
@@ -31,7 +37,6 @@ public class DBManager implements DBCredentials{
 		
 		try {
 			//Create  Statements
-			myConn = DriverManager.getConnection(URL,USER, PASS);
 
 			Statement state1 = myConn.createStatement();
 			Statement state2 = myConn.createStatement();
@@ -71,7 +76,6 @@ public class DBManager implements DBCredentials{
 	public String checkStudentDetails(int id, String password) {
 		
 		try {
-			myConn = DriverManager.getConnection(URL,USER, PASS);
 			
 			String query1 = "SELECT * FROM " + DBNAME + ".students WHERE studentid LIKE ?";
 			
@@ -97,7 +101,6 @@ public class DBManager implements DBCredentials{
 		
 		try {
 			
-			myConn = DriverManager.getConnection(URL,USER, PASS);
 			
 			int courseId;
 			String query1 = "SELECT * FROM " + DBNAME + ".studentcoursestaken WHERE studentid LIKE ?";
@@ -133,7 +136,6 @@ public class DBManager implements DBCredentials{
 		
 		try {
 			
-			myConn = DriverManager.getConnection(URL,USER, PASS);
 			
 			int courseId;
 			int sectionId;
@@ -177,6 +179,60 @@ public class DBManager implements DBCredentials{
 		}
 		
 		return registered;
+	}
+	
+	public void registerStudent(int studentId, CourseOffering co) {
+		try {
+			Statement state1 = myConn.createStatement();
+			Statement state2 = myConn.createStatement();
+			Statement state3 = myConn.createStatement();
+
+			//find courseid
+			ResultSet rs1 = state1.executeQuery("SELECT * FROM "+DBNAME+".courses WHERE courseName = '"+co.getTheCourse().getCourseName()+"' AND courseNum ='"+co.getTheCourse().getCourseNum()+"'");
+			if(rs1.next()) {
+				int courseid = rs1.getInt(1);
+				ResultSet rs3 = state3.executeQuery("SELECT * FROM "+DBNAME+".sections WHERE idcourse = '"+courseid+"' AND sectionnum = '"+co.getSecNum()+"'");
+				if(rs3.next()) {
+					int sectionID = rs3.getInt(1);
+					state2.execute("INSERT INTO "+DBNAME+".studentcoursesreg (studentid, sectionid, courseid) VALUES ( "+studentId+","+sectionID+","+courseid+")");
+					int currentSize = rs3.getInt(5);
+					int primaryKey = rs3.getInt(1);
+					currentSize++;
+					state3.execute("UPDATE `"+DBNAME+"`.`sections` SET `currentsize` = '"+currentSize+"' WHERE (`id` = '"+primaryKey+"')");
+				}
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch blockUPDAT
+			e.printStackTrace();
+		}
+	}
+	
+	public void unregisterStudent(int studentId, String courseName, int courseNum, int sectionNum) {
+		try {
+			Statement state1 = myConn.createStatement();
+			Statement state2 = myConn.createStatement();
+			Statement state3 = myConn.createStatement();
+			
+			//find courseid
+			ResultSet rs1 = state1.executeQuery("SELECT * FROM "+DBNAME+".courses WHERE courseName = '"+courseName+"' AND courseNum ='"+courseNum+"'");
+			if(rs1.next()) {
+				int courseid = rs1.getInt(1);
+				state2.execute("DELETE FROM "+DBNAME+".studentcoursesreg WHERE studentid = '"+studentId+"' AND courseid = '"+courseid+"'");
+				
+				ResultSet rs3 = state3.executeQuery("SELECT * FROM "+DBNAME+".sections WHERE idcourse = '"+courseid+"' AND sectionnum = '"+sectionNum+"'");
+				if(rs3.next()) {
+					int currentSize = rs3.getInt(5);
+					int primaryKey = rs3.getInt(1);
+					currentSize--;
+					state3.execute("UPDATE `"+DBNAME+"`.`sections` SET `currentsize` = '"+currentSize+"' WHERE (`id` = '"+primaryKey+"')");
+				}
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void close() {

@@ -42,7 +42,7 @@ public class RegThread extends Thread {
 		
  		try {
  			theCatalogue = new CourseCatalogue(socketIn, socketOut);
- 			theStudent = new Student(socketIn, socketOut, theCatalogue);
+ 			theStudent = new Student(socketIn, socketOut);
 		} catch (SocketException e2) {
 			return;
 		}
@@ -55,7 +55,6 @@ public class RegThread extends Thread {
 				try {
 					choice = Integer.parseInt(socketIn.readLine());
 				} catch (NumberFormatException e1) {
-					e1.printStackTrace();
 				} catch(SocketException e) {
 					return;
 				} catch (IOException e1) {

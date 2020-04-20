@@ -35,13 +35,14 @@ public class Student {
 	 * socketOut is used to write to the socket 
 	 */
 	private PrintWriter socketOut;
+	
+	private DBManager DB;
 	/**
 	 * Constructor that takes in BufferedReader and PrintWriter objects, and assigns then to
 	 * their corrosponding instance variables.
 	 */
-	private DBManager DB;
 	
-	public Student (BufferedReader socketIn, PrintWriter socketOut, CourseCatalogue theCat)throws SocketException {
+	public Student (BufferedReader socketIn, PrintWriter socketOut)throws SocketException {
 		studentRegList = new ArrayList<Registration>();
 		
 		this.socketIn = socketIn;
@@ -162,6 +163,7 @@ public class Student {
 		
 		for(int i=0;i < studentRegList.size();i++) {
 			if(courseName.contentEquals(studentRegList.get(i).getTheOffering().getTheCourse().getCourseName()) && courseNum==studentRegList.get(i).getTheOffering().getTheCourse().getCourseNum()) {
+				DB.unregisterStudent(studentId, courseName, courseNum, studentRegList.get(i).getTheOffering().getSecNum());
 				studentRegList.remove(i);
 				socketOut.println("The course has been successfully removed from your registration");
 				return;
@@ -228,6 +230,13 @@ public class Student {
 			return;
 		}
 		
+		for(int i =0; i<studentRegList.size(); i++) {
+			if(studentRegList.get(i).getTheOffering().getTheCourse().getCourseName().contentEquals(courseName) && studentRegList.get(i).getTheOffering().getTheCourse().getCourseNum() == courseNum) {
+				socketOut.println("You have alreaded registered for this course");
+				break;
+			}
+		}
+		
 		CourseOffering of;
 		check=0;
 		for(int i=0; i<reg.getOfferingList().size();i++) {
@@ -236,6 +245,7 @@ public class Student {
 				of=reg.getCourseOfferingAt(i);
 				Registration r = new Registration();
 				r.completeRegistration(this, of);
+				DB.registerStudent(studentId, of);
 				
 				socketOut.println("You have been added to "+of.getTheCourse().getCourseName()+" "+of.getTheCourse().getCourseNum());
 				break;
