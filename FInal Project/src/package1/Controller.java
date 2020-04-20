@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
-
+import javax.swing.*;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -41,6 +41,61 @@ public class Controller {
 		theGUI.setVisible(true);
 		getStudentInfo();
 	}
+	
+	public void getAdminInfo() {
+		// Take Student ID and password using a dialog pane
+        String iDIn = "";
+        String passwordIn = "";
+        String panelTitle = "Enter Login Information";
+        boolean duplicate;
+        String foundUser = "0";
+        
+        do {
+    		JTextField adminID = new JTextField();
+    		JTextField adminPassword = new JTextField();
+    		
+    		Object[] field1 = {
+    				"Admin ID:", adminID,
+    				"Admin password:", adminPassword,
+    		};
+    		
+    		Object[] options = { "Login", "Cancel", "Student Login" };
+        	int option = JOptionPane.showOptionDialog(null,field1, panelTitle, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, null);
+        	
+        	// Show student login
+        	if(option == JOptionPane.CANCEL_OPTION) {
+        		getStudentInfo();
+        		return;
+        	}
+        	
+        	// Cancel/Close pressed
+        	if(option == JOptionPane.NO_OPTION || option == JOptionPane.CLOSED_OPTION) {
+        		socketOut.println("0");
+        		System.exit(0);
+        	}
+        	
+            iDIn = adminID.getText();
+            passwordIn = adminPassword.getText();
+            
+            if (iDIn.matches("^[0-9]*$") && !passwordIn.equals("") && !iDIn.equals("")) {
+        		socketOut.println(iDIn);
+        		socketOut.println(passwordIn);
+        		try {
+        			foundUser = socketIn.readLine();
+					if(foundUser == "1")
+						break;
+					else
+						panelTitle = "Error! Re-enter Admin Details";
+						
+				} catch (IOException e) {
+					panelTitle = "Error! Re-enter Admin Details";
+				}
+            } else {
+            	panelTitle = "Error! Re-enter Admin Details";
+            }
+        } while (!iDIn.matches("^[0-9]*$") || passwordIn.equals("") || iDIn.equals("") || !foundUser.equals("1"));
+	}
+	
 	/**
 	 * The method getStudentInfo creates a popup that asks for the student's name, student's id and the courses
 	 * they have already taken. They can choose to add additional courses by pressing "Yes" after a prompt or "No"
@@ -64,9 +119,16 @@ public class Controller {
     				"Student password:", studentPassword,
     		};
     		
-        	int option = JOptionPane.showConfirmDialog(null,field1, panelTitle, JOptionPane.CANCEL_OPTION);
+    		Object[] options = { "Login", "Cancel", "Admin Login" };
+        	int option = JOptionPane.showOptionDialog(null,field1, panelTitle, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, null);
         	
-        	if(option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION) {
+        	// Show admin login
+        	if(option == JOptionPane.CANCEL_OPTION) {
+        		getAdminInfo();
+        		return;
+        	}
+        	
+        	if(option == JOptionPane.NO_OPTION || option == JOptionPane.CLOSED_OPTION) {
         		socketOut.println("0");
         		System.exit(0);
         	}
@@ -74,7 +136,7 @@ public class Controller {
             iDIn = studentId.getText();
             passwordIn = studentPassword.getText();
             
-            if (passwordIn.matches("^[a-zA-Z]*$") && iDIn.matches("^[0-9]*$") && !passwordIn.equals("") && !iDIn.equals("")) {
+            if (iDIn.matches("^[0-9]*$") && !passwordIn.equals("") && !iDIn.equals("")) {
         		socketOut.println(iDIn);
         		socketOut.println(passwordIn);
         		try {
@@ -90,7 +152,7 @@ public class Controller {
             } else {
             	panelTitle = "Error! Re-enter Student Details";
             }
-        } while (!passwordIn.matches("^[a-zA-Z]*$") || !iDIn.matches("^[0-9]*$") || passwordIn.equals("") || iDIn.equals("") || !foundUser.equals("1"));
+        } while (!iDIn.matches("^[0-9]*$") || passwordIn.equals("") || iDIn.equals("") || !foundUser.equals("1"));
 	}
 	
 	
