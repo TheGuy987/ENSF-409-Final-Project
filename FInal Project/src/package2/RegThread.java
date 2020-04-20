@@ -41,11 +41,12 @@ public class RegThread extends Thread {
 	public void run() {
  		try {
 			theStudent = new Student(socketIn, socketOut);
+ 			theCatalogue = new CourseCatalogue(socketIn, socketOut);
 		} catch (SocketException e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
+			return;
 		}
- 		theCatalogue = new CourseCatalogue(socketIn, socketOut);
 		
 		//Begin
 		Boolean check=true;

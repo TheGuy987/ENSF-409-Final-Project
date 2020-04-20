@@ -20,6 +20,7 @@ public class Controller {
 	private GUI theGUI;	
 	private BufferedReader socketIn;
 	private PrintWriter socketOut;
+	private int admin = 0;
 	/**
 	 * The constructor for controller constructs the controller class and passes a BufferedReader and a Printwriter
 	 * to it. 
@@ -45,20 +46,21 @@ public class Controller {
 	 * to continue to the menu
 	 */
 	public void getStudentInfo() {
-		// Take Student Name and Id using a dialog pane
-        String nameIn = "";
-        String idIn = "";
-        String panelTitle = "Enter Student Details";
+		// Take Student ID and password using a dialog pane
+        String iDIn = "";
+        String passwordIn = "";
+        String panelTitle = "Enter Login Information";
         boolean duplicate;
+        String foundUser = "0";
         
         
         do {
-    		JTextField studentName = new JTextField();
     		JTextField studentId = new JTextField();
+    		JTextField studentPassword = new JTextField();
     		
     		Object[] field1 = {
-    				"Student Name:", studentName,
-    				"Student id:", studentId,
+    				"Student ID:", studentId,
+    				"Student password:", studentPassword,
     		};
     		
         	int option = JOptionPane.showConfirmDialog(null,field1, panelTitle, JOptionPane.CANCEL_OPTION);
@@ -68,68 +70,26 @@ public class Controller {
         		System.exit(0);
         	}
         	
-            nameIn = studentName.getText();
-            idIn = studentId.getText();
+            iDIn = studentId.getText();
+            passwordIn = studentPassword.getText();
             
-            if (nameIn.matches("^[a-zA-Z]*$") && idIn.matches("^[0-9]*$") && !nameIn.equals("") && !idIn.equals("")) {
-        		socketOut.println(nameIn);
-        		socketOut.println(idIn);
-                break;
+            if (passwordIn.matches("^[a-zA-Z]*$") && iDIn.matches("^[0-9]*$") && !passwordIn.equals("") && !iDIn.equals("")) {
+        		socketOut.println(iDIn);
+        		socketOut.println(passwordIn);
+        		try {
+        			foundUser = socketIn.readLine();
+					if(foundUser == "1")
+						break;
+					else
+						panelTitle = "Error! Re-enter Student Details";
+						
+				} catch (IOException e) {
+					panelTitle = "Error! Re-enter Student Details";
+				}
             } else {
             	panelTitle = "Error! Re-enter Student Details";
             }
-        } while (!nameIn.matches("^[a-zA-Z]*$") || !idIn.matches("^[0-9]*$") || nameIn.equals("") || idIn.equals(""));
-		
-        // Ask students what courses they have taken using a dialog pane
-        int check = 0;
-        nameIn = "";
-        idIn = "";
-        panelTitle = "Courses Taken";
-        do {
-    		JTextField courseName = new JTextField();
-    		JTextField courseNum = new JTextField();
-    		
-    		Object[] field2 = {
-    				"Course Name:", courseName,
-    				"Course Number: ", courseNum,
-    		};
-    		
-    		int option = JOptionPane.showConfirmDialog(null,field2, panelTitle, JOptionPane.CANCEL_OPTION);
-        	socketOut.println(option);
-        	
-    		if(option == JOptionPane.CANCEL_OPTION || option == JOptionPane.CLOSED_OPTION)
-        		break;
-    		
-    		
-        	
-            nameIn = courseName.getText();
-            idIn = courseNum.getText();
-            ArrayList<String> alreadyEntered = new ArrayList<String>();
-            duplicate = false;
-            for(int i = 0; i < alreadyEntered.size(); i++) {
-            	if(alreadyEntered.get(i).matches(nameIn + idIn)) {
-            		duplicate = true;
-            	}
-            }
-            
-            if(duplicate) {
-            	panelTitle = "Error! You already entered that! Re-enter Courses Taken";
-            }
-            
-            else if (nameIn.matches("^[a-zA-Z]*$") && idIn.matches("^[0-9]*$") && !nameIn.equals("") && !idIn.equals("")) {
-            	alreadyEntered.add(nameIn + idIn);
-            	for(int i = 0; i < alreadyEntered.size(); i++) {
-            		System.out.println(alreadyEntered.get(i));
-            	}
-        		socketOut.println(nameIn);
-        		socketOut.println(idIn);
-        		panelTitle = "Courses Taken";
-        		check =JOptionPane.showConfirmDialog(null, "Do you want to add another course?", panelTitle, JOptionPane.OK_OPTION);
-    			socketOut.println(check);   			
-            } else {
-            	panelTitle = "Error! Re-enter Courses Taken";
-            }
-        }while(check == 0 || !nameIn.matches("^[a-zA-Z]*$") || !idIn.matches("^[0-9]*$") || nameIn.equals("") || idIn.equals(""));
+        } while (!passwordIn.matches("^[a-zA-Z]*$") || !iDIn.matches("^[0-9]*$") || passwordIn.equals("") || iDIn.equals("") || !foundUser.equals("1"));
 	}
 	/**
 	 * the method searchCataPressed is used to search for courses in the Course Catalogue. A popup will appear

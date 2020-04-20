@@ -2,6 +2,7 @@ package package3;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
  * @author Vaibhav Kapoor, Thomas Pan, and Matthew Wells
  *
  */
-public class DBManager {
+public class DBManager implements DBCredentials {
 	
 	ArrayList <Course> courseList;
 	Connection myConn;
@@ -23,6 +24,13 @@ public class DBManager {
 	 */
 	public DBManager () {
 		courseList = new ArrayList<Course>();
+		try {
+			myConn = DriverManager.getConnection(URL,USER, PASS);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 	
 	public ArrayList<Course> readFromDataBase(){
@@ -30,21 +38,19 @@ public class DBManager {
 		
 		try {
 			//Create  Statements
-			myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306","root", "alvin123");
-
 			Statement state1 = myConn.createStatement();
 			Statement state2 = myConn.createStatement();
 			Statement state3 = myConn.createStatement();
 
 			//ResultSet from courses table
-			ResultSet rs1 = state1.executeQuery("SELECT * FROM registration.courses");
+			ResultSet rs1 = state1.executeQuery("SELECT * FROM " + DBNAME + ".courses");
 			System.out.println("SQL Test");
 			while(rs1.next()) {
 				Course c = new Course(rs1.getString(2),Integer.parseInt(rs1.getString(3)));
 				int idcourse = rs1.getInt(1);
 				System.out.println(c.toString());
 				//reads course sections number and size and adds it to course offering
-				ResultSet rs2 = state2.executeQuery("SELECT * FROM registration.sections WHERE idcourse = '"+idcourse+"'");
+				ResultSet rs2 = state2.executeQuery("SELECT * FROM " + DBNAME + ".sections WHERE idcourse = '"+idcourse+"'");
 				while(rs2.next()) {
 					CourseOffering co = new CourseOffering(rs2.getInt(3), rs2.getInt(4));
 					c.addOffering(co);
@@ -53,7 +59,7 @@ public class DBManager {
 				
 				//reads course prereqs and adds it to the course 
 				ArrayList<Course> prereq = new ArrayList<Course>();
-				ResultSet rs3 = state3.executeQuery("SELECT * FROM registration.prereqs WHERE idcourse = '"+idcourse+"'");
+				ResultSet rs3 = state3.executeQuery("SELECT * FROM " + DBNAME + ".prereqs WHERE idcourse = '"+idcourse+"'");
 				while(rs3.next()) {
 					Course pre = new Course(rs3.getString(3),rs3.getInt(4));
 					prereq.add(pre);
@@ -61,11 +67,66 @@ public class DBManager {
 				list.add(c);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		return list ;
+	}
+	
+	public String checkStudentDetails(int id, String password) {
+		
+		try {			
+			String query1 = "SELECT * FROM " + DBNAME + ".students WHERE studentid LIKE ?";
+			
+			PreparedStatement state1 = myConn.prepareStatement(query1);
+			state1.setInt(1, id);
+			ResultSet rs = state1.executeQuery();
+			if(rs.next()) {
+				if(rs.getInt(2) == id && rs.getString(3).equals(password)) {
+					return rs.getString(4);
+				}
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+	
+	public ArrayList<Course> readCoursesTaken(int studentId){
+		
+		ArrayList<Course> taken = new ArrayList<Course>();	
+		
+		try {
+						
+			int courseId;
+			String query1 = "SELECT * FROM " + DBNAME + ".studentcoursestaken WHERE studentid LIKE ?";
+			String courseQuery = "SELECT * FROM " + DBNAME + ".courses WHERE idcourse LIKE ?";
+			PreparedStatement state1 = myConn.prepareStatement(query1);
+			PreparedStatement state2;
+			state1.setInt(1, studentId);
+			ResultSet rs = state1.executeQuery();
+			ResultSet courseRS;
+			while(rs.next()) {
+				courseId = rs.getInt(3);
+				state2 = myConn.prepareStatement(courseQuery);
+				state2.setInt(1, courseId);
+				courseRS = state2.executeQuery();
+				if(courseRS.next()) {
+					taken.add(new Course(courseRS.getString(2), courseRS.getInt(3)));
+				}
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return taken;
+	}
+	
+	public void registerStudent(int studentId, CourseOffering co) {
+		
 	}
 	
 	public void close() {

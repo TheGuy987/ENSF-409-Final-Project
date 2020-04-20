@@ -35,6 +35,8 @@ public class Student {
 	 * socketOut is used to write to the socket 
 	 */
 	private PrintWriter socketOut;
+	
+	private DBManager DB;
 	/**
 	 * Constructor that takes in BufferedReader and PrintWriter objects, and assigns then to
 	 * their corrosponding instance variables.
@@ -44,11 +46,31 @@ public class Student {
 		
 		this.socketIn = socketIn;
 		this.socketOut = socketOut;
+		DB = new DBManager();
+		
+		//attempt to match the user entered credentials with the database.
 		
 		try {
-			setStudentName();
-			setStudentId();
-			coursesTaken = addCoursesTaken();
+			while(true) {
+				
+				setStudentId();
+				String pass = getStudentPassword();
+			
+				studentName = DB.checkStudentDetails(studentId, pass);
+				if(studentName != null) {
+					socketOut.println("1");
+					break;
+				}
+				else {
+					socketOut.println("0");
+				}
+			}
+			
+			
+			coursesTaken = DB.readCoursesTaken(studentId);
+		
+		
+		
 		}catch(SocketException e) {
 			throw new SocketException();
 		} catch (IOException e) {
@@ -75,14 +97,8 @@ public class Student {
 	 * Sets the student's name, using variable socketIn as input.
 	 * @throws SocketException that is thrown if the server has lost connection to the client.
 	 */
-	public void setStudentName() throws SocketException {
-		try {
-			studentName = socketIn.readLine(); 
-		}catch(SocketException e) {
-			throw new SocketException();
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
+	public void setStudentName(String name){
+		studentName = name;
 	}
 	/**
 	 * Returns the students ID number.
@@ -103,6 +119,18 @@ public class Student {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public String getStudentPassword()throws SocketException {
+		try {
+			String pass = socketIn.readLine(); 
+			return pass;
+		}catch(SocketException e) {
+			throw new SocketException();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	/**
 	 * Returns the students information in the form of a String.
@@ -207,6 +235,7 @@ public class Student {
 				of=reg.getCourseOfferingAt(i);
 				Registration r = new Registration();
 				r.completeRegistration(this, of);
+				DB.registerStudent(studentId, of);
 				socketOut.println("You have been added to "+of.getTheCourse().getCourseName()+" "+of.getTheCourse().getCourseNum());
 				break;
 			}
@@ -224,37 +253,6 @@ public class Student {
 	public boolean maxCourseReg(){
 		if(studentRegList.size()>6) return true;
 		return false; 
-	}
-	/**
-	 * Adds courses to an ArrayList of courese that the student has already taken.
-	 * @return ArrayList of Course objects representing all of the courses the student
-	 * has already taken.
-	 * @throws IOException
-	 */	
-	public ArrayList<Course> addCoursesTaken() throws IOException {
-		boolean check=true;
-		String courseName;
-		int userInput;
-		int courseNum=0;
-		ArrayList<Course> temp = new ArrayList<Course>();
-	
-		
-		while(check) {
-			String option = socketIn.readLine();
-			if(!option.contentEquals("0")) {
-				break;
-			}
-			courseName=socketIn.readLine();
-			courseNum =Integer.parseInt(socketIn.readLine());
-			Course c = new Course(courseName,courseNum);
-			temp.add(c);
-						
-			userInput=Integer.parseInt(socketIn.readLine());
-			if(userInput==1) {
-				check=false;
-			}
-		}
-		return temp;
 	}
 	/**
 	 * Removes a coures from the list of courses that the student has already taken.
