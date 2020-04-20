@@ -129,28 +129,47 @@ public class DBManager implements DBCredentials {
 		try {
 			Statement state1 = myConn.createStatement();
 			Statement state2 = myConn.createStatement();
+			Statement state3 = myConn.createStatement();
 
+			//find courseid
 			ResultSet rs1 = state1.executeQuery("SELECT * FROM "+DBNAME+".courses WHERE courseName = '"+co.getTheCourse().getCourseName()+"' AND courseNum ='"+co.getTheCourse().getCourseNum()+"'");
 			if(rs1.next()) {
 				int courseid = rs1.getInt(1);
 				state2.execute("INSERT INTO "+DBNAME+".studentcoursesreg (studentid, courseid) VALUES ( "+studentId+", "+courseid+")");
+				ResultSet rs3 = state3.executeQuery("SELECT * FROM "+DBNAME+".sections WHERE idcourse = '"+courseid+"' AND sectionnum = '"+co.getSecNum()+"'");
+				if(rs3.next()) {
+					int currentSize = rs3.getInt(5);
+					int primaryKey = rs3.getInt(1);
+					currentSize++;
+					state3.execute("UPDATE `"+DBNAME+"`.`sections` SET `currentsize` = '"+currentSize+"' WHERE (`id` = '"+primaryKey+"')");
+				}
 			}
+			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			// TODO Auto-generated catch blockUPDAT
 			e.printStackTrace();
 		}
 	}
 	
-	public void unregisterStudent(int studentId, String courseName, int courseNum) {
+	public void unregisterStudent(int studentId, String courseName, int courseNum, int sectionNum) {
 		try {
 			Statement state1 = myConn.createStatement();
 			Statement state2 = myConn.createStatement();
-
+			Statement state3 = myConn.createStatement();
+			
+			//find courseid
 			ResultSet rs1 = state1.executeQuery("SELECT * FROM "+DBNAME+".courses WHERE courseName = '"+courseName+"' AND courseNum ='"+courseNum+"'");
 			if(rs1.next()) {
 				int courseid = rs1.getInt(1);
 				state2.execute("DELETE FROM "+DBNAME+".studentcoursesreg WHERE studentid = '"+studentId+"' AND courseid = '"+courseid+"'");
-				System.out.println(courseName+" has been removed");
+				
+				ResultSet rs3 = state3.executeQuery("SELECT * FROM "+DBNAME+".sections WHERE idcourse = '"+courseid+"' AND sectionnum = '"+sectionNum+"'");
+				if(rs3.next()) {
+					int currentSize = rs3.getInt(5);
+					int primaryKey = rs3.getInt(1);
+					currentSize--;
+					state3.execute("UPDATE `"+DBNAME+"`.`sections` SET `currentsize` = '"+currentSize+"' WHERE (`id` = '"+primaryKey+"')");
+				}
 			}
 			
 		} catch (SQLException e) {
