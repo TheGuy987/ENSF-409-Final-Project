@@ -29,6 +29,7 @@ public class CourseOffering {
 		offeringRegList = new ArrayList <Registration>();
 		minReached = false;
 	}
+	
 	/**
 	 * Returns section number.
 	 * @return Integer holding the section number.

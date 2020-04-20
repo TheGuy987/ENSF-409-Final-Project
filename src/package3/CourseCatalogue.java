@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Scanner;
 /**
  * Class representing the course catalogue of a course registration system. It has variables
  * holding data streams to a client, and an ArrayList containing all courses.
@@ -29,7 +28,7 @@ public class CourseCatalogue {
 	 * @param socketOut PrintWriter object that sends data to the client.
 	 */
 	public CourseCatalogue (BufferedReader socketIn, PrintWriter socketOut) {
-		loadFromDataBase ();
+		loadFromDataBase();
 		this.socketIn = socketIn;
 		this.socketOut = socketOut;
 	}
@@ -40,8 +39,8 @@ public class CourseCatalogue {
 		// TODO Auto-generated method stub
 		DBManager db = new DBManager();
 		setCourseList(db.readFromDataBase());
-		
 	}
+
 	/**
 	 * Creates a new course offering
 	 * @param c Course object representing the class the new course offering will be.
@@ -112,7 +111,8 @@ public class CourseCatalogue {
 	 */
 	@Override
 	public String toString () {
-		String st = "All courses in the catalogue: \n";
+		String st = "\nAll courses in the catalogue: \n";
+		st += "_________________________________________\n";
 		for (Course c : courseList) {
 			st += c.toString();  //This line invokes the toString() method of Course
 			st += "\n";
