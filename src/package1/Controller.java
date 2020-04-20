@@ -20,7 +20,7 @@ public class Controller {
 	private GUI theGUI;	
 	private BufferedReader socketIn;
 	private PrintWriter socketOut;
-	private int admin = 0;
+	private int user = 0;
 	
 	/**
 	 * The constructor for controller constructs the controller class and passes a BufferedReader and a Printwriter
@@ -82,8 +82,15 @@ public class Controller {
         		socketOut.println(passwordIn);
         		try {
         			foundUser = socketIn.readLine();
-					if(foundUser == "1")
+					if(foundUser.equals("1")) {
+						setUser(1);
+						theGUI.setVisible(false);
+						theGUI.dispose();
+						theGUI = new GUI(this);
+						theGUI.setVisible(true);
+						// call the admin here
 						break;
+					}
 					else
 						panelTitle = "Error! Re-enter Admin Details";
 						
@@ -141,8 +148,14 @@ public class Controller {
         		socketOut.println(passwordIn);
         		try {
         			foundUser = socketIn.readLine();
-					if(foundUser == "1")
+					if(foundUser.equals("1")) {						
+						setUser(2);
+						theGUI.setVisible(false);
+						theGUI.dispose();
+						theGUI = new GUI(this);
+						theGUI.setVisible(true);
 						break;
+					}
 					else
 						panelTitle = "Error! Re-enter Student Details";
 						
@@ -310,11 +323,11 @@ public class Controller {
 		return jta;
 	}
 	
-	public int getAdmin() {
-		return admin;
+	public int getUser() {
+		return user;
 	}
-	public void setAdmin(int admin) {
-		this.admin = admin;
+	public void setUser(int user) {
+		this.user = user;
 	}
 	
 }
