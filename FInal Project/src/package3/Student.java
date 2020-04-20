@@ -162,6 +162,7 @@ public class Student {
 		for(int i=0;i < studentRegList.size();i++) {
 			if(courseName.contentEquals(studentRegList.get(i).getTheOffering().getTheCourse().getCourseName()) && courseNum==studentRegList.get(i).getTheOffering().getTheCourse().getCourseNum()) {
 				studentRegList.remove(i);
+				DB.unregisterStudent(studentId, courseName, courseNum);
 				socketOut.println("The course has been successfully removed from your registration");
 				return;
 			}

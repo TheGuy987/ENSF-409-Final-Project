@@ -130,11 +130,29 @@ public class DBManager implements DBCredentials {
 			Statement state1 = myConn.createStatement();
 			Statement state2 = myConn.createStatement();
 
-			ResultSet rs1 = state1.executeQuery("SELECT * FROM "+DBNAME+".courses WHERE courseName = '"+co.getTheCourse().getCourseName()+"' AND courseNum ='"+co.getTheCourse().getCourseName()+"'");
+			ResultSet rs1 = state1.executeQuery("SELECT * FROM "+DBNAME+".courses WHERE courseName = '"+co.getTheCourse().getCourseName()+"' AND courseNum ='"+co.getTheCourse().getCourseNum()+"'");
 			if(rs1.next()) {
 				int courseid = rs1.getInt(1);
 				state2.execute("INSERT INTO "+DBNAME+".studentcoursesreg (studentid, courseid) VALUES ( "+studentId+", "+courseid+")");
 			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void unregisterStudent(int studentId, String courseName, int courseNum) {
+		try {
+			Statement state1 = myConn.createStatement();
+			Statement state2 = myConn.createStatement();
+
+			ResultSet rs1 = state1.executeQuery("SELECT * FROM "+DBNAME+".courses WHERE courseName = '"+courseName+"' AND courseNum ='"+courseNum+"'");
+			if(rs1.next()) {
+				int courseid = rs1.getInt(1);
+				state2.execute("DELETE FROM "+DBNAME+".studentcoursesreg WHERE studentid = '"+studentId+"' AND courseid = '"+courseid+"'");
+				System.out.println(courseName+" has been removed");
+			}
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

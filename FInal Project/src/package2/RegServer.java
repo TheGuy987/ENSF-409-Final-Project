@@ -60,7 +60,6 @@ public class RegServer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 	/**
 	 * Main method of the server. It creates a new RegServer object, then uses it to call the method
