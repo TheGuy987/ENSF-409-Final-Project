@@ -1,4 +1,4 @@
-package package3;
+package src.package3;
 
 public class LoginException extends Exception{
 

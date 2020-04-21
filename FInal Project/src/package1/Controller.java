@@ -1,4 +1,4 @@
-package package1;
+package src.package1;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -295,29 +295,72 @@ public class Controller {
 		
 		JTextField courseName = new JTextField();
 		JTextField courseNum = new JTextField();
+		JTextField courseSec = new JTextField();
 		
 		Object[] field1 = {
 				"Course Name:", courseName,
 				"Course Number:", courseNum,
+				"Sections:",courseSec,
 		};
 		
-    	int option = JOptionPane.showConfirmDialog(null,field1, "Create New Course Wizard", JOptionPane.CANCEL_OPTION);
+		int option;
+		String title = "Create New Course Wizard";
+		do {
+			option = JOptionPane.showConfirmDialog(null,field1, title, JOptionPane.CANCEL_OPTION);
+	    
+			//sends option to server so it knows whether the user pressed "ok" or "cancel"
+	    	socketOut.println(option);
+	    	
+	    	if(option==JOptionPane.NO_OPTION || option == JOptionPane.CLOSED_OPTION){
+				socketOut.println("0");
+				break;
+	    	}
+	    	
+			if(courseName.getText().equals("") || courseNum.getText().equals("") || courseSec.getText().contentEquals("") || !courseName.getText().matches("^[a-zA-Z]*$") || !courseNum.getText().matches("^[0-9]*$") || !courseSec.getText().matches("^[0-9]*$"))
+				title = "Error: Unacceptable Input, Try Again";
+			else
+				break;
+		}while(true);
     	
-    	//sends option to server so it knows whether the user pressed "ok" or "cancel"
-    	socketOut.println(option);
+
     	
     	if(option == 0) {
     		socketOut.println(courseName.getText().toUpperCase());
     		socketOut.println(courseNum.getText());
+    		socketOut.println(courseSec.getText());
     		
-    		/*
+    		for(int x=0; x<Integer.parseInt(courseSec.getText()); x++){
+    			Object[] field2 = {
+    				"Section Capacity:", courseNum,
+    			};
+    			
+    			title = "Enter Section Number "+x+" Capacity";
+    			do {
+    				option = JOptionPane.showConfirmDialog(null,field2, title, JOptionPane.CANCEL_OPTION);
+    				if(option==JOptionPane.NO_OPTION || option == JOptionPane.CLOSED_OPTION){
+    					socketOut.println("0");
+    					return;
+    				}else if(courseNum.getText().equals("") || !courseNum.getText().matches("^[0-9]*$")) {
+    					title = "Error: Unacceptable Input, Try Again";
+    				}else {
+    					break;
+    				}
+    			}while(true);
+				
+    			socketOut.println("1");
+				socketOut.println(courseNum);
+				
+    		}
+    		
     		try {
 				while(!socketIn.ready());
 	    		updateScrollPanel();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}*/
+			}
+    		
+    		// ask for additional course options required
     	}
 		updateScrollPanel();
 	}

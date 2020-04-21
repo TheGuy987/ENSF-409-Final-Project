@@ -1,4 +1,4 @@
-package package3;
+package src.package3;
 /**
  * Class representing a students registration in a specific course. It has variables for
  * the student, the course offering, and the grade the student currently has in the course.

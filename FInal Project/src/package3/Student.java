@@ -1,4 +1,4 @@
-package package3;
+package src.package3;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,11 +1,12 @@
-package package2;
+package src.package2;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.SocketException;
+import java.sql.SQLException;
 
-import package3.*;
+import src.package3.*;
 
 /**
 * Class that represents a thread that a RegServer will run. It is responsible to passing information
@@ -63,6 +64,9 @@ public class RegThread extends Thread {
 		} catch (LoginException e) {
 			this.run();
 			return;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		//Begin
@@ -130,11 +134,12 @@ public class RegThread extends Thread {
 						
 				case(8):
 					try {
-						theAdmin.createCourseInterface();
+						theAdmin.createCourseInterface(theCatalogue);
 						socketOut.flush();
-					} catch (IOException e) {
+					} catch (IOException | SQLException e) {
 						e.printStackTrace();
 					}
+					break;
 				}
 			}
 		}catch(SocketException e) {

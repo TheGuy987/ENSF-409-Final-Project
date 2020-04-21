@@ -1,11 +1,17 @@
-package package3;
+package src.package3;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.SocketException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 
-public class Admin {
+public class Admin implements DBCredentials {
 
 	private int adminID;
 	private String adminName;
@@ -20,12 +26,15 @@ public class Admin {
 	 */
 	private DBManager DB;
 	
-	public Admin(BufferedReader socketIn, PrintWriter socketOut) throws SocketException, LoginException{
+	private Connection myConn;
+	
+	public Admin(BufferedReader socketIn, PrintWriter socketOut) throws SocketException, LoginException, SQLException{
 		
 		this.socketIn = socketIn;
 		this.socketOut = socketOut;
 		DB = new DBManager();
-		
+		myConn = DriverManager.getConnection(URL, USER, PASS);
+
 		try {
 			while(true) {
 				System.out.println("test");
@@ -57,12 +66,42 @@ public class Admin {
 		
 	}
 
-	public void createCourseInterface() throws IOException{
+	public void createCourseInterface(CourseCatalogue list) throws IOException, SQLException{
 		String option = socketIn.readLine();
+		ArrayList<CourseOffering> offeringList = new ArrayList<CourseOffering>();
+		Statement state1 = myConn.createStatement();
+		Statement state2 = myConn.createStatement();
 		
-		if(!option.contentEquals("0")) {
+		ResultSet rs1;
+		
+		Course new_course = null;
+		int courseId = 0;
+		
+		if(option.contentEquals("0")) {
 			return;
+			
+		}else if(option.contentEquals("0")) {
+			String courseName = socketIn.readLine();
+			int courseNum = Integer.parseInt(socketIn.readLine());
+			int courseSec = Integer.parseInt(socketIn.readLine());
+			
+			state1.execute("INSERT INTO "+DBNAME+".courses (courseName, courseNum, sections) VALUES ("+courseName+", "+courseNum+", "+courseSec+")");
+			rs1 = state1.executeQuery("SELECT * FROM "+DBNAME+".courses WHERE courseName = '"+courseName+"' AND courseNum ='"+courseNum+"'");
+			if(rs1.next())
+				courseId = rs1.getInt(1);
+			
+			new_course = new Course(courseName, courseNum);
 		}
+		
+		int count = 0;
+		while(socketIn.readLine().contentEquals("1")) {
+			int sectionSize = Integer.parseInt(socketIn.readLine());
+			new_course.getOfferingList().add(new CourseOffering(sectionSize, sectionSize));
+			state1.execute("INSERT INTO "+DBNAME+".sections (idcourse, sectionnum, sectionsize) VALUES ("+courseId+", "+count+", "+sectionSize+")");
+			count++;
+		}
+		
+		list.getCourseList().add(new_course);
 	}
 	
 	public String getAdminPassword()throws SocketException {
