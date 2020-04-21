@@ -351,6 +351,7 @@ public class Controller {
 				
     		}
     		updateScrollPanel();
+    		updateScrollPanel();
     	}
 	}
 	

@@ -74,6 +74,10 @@ public class Admin implements DBCredentials {
 		
 		ResultSet rs1;
 		
+		String courseName=null;
+		int courseNum=0;
+		int courseSec;
+		
 		Course new_course = null;
 		int courseId = 0;
 		
@@ -81,9 +85,9 @@ public class Admin implements DBCredentials {
 			return;
 			
 		}else if(option.contentEquals("0")) {
-			String courseName = socketIn.readLine();
-			int courseNum = Integer.parseInt(socketIn.readLine());
-			int courseSec = Integer.parseInt(socketIn.readLine());
+			courseName = socketIn.readLine();
+			courseNum = Integer.parseInt(socketIn.readLine());
+			courseSec = Integer.parseInt(socketIn.readLine());
 			new_course = new Course(courseName, courseNum);
 
 			
@@ -93,14 +97,16 @@ public class Admin implements DBCredentials {
 			int count = 1;
 			while(socketIn.readLine().contentEquals("1")) {
 				int sectionSize = Integer.parseInt(socketIn.readLine());
-				new_course.getOfferingList().add(new CourseOffering(sectionSize, sectionSize));
-				DB.insertSection(courseId, count, courseSec);
+				new_course.getOfferingList().add(new CourseOffering(count, sectionSize));
+				DB.insertSection(courseId, count, sectionSize);
 				count++;
 			}
 			
-			socketOut.println(courseName+" "+courseNum+" has been created");
 		}
 		
+		socketOut.flush();
+		socketOut.println(courseName+" "+courseNum+" has been created");
+
 		list.getCourseList().add(new_course);
 	}
 	
