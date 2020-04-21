@@ -97,6 +97,8 @@ public class Admin implements DBCredentials {
 				DB.insertSection(courseId, count, courseSec);
 				count++;
 			}
+			
+			socketOut.println(courseName+" "+courseNum+" has been created");
 		}
 		
 		list.getCourseList().add(new_course);

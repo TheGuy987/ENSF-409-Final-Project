@@ -350,18 +350,8 @@ public class Controller {
 				socketOut.println(courseNum.getText());
 				
     		}
-    		
-    		try {
-				while(!socketIn.ready());
-	    		updateScrollPanel();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    		
-    		// ask for additional course options required
+    		updateScrollPanel();
     	}
-		updateScrollPanel();
 	}
 	
 	/**
