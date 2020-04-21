@@ -39,7 +39,11 @@ public class Student {
 	private DBManager DB;
 	/**
 	 * Constructor that takes in BufferedReader and PrintWriter objects, and assigns then to
-	 * their corrosponding instance variables.
+	 * their corrosponding instance variables. It also verifies the login information that the user
+	 * has entered using a database reader, and then initializes the list of previous registrations,
+	 * as well as the list of previous courses taken. If a socket exception is thrown, it signals that
+	 * the connection to the client has been lost. It throws a login exception if the user switches to
+	 * the admin login panel.
 	 */
 	
 	public Student (BufferedReader socketIn, PrintWriter socketOut)throws SocketException, LoginException {
@@ -119,6 +123,11 @@ public class Student {
 		}
 	}
 	
+	/**
+	 * Gets the students password from the client side.
+	 * @return String holding the student's password
+	 * @throws SocketException thrown if the method loses connection to the client.
+	 */
 	public String getStudentPassword()throws SocketException {
 		try {
 			String pass = socketIn.readLine(); 
@@ -148,7 +157,7 @@ public class Student {
 		studentRegList.add(registration);
 	}
 	/**
-	 * Removes a registration form student list.
+	 * Removes a registration form student list, and from the database.
 	 * @param courseName String holding the name of course the regisitration is for.
 	 * @param courseNum Integer holding the number of the course the registration is for.
 	 * @return String indicating if the operation was performed successfully.
@@ -168,6 +177,10 @@ public class Student {
 		socketOut.println("The course you have entered could not be found");
 	}
 	
+	/**
+	 * Gets user input of which registration is to be removed.
+	 * @throws IOException
+	 */
 	public void removeRegistrationInterface() throws IOException {
 		
 		//cancels method if the user presses "Cancel"
@@ -183,7 +196,7 @@ public class Student {
 	}
 	/**
 	 * Registers the student to a course based on client input. It will then send a message to the client based
-	 * on whether or not the student was successfully added and why
+	 * on whether or not the student was successfully added and why. It also adds the registration to the database.
 	 * @param list of courses to register for 
 	 * @param courseName is the name of the course to add
 	 * @param courseNum is the number of the course to add
@@ -300,6 +313,10 @@ public class Student {
 		return st;
 	}
 	
+	/**
+	 * Returns the variable DB.
+	 * @return DBmanager object that is returned.
+	 */
 	public DBManager getDB() {
 		return DB;
 	}

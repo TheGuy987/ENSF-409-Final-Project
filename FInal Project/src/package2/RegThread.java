@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.SocketException;
+import java.sql.SQLException;
 
 import package3.*;
 
@@ -33,10 +34,10 @@ public class RegThread extends Thread {
 		this.socketOut = socketOut;
 	}
 	/**
-	 * Assigns variables theStudent and theCatalogue to new Student and CourseCatalogue objects
-	 * respectively, using variables socketIn and socketOut. It then waits for input from the client
+	 * Assigns variables theStudent and theCatalogue to new Student/Admin (depending on the input) and 
+	 * CourseCatalogue objects respectively, using variables socketIn and socketOut. It then waits for input 
 	 * in the form of an Integer, which is then used in a switch statement to select an operation to
-	 * run. This process loops unitl the client disconnnects, at which point the run method will catch
+	 * from the client run. This process loops unitl the client disconnnects, at which point the run method will catch
 	 * and exception, causing it to break the loop and exit.
 	 */
 	public void run() {
@@ -62,7 +63,11 @@ public class RegThread extends Thread {
 			return;
 		} catch (LoginException e) {
 			this.run();
+			e.printStackTrace();
 			return;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		//Begin
@@ -130,20 +135,30 @@ public class RegThread extends Thread {
 						
 				case(8):
 					try {
-						theAdmin.createCourseInterface();
+						theAdmin.createCourseInterface(theCatalogue);
 						socketOut.flush();
-					} catch (IOException e) {
+					} catch (IOException | SQLException e) {
 						e.printStackTrace();
 					}
+					break;
 				}
 			}
 		}catch(SocketException e) {
 			return;
 		}
 	}
+	
+	/**
+	 * Returns an admin object.
+	 * @return Object of type Admin to be returned.
+	 */
 	public Admin getTheAdmin() {
 		return theAdmin;
 	}
+	/**
+	 * Sets the variable admin to an Admin object.
+	 * @param theAdmin object of type Admin to set variable admin to.
+	 */
 	public void setTheAdmin(Admin theAdmin) {
 		this.theAdmin = theAdmin;
 	}

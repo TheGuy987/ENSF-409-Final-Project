@@ -34,7 +34,8 @@ public class GUI extends JFrame {
 	/**
 	 * Constructor that takes no input and creates a frame representing the menu screen
 	 * of the Student Record application. It uses lambda expressions to monitor button
-	 * presses, which interact with variable control.
+	 * presses, which interact with variable control. it is able to accomidate both a 
+	 * student and an admin user.
 	 */
 	public GUI(Controller control) {
 		this.control = control;		

@@ -9,8 +9,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 /**
- * Class that will read the SQL database in milestone III. Currently contains numerous har-coded
- * coureses.
+ * Class that read from a SQL data base. It contains variables for connecting to said database, as well as an
+ * Array List that holds a list of courses read from the database. Its various methods handle all writing and 
+ * reading to the database in the program. It implements interface DBCredentials.
  * @author Vaibhav Kapoor, Thomas Pan, and Matthew Wells
  *
  */
@@ -20,7 +21,8 @@ public class DBManager implements DBCredentials{
 	Connection myConn;
 
 	/**
-	 * Constructor that assigns variable courseList to a new ArrayList of type Coures.
+	 * Constructor that takes no inout, creates an empty Array List of courses, and then assigns
+	 * variable myConn to a Connection object using the information in DBCredentials.
 	 */
 	public DBManager () {
 		courseList = new ArrayList<Course>();
@@ -32,6 +34,11 @@ public class DBManager implements DBCredentials{
 		
 	}
 	
+	/**
+	 * Used to create the course catalogue, it reads a list of courses from the database, along side
+	 * the numerous course offerings and the pre-reqs for each course.
+	 * @return
+	 */
 	public ArrayList<Course> readFromDataBase(){
 		ArrayList<Course> list = new ArrayList<Course>();
 		
@@ -71,6 +78,13 @@ public class DBManager implements DBCredentials{
 		return list ;
 	}
 	
+	/**
+	 * Verifies the login information of a student user. It takes in their id and password, and attempts to match
+	 * them with a user stored in the database.
+	 * @param id Integer holding the student's student ID.
+	 * @param password String holding the student's password.
+	 * @return String indicating the name of the student.
+	 */
 	public String checkStudentDetails(int id, String password) {
 		
 		try {
@@ -93,6 +107,13 @@ public class DBManager implements DBCredentials{
 		
 	}
 	
+	/**
+	 * Verifies the login information of an admin user. It takes in their id and password, and attempts to match
+	 * them with a user stored in the database.
+	 * @param id Integer holding the admin's student ID.
+	 * @param password String holding the admin's password.
+	 * @return String indicating the name of the admin.
+	 */
 	public String checkAdminDetails(int id, String password) {
 		
 		try {
@@ -115,6 +136,13 @@ public class DBManager implements DBCredentials{
 		
 	}
 	
+	/**
+	 * Reads the courses that a student user has previously taken from the data base. It stores them is a list
+	 * which it returns to the caller.
+	 * @param studentId Integer holding the student's ID number, used to reference the database for the courses
+	 * that they have already taken.
+	 * @return Array List of type Course, holding all of the courese that the student has already taken.
+	 */
 	public ArrayList<Course> readCoursesTaken(int studentId){
 		
 		ArrayList<Course> taken = new ArrayList<Course>();	
@@ -148,6 +176,15 @@ public class DBManager implements DBCredentials{
 		
 	}
 	
+	/**
+	 * Reads the courses that a student user has already registered on from the database. It stores them in
+	 * a list, which it returns the to caller.
+	 * @param studentId Integer holding the student's ID number, which is used to reference the database for
+	 * courses that they have already taken.
+	 * @param theStudent Student object used to create registration objects from the database.
+	 * @return Array List of type registration holding all of the classes the student has previously registered
+	 * for.
+	 */
 	public ArrayList<Registration> readCoursesRegistered(int studentId, Student theStudent) {
 		ArrayList<Registration> registered = new ArrayList<Registration>();
 		Course courseTemp;
@@ -200,6 +237,11 @@ public class DBManager implements DBCredentials{
 		return registered;
 	}
 	
+	/**
+	 * Registers a student for a course offering in the database.
+	 * @param studentId Integer holding the id of the student to be registered.
+	 * @param co CourseOffering object that is used to add a registration to the database.
+	 */
 	public void registerStudent(int studentId, CourseOffering co) {
 		try {
 			Statement state1 = myConn.createStatement();
@@ -227,6 +269,13 @@ public class DBManager implements DBCredentials{
 		}
 	}
 	
+	/**
+	 * Un-registers a student from a registration in the data base, specified by its incoming arguements.
+	 * @param studentId Integer holding the student's student ID.
+	 * @param courseName String holding the name of the course which the registration belongs to.
+	 * @param courseNum Integer holding the nunber of the course which the registration belongs to.
+	 * @param sectionNum Integer holding the section number of the course offering in the registration.
+	 */
 	public void unregisterStudent(int studentId, String courseName, int courseNum, int sectionNum) {
 		try {
 			Statement state1 = myConn.createStatement();
@@ -254,6 +303,50 @@ public class DBManager implements DBCredentials{
 		}
 	}
 	
+	/**
+	 * Inserts a new course into the database.
+	 * @param courseName String holding the name of the course to be created.
+	 * @param courseNum Integer holding the number of the course to be created.
+	 * @param courseSec Integer holding the number of lecture sections the course will have.
+	 * @throws SQLException Exception thrown if their is an error writing to the database.
+	 */
+	public void insertCourse(String courseName, int courseNum, int courseSec) throws SQLException {
+		Statement state4 = myConn.createStatement();
+		state4.execute("INSERT INTO "+DBNAME+".courses (courseName, courseNum, sections) VALUES ('"+courseName+"', '"+courseNum+"', '"+courseSec+"')");
+	}
+	
+	/**
+	 * Returns the database id of a course (course id).
+	 * @param courseName String holding the name of the course.
+	 * @param courseNum Integer holding the course number.
+	 * @return Integer holding the database course id.
+	 * @throws SQLException
+	 */
+	public int getCourseId(String courseName, int courseNum) throws SQLException {
+		Statement state5 = myConn.createStatement();
+		
+		ResultSet rs1 = state5.executeQuery("SELECT * FROM "+DBNAME+".courses WHERE courseName = '"+courseName+"' AND courseNum ='"+courseNum+"'");
+		if(rs1.next()) {
+			return rs1.getInt(1);
+		}
+		return -1;
+	}
+	
+	/**
+	 * Inserts a lecture section into the database.
+	 * @param courseId Integer holding the database course id of the section.
+	 * @param count Integer holding the number of the lecture section.
+	 * @param sectionSize Integer holding the number of students in the lecture section.
+	 * @throws SQLException
+	 */
+	public void insertSection(int courseId, int count, int sectionSize) throws SQLException {
+		Statement state6 = myConn.createStatement();
+		state6.execute("INSERT INTO "+DBNAME+".sections (idcourse, sectionnum, sectionsize) VALUES ('"+courseId+"', '"+count+"', '"+sectionSize+"')");
+	}
+	
+	/**
+	 * Closes a connection object.
+	 */
 	public void close() {
 		try {
 			myConn.close();

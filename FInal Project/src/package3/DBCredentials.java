@@ -1,5 +1,12 @@
 package package3;
 
+/**
+ * Interface contianing the credentials necessary to connect and use a SQL database. It
+ * contains variables for the URL, the password, the username, the name of the database,
+ * and driver information.
+ * @author Vaibhav Kapoor, Thomas Pan, and Matthew Wells
+ *
+ */
 public interface DBCredentials {
 	
 

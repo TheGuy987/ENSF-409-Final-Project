@@ -15,7 +15,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 /**
  * The Controller class handles all of the client side logic and also the actions that happen when a button is pressed
- * @author Thomas (Hong Pan)
+ * @author Vaibhav Kapoor, Thomas Pan, and Matthew Wells
  *
  */
 public class Controller {
@@ -36,7 +36,7 @@ public class Controller {
 	}
 	/**
 	 * The method startGUI constructs a GUI and makes it visible. Then a popup appears to ask the user for
-	 * their name, student ID and courses taken
+	 * their login information.
 	 */
 	public void startGUI() {
 		theGUI = new GUI(this);
@@ -44,12 +44,16 @@ public class Controller {
 		getStudentInfo();
 	}
 	
+	/**
+	 * Prompts the user for admin login information, and sends it to the server-side of the program. If the
+	 * user selects that they want to switch to a student login, it sends that to the server-side and calls 
+	 * method getStudentInfo.
+	 */
 	public void getAdminInfo() {
 		// Take Student ID and password using a dialog pane
         String iDIn = "";
         String passwordIn = "";
         String panelTitle = "Enter Login Information";
-        boolean duplicate;
         String foundUser = "0";
         socketOut.flush();
         socketOut.println("1");
@@ -109,16 +113,15 @@ public class Controller {
 	}
 	
 	/**
-	 * The method getStudentInfo creates a popup that asks for the student's name, student's id and the courses
-	 * they have already taken. They can choose to add additional courses by pressing "Yes" after a prompt or "No"
-	 * to continue to the menu
+	 * Prompts the user for login information as a student, and sends the information to the server-side. If the
+	 * user indicates that they want to switch to admin login, it also sends that to the server-side before calling
+	 * method getAdminInfo.
 	 */
 	public void getStudentInfo() {
 		// Take Student ID and password using a dialog pane
         String iDIn = "";
         String passwordIn = "";
         String panelTitle = "Enter Login Information";
-        boolean duplicate;
         String foundUser = "0";
         socketOut.flush();
         socketOut.println("0");
@@ -239,6 +242,10 @@ public class Controller {
     	}
 	}
 	
+	/**
+	 * Prompts the user to enter the information about the course they wish to remove from their
+	 * registration list. It sends a prompt to the server side to remove said course.
+	 */
 	public void removeRegPressed() {
 		socketOut.println("3");
 		
@@ -284,42 +291,81 @@ public class Controller {
 		updateScrollPanel();
 	}
 	
+	/**
+	 * Logs the user out, and restarts the GUI for a new user.
+	 */
 	public void logoutPressed() {
 		socketOut.println("7");
 		theGUI.dispose();
 		startGUI();
 	}
 	
+	/**
+	 * Prompts an admin user to enter information that will be used to create a new course.
+	 * It sends this information to the server-side, which will add it to the data-base.
+	 */
 	public void createCoursePressed() {
 		socketOut.println("8");
 		
 		JTextField courseName = new JTextField();
 		JTextField courseNum = new JTextField();
+		JTextField courseSec = new JTextField();
 		
 		Object[] field1 = {
 				"Course Name:", courseName,
 				"Course Number:", courseNum,
+				"Sections:",courseSec,
 		};
 		
-    	int option = JOptionPane.showConfirmDialog(null,field1, "Create New Course Wizard", JOptionPane.CANCEL_OPTION);
+		int option;
+		String title = "Create New Course Wizard";
+		do {
+			option = JOptionPane.showConfirmDialog(null,field1, title, JOptionPane.CANCEL_OPTION);
+			
+			System.out.println("Option is: "+option);
+	    	socketOut.println(option); //#1
+	    	
+	    	if(option==JOptionPane.NO_OPTION || option == JOptionPane.CLOSED_OPTION){
+				return;
+	    	}
+	    	
+			if(courseName.getText().equals("") || courseNum.getText().equals("") || courseSec.getText().contentEquals("") || !courseName.getText().matches("^[a-zA-Z]*$") || !courseNum.getText().matches("^[0-9]*$") || !courseSec.getText().matches("^[0-9]*$"))
+				title = "Error: Unacceptable Input, Try Again";
+			else
+				break;
+		}while(true);
     	
-    	//sends option to server so it knows whether the user pressed "ok" or "cancel"
-    	socketOut.println(option);
+
     	
     	if(option == 0) {
     		socketOut.println(courseName.getText().toUpperCase());
     		socketOut.println(courseNum.getText());
+    		socketOut.println(courseSec.getText());
     		
-    		/*
-    		try {
-				while(!socketIn.ready());
-	    		updateScrollPanel();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}*/
+    		for(int x=0; x<Integer.parseInt(courseSec.getText()); x++){
+    			Object[] field2 = {
+    				"Section Capacity:", courseNum,
+    			};
+    			courseNum.setText("100");
+    			title = "Enter Section Number "+(x+1)+" Capacity";
+    			do {
+    				option = JOptionPane.showConfirmDialog(null,field2, title, JOptionPane.CANCEL_OPTION);
+    				if(option==JOptionPane.NO_OPTION || option == JOptionPane.CLOSED_OPTION){
+    					socketOut.println("0");
+    					return;
+    				}else if(courseNum.getText().equals("") || !courseNum.getText().matches("^[0-9]*$")) {
+    					title = "Error: Unacceptable Input, Try Again";
+    				}else {
+    					break;
+    				}
+    			}while(true);
+				
+    			socketOut.println("1");
+				socketOut.println(courseNum.getText());
+				
+    		}
+    		updateScrollPanel();
     	}
-		updateScrollPanel();
 	}
 	
 	/**
@@ -357,9 +403,17 @@ public class Controller {
 		return jta;
 	}
 	
+	/**
+	 * Returns the user type.
+	 * @return Integer holding the user type.
+	 */
 	public int getUser() {
 		return user;
 	}
+	/**
+	 * Sets the user type.
+	 * @param user Integer that will set the user type.
+	 */
 	public void setUser(int user) {
 		this.user = user;
 	}

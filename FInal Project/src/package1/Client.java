@@ -50,7 +50,7 @@ public class Client {
 	 * Main method of the client. Creates a Client object and calls method startController.
 	 * @param args Array of strings that can be read from the command line.
 	 */
-	public static void main(String[] args) {
+	public static void main(String args[]) {
 		Client theClient = new Client("localhost", 8099);
 		theClient.startController();
 	}
