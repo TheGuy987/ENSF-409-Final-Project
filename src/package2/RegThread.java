@@ -114,7 +114,7 @@ public class RegThread extends Thread {
 				
 				case(8):
 					try {
-						theAdmin.createCourseInterface();
+						theAdmin.createCourseInterface(theCatalogue);
 						socketOut.flush();
 					} catch (IOException e) {
 						e.printStackTrace();

@@ -26,7 +26,7 @@ import javax.swing.JTextField;
 
 public class GUI extends JFrame {
 	JButton searchCata, addReg, removeReg, displayCata, displayTaken, displayReg, logout, createCourse;
-	JLabel title;
+	JLabel title, userName;
 	JPanel titlePanel, buttonPanel, logoutPanel;
 	JScrollPane display;
 	Controller control;

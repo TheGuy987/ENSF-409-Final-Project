@@ -23,13 +23,24 @@ public class Admin {
 		
 	}
 
-	public void createCourseInterface() throws IOException{
+	public void createCourseInterface(CourseCatalogue list) throws IOException{
 		String option = socketIn.readLine();
 		
 		if(!option.contentEquals("0")) {
 			return;
 		}
-	}
-	
-	
+		
+		String courseName = socketIn.readLine();
+		int courseNum = Integer.parseInt(socketIn.readLine());
+		int courseSec = Integer.parseInt(socketIn.readLine());
+				
+		Course reg = list.searchCat(courseName, courseNum);
+		if(reg!=null) {
+			socketOut.println("The course already exists");
+			return;
+		}
+		// Add course 
+		
+		socketOut.println("The course was created");
+	}	
 }
