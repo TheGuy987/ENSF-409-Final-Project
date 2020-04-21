@@ -307,13 +307,12 @@ public class Controller {
 		String title = "Create New Course Wizard";
 		do {
 			option = JOptionPane.showConfirmDialog(null,field1, title, JOptionPane.CANCEL_OPTION);
-	    
-			//sends option to server so it knows whether the user pressed "ok" or "cancel"
-	    	socketOut.println(option);
+			
+			System.out.println("Option is: "+option);
+	    	socketOut.println(option); //#1
 	    	
 	    	if(option==JOptionPane.NO_OPTION || option == JOptionPane.CLOSED_OPTION){
-				socketOut.println("0");
-				break;
+				return;
 	    	}
 	    	
 			if(courseName.getText().equals("") || courseNum.getText().equals("") || courseSec.getText().contentEquals("") || !courseName.getText().matches("^[a-zA-Z]*$") || !courseNum.getText().matches("^[0-9]*$") || !courseSec.getText().matches("^[0-9]*$"))
@@ -333,8 +332,8 @@ public class Controller {
     			Object[] field2 = {
     				"Section Capacity:", courseNum,
     			};
-    			
-    			title = "Enter Section Number "+x+" Capacity";
+    			courseNum.setText("100");
+    			title = "Enter Section Number "+(x+1)+" Capacity";
     			do {
     				option = JOptionPane.showConfirmDialog(null,field2, title, JOptionPane.CANCEL_OPTION);
     				if(option==JOptionPane.NO_OPTION || option == JOptionPane.CLOSED_OPTION){
@@ -348,7 +347,7 @@ public class Controller {
     			}while(true);
 				
     			socketOut.println("1");
-				socketOut.println(courseNum);
+				socketOut.println(courseNum.getText());
 				
     		}
     		

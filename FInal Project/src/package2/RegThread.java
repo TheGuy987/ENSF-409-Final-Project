@@ -63,6 +63,7 @@ public class RegThread extends Thread {
 			return;
 		} catch (LoginException e) {
 			this.run();
+			e.printStackTrace();
 			return;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

@@ -67,7 +67,7 @@ public class Admin implements DBCredentials {
 	}
 
 	public void createCourseInterface(CourseCatalogue list) throws IOException, SQLException{
-		String option = socketIn.readLine();
+		String option = socketIn.readLine(); // #1
 		ArrayList<CourseOffering> offeringList = new ArrayList<CourseOffering>();
 		Statement state1 = myConn.createStatement();
 		Statement state2 = myConn.createStatement();
@@ -77,28 +77,26 @@ public class Admin implements DBCredentials {
 		Course new_course = null;
 		int courseId = 0;
 		
-		if(option.contentEquals("0")) {
+		if(option.contentEquals("1")) {
 			return;
 			
 		}else if(option.contentEquals("0")) {
 			String courseName = socketIn.readLine();
 			int courseNum = Integer.parseInt(socketIn.readLine());
 			int courseSec = Integer.parseInt(socketIn.readLine());
-			
-			state1.execute("INSERT INTO "+DBNAME+".courses (courseName, courseNum, sections) VALUES ("+courseName+", "+courseNum+", "+courseSec+")");
-			rs1 = state1.executeQuery("SELECT * FROM "+DBNAME+".courses WHERE courseName = '"+courseName+"' AND courseNum ='"+courseNum+"'");
-			if(rs1.next())
-				courseId = rs1.getInt(1);
-			
 			new_course = new Course(courseName, courseNum);
-		}
-		
-		int count = 0;
-		while(socketIn.readLine().contentEquals("1")) {
-			int sectionSize = Integer.parseInt(socketIn.readLine());
-			new_course.getOfferingList().add(new CourseOffering(sectionSize, sectionSize));
-			state1.execute("INSERT INTO "+DBNAME+".sections (idcourse, sectionnum, sectionsize) VALUES ("+courseId+", "+count+", "+sectionSize+")");
-			count++;
+
+			
+			DB.insertCourse(courseName, courseNum, courseSec);
+			courseId = DB.getCourseId(courseName, courseNum);
+			
+			int count = 1;
+			while(socketIn.readLine().contentEquals("1")) {
+				int sectionSize = Integer.parseInt(socketIn.readLine());
+				new_course.getOfferingList().add(new CourseOffering(sectionSize, sectionSize));
+				DB.insertSection(courseId, count, courseSec);
+				count++;
+			}
 		}
 		
 		list.getCourseList().add(new_course);
